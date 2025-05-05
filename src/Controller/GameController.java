@@ -1,9 +1,11 @@
 package Controller;
 
+import Model.Player;
 import View.GameView;
 
 public class GameController {
     public GameView gameView;
+    public Player currentPlayer;
     public HorseController horseController;
     // 생성자
     public GameController(GameView gameView, HorseController horseController) {
@@ -12,6 +14,7 @@ public class GameController {
         this.
     }
 
+    //
 
 
 
