@@ -1,20 +1,28 @@
-import View.StartView;
+import javax.swing.*;
+
 import View.GameView;
+import View.StartView;
 import Controller.GameController;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Yut Nori Game");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(600, 600);
+        JFrame frame = new JFrame("Board Game");
+        frame.setSize(1100, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
 
-            StartView startView = new StartView();
-            GameView gameView = new GameView();
-            GameController controller = new GameController(startView, gameView, frame);
+        StartView startView = new StartView();
+        startView.setBounds(0, 0, 1100, 700);
 
-            frame.add(startView);  // 최초에는 StartView만 보여줌
-            frame.setVisible(true);
-        });
+        GameView gameView = new GameView();
+        gameView.setBounds(0, 0, 1100, 700);
+        gameView.setVisible(false);
+
+        frame.add(startView);
+        frame.add(gameView);
+
+        new GameController(startView, gameView);
+
+        frame.setVisible(true);
     }
 }
