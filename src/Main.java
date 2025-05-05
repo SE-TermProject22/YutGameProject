@@ -1,28 +1,35 @@
 import javax.swing.*;
-
-import View.GameView;
-import View.StartView;
 import Controller.GameController;
+import View.StartView;
+import View.GameView;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Board Game");
-        frame.setSize(1100, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
+        // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Horse Game");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1080, 720);
+            frame.setLocationRelativeTo(null); // 화면 중앙에 배치
+            frame.setResizable(false);
 
-        StartView startView = new StartView();
-        startView.setBounds(0, 0, 1100, 700);
+            // 뷰들 생성
+            StartView startView = new StartView();
+            GameView gameView = new GameView();
+            gameView.setVisible(false); // 처음엔 안 보이게
 
-        GameView gameView = new GameView();
-        gameView.setBounds(0, 0, 1100, 700);
-        gameView.setVisible(false);
+            // 패널들을 JFrame에 추가
+            frame.setLayout(null);
+            startView.setBounds(0, 0, 1080, 720);
+            gameView.setBounds(0, 0, 1080, 720);
 
-        frame.add(startView);
-        frame.add(gameView);
+            frame.add(startView);
+            frame.add(gameView);
 
-        new GameController(startView, gameView);
+            // 컨트롤러 생성
+            new GameController(startView, gameView);
 
-        frame.setVisible(true);
+            frame.setVisible(true);
+        });
     }
 }

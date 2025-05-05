@@ -2,6 +2,9 @@ package Controller;
 
 import java.util.List;
 import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 import View.StartView;
 import View.GameView;
@@ -10,53 +13,100 @@ public class GameController {
     private StartView startView;
     private GameView gameView;
 
-    private boolean isGameStarted = false;
-    private boolean isHorseSelected = false;
-    private boolean isGameOver = false;
+    private GameState currentState = GameState.START_SCREEN;
 
     public GameController(StartView startView, GameView gameView) {
         this.startView = startView;
         this.gameView = gameView;
 
-        setupListeners();
+        initializeListeners();
+        updateViewState();
     }
 
-    private void setupListeners() {
-        startView.addStartButtonListener(e -> {
+    private void initializeListeners() {
+        startView.addStartButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setState(GameState.HORSE_SELECTION);
+            }
+        });
 
-            startView.showSettings();
+        // Horse Selection Listener
+        startView.setHorseSelectionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 말 버튼 클릭 시, 말 선택 및 취소 처리
+                String color = ((JButton) e.getSource()).getText(); // 버튼에서 말 색상 가져오기
+                startView.toggleHorseSelection(color);
+
+                int playerCount = startView.getPlayerCount();
+                int selectedHorseCount = startView.getSelectedColors().size();
+
+                if (selectedHorseCount == playerCount) {
+                    // 말 수가 일치하면 보드 선택 화면으로 넘어감
+                    setState(GameState.BOARD_SELECTION);
+                } else if (selectedHorseCount > playerCount) {
+                    // 플레이어 수를 초과하면 경고
+                    JOptionPane.showMessageDialog(null, "플레이어 수에 맞게 말을 선택해주세요.");
+                    startView.toggleHorseSelection(""); // 선택 취소
+                }
+            }
         });
 
         startView.setBoardSelectionListeners(
-                e -> startView.selectBoard("square"),
-                e -> startView.selectBoard("pentagon"),
-                e -> startView.selectBoard("hexagon")
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Square 버튼 클릭 시
+                        startView.selectBoard("square");
+                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
+                    }
+                },
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Pentagon 버튼 클릭 시
+                        startView.selectBoard("pentagon");
+                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
+                    }
+                },
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Hexagon 버튼 클릭 시
+                        startView.selectBoard("hexagon");
+                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
+                    }
+                }
         );
 
-        startView.setHorseSelectionListener(e -> {
-            JButton source = (JButton) e.getSource();
-            String color = getColorFromButton(source);
-            startView.toggleHorseSelection(color);
+        startView.addNextButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int playerCount = startView.getPlayerCount();
+                int horseCount = startView.getSelectedColors().size();
+
+                startGame();
+            }
         });
-
-        startView.addNextButtonListener(e -> {
-            // 설정 완료 후 GameView로 화면 전환
-            startView.setVisible(false);
-            gameView.setVisible(true);
-
-            gameView.setBoardType(startView.getSelectedBoard());
-            gameView.placeHorses(startView.getSelectedColors());
-        });
-
-        // 추가적인 리스너 (보드 버튼, 말 선택 등)도 설정 가능
     }
 
-    private String getColorFromButton(JButton button) {
-        for (var entry : startView.getHorseButtons().entrySet()) {
-            if (entry.getValue().equals(button)) {
-                return entry.getKey();
-            }
-        }
-        return null;
+    private void startGame() {
+        setState(GameState.GAME_PLAY); // 게임 상태로 전환
+        startView.setVisible(false); // StartView 숨기기
+        gameView.setVisible(true);   // GameView 보이기
+
+        // 게임 화면에 보드와 선택된 말 설정
+        gameView.setBoardType(startView.getSelectedBoard());
+        gameView.placeHorses(startView.getSelectedColors());
+    }
+
+    private void setState(GameState newState) {
+        currentState = newState;
+        updateViewState();
+    }
+
+    private void updateViewState() {
+        startView.setState(currentState);
     }
 }

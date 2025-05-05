@@ -1,5 +1,7 @@
 package View;
 
+import Controller.GameState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -12,12 +14,14 @@ public class StartView extends JPanel{
     private JButton startButton, nextButton;
     private JButton squareBtn, pentagonBtn, hexagonBtn;
 
-    private JComboBox<String> playerCountBox;
+    private JComboBox<String> playerCountBox, horseCountBox;
     private Map<String, JButton> horseButtons;
 
     private String selectedBoard = null;
     private int playerCount = 2;
     private List<String> selectedColors = new ArrayList<>();
+
+    private GameState currentState = GameState.START_SCREEN;
 
     public StartView() { //생성자
             setLayout(null); //수동으로 버튼 위치를 지정하기 위해 레이아웃 매니저를 쓰지 않겠다는 의미
@@ -56,12 +60,19 @@ public class StartView extends JPanel{
         squareBtn = createButton("image/사각형.png", 50, 217);
         pentagonBtn = createButton("image/오각형.png", 396, 217);
         hexagonBtn = createButton("image/육각형.png", 742, 217);
-        hideButtons(squareBtn, pentagonBtn, hexagonBtn);
+        add(squareBtn);
+        add(pentagonBtn);
+        add(hexagonBtn);
 
         playerCountBox = new JComboBox<>(new String[]{"2","3", "4"});
-        playerCountBox.setBounds(160, 300, 100, 30);
+        playerCountBox.setBounds(200, 265, 280, 71);
         playerCountBox.setVisible(false);
         add(playerCountBox);
+
+        horseCountBox = new JComboBox<>(new String[]{"2", "3", "4", "5"});
+        horseCountBox.setBounds(621, 265, 280, 71);
+        horseCountBox.setVisible(false);
+        add(horseCountBox);
 
         horseButtons = new HashMap<>(); //key-value 형태로 저장 -> 색깔을 key로 사용해 각 말에 대응하는 버튼을 쉽게 찾을 수 있음
         addHorseButton("red", 148);
@@ -82,21 +93,56 @@ public class StartView extends JPanel{
         add(btn);
     }
 
-    //버튼이 화면에 보이면 안 될 때 숨기는 용도
-    private void hideButtons(JButton... buttons) {
-        for (JButton btn : buttons) {
-            btn.setVisible(false);
-            add(btn);
-        }
-    }
-
     //JPanel이 화면에 그려질 때 호출되는 메서드
     //이 메서드 안에서 배경 이미지를 그림
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(startBackground, 0, 0, getWidth(), getHeight(), null);
-        g.drawImage(horseSelectionBackground, 0, 0, getWidth(), getHeight(), null);
-        g.drawImage(boardSelectionBackground, 0, 0, getWidth(), getHeight(), null);
+
+        switch (currentState) {
+            case START_SCREEN:
+                g.drawImage(startBackground, 0, 0, getWidth(), getHeight(), null);
+                break;
+            case HORSE_SELECTION:
+                g.drawImage(horseSelectionBackground, 0, 0, getWidth(), getHeight(), null);
+                break;
+            case BOARD_SELECTION:
+                g.drawImage(boardSelectionBackground, 0, 0, getWidth(), getHeight(), null);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void setState(GameState state) {
+        this.currentState = state;
+
+        switch (state) {
+            case START_SCREEN:
+                showOnly(startButton);
+                break;
+
+            case HORSE_SELECTION:
+                List<JButton> horses = new ArrayList<>(horseButtons.values());
+                horses.add(nextButton);
+                showOnly(horses.toArray(new JButton[0]));
+                break;
+
+            case BOARD_SELECTION:
+                showOnly(squareBtn, pentagonBtn, hexagonBtn, playerCountBox, horseCountBox);
+                break;
+
+            default:
+                break;
+        }
+        repaint();
+    }
+
+    private void showOnly(JComponent... visibleComponents) {
+        Set<JComponent> show = new HashSet<>(Arrays.asList(visibleComponents));
+
+        for (Component comp : getComponents()) {
+            comp.setVisible(show.contains(comp));
+        }
     }
 
     //MVC 분리의 핵심 포인트
@@ -121,22 +167,12 @@ public class StartView extends JPanel{
         }
     }
 
-    //시작 버튼 클릭하면 나머지 UI가 나타나도록 하는 메서드
-    public void showSettings() {
-        startButton.setVisible(false);
-        squareBtn.setVisible(true);
-        pentagonBtn.setVisible(true);
-        hexagonBtn.setVisible(true);
-        playerCountBox.setVisible(true);
-        nextButton.setVisible(true);
-
-        for (JButton btn : horseButtons.values()) {
-            btn.setVisible(true);
-        }
-    }
-
     public int getPlayerCount() {
         return Integer.parseInt((String) playerCountBox.getSelectedItem());
+    }
+
+    public int getHorseCount() {
+        return Integer.parseInt((String) horseCountBox.getSelectedItem());
     }
 
     public void selectBoard(String boardType) {
