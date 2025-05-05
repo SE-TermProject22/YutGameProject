@@ -1,6 +1,5 @@
 package View;
 
-import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -10,7 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class StartView extends JPanel{
-    private Image startBackground, characterBackground;
+    private Image startBackground, horseSelectionBackground;
 
     private JButton startButton, confirmButton;
     private JButton squareBtn, pentagonBtn, hexagonBtn;
@@ -30,6 +29,7 @@ public class StartView extends JPanel{
         setupInitialView();
     }
 
+    //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y, int width, int height) {
         JButton button = new JButton(new ImageIcon(new ImageIcon(imagePath).
                 getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH)));
@@ -41,6 +41,7 @@ public class StartView extends JPanel{
         return button;
     }
 
+    //게임 시작 화면 세팅 (game start 버튼만 화면에 보이고 나머지는 가려진 상태)
     private void setupInitialView() { //start 버튼만 보이게 초기 세팅 후, 버튼을 누르면 나머지 설정 UI를 보여줄 수 있도록 준비
         startButton = createButton("image/.png", 160, 275, 175, 45);
         add(startButton);
@@ -55,7 +56,7 @@ public class StartView extends JPanel{
         playerCountBox.setVisible(false);
         add(playerCountBox);
 
-        horseButtons = new HashMap<>(); //key-value
+        horseButtons = new HashMap<>(); //key-value 형태로 저장 -> 색깔을 key로 사용해 각 말에 대응하는 버튼을 쉽게 찾을 수 있음
         addHorseButton("red", 50);
         addHorseButton("blue", 130);
         addHorseButton("yellow", 210);
@@ -66,6 +67,7 @@ public class StartView extends JPanel{
         add(confirmButton);
     }
 
+    //말 버튼
     private void addHorseButton(String color, int x) {
         JButton btn = createButton("image/" + color + ".png", x, 350, 60, 60);
         btn.setVisible(false);
@@ -73,6 +75,7 @@ public class StartView extends JPanel{
         add(btn);
     }
 
+    //버튼이 화면에 보이면 안 될 때 숨기는 용도
     private void hideButtons(JButton... buttons) {
         for (JButton btn : buttons) {
             btn.setVisible(false);
@@ -80,9 +83,10 @@ public class StartView extends JPanel{
         }
     }
 
+    //필요한 이미지 불러오기
     private void loadImages() {
-        startBackground = new ImageIcon("image/.png").getImage();
-        characterBackground = new ImageIcon("image/.png").getImage();
+        startBackground = new ImageIcon("image/.png").getImage(); //시작 배경화면
+        horseSelectionBackground = new ImageIcon("image/.png").getImage(); //말 고를 때 배경화면
         yut.loadImages("image/yut/");
     }
 
@@ -91,7 +95,7 @@ public class StartView extends JPanel{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(startBackground, 0, 0, getWidth(), getHeight(), null);
-        g.drawImage(characterBackground, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(horseSelectionBackground, 0, 0, getWidth(), getHeight(), null);
     }
 
     //MVC 분리의 핵심 포인트
@@ -104,7 +108,8 @@ public class StartView extends JPanel{
         confirmButton.addActionListener(listener);
     }
 
-    public void showSettings() { //시작 버튼 클릭하면 나머지 UI가 나타나도록 하는 메서드
+    //시작 버튼 클릭하면 나머지 UI가 나타나도록 하는 메서드
+    public void showSettings() {
         startButton.setVisible(false);
         squareBtn.setVisible(true);
         pentagonBtn.setVisible(true);
@@ -145,6 +150,7 @@ public class StartView extends JPanel{
         this.selectedBoard = boardType;
     }
 
+    //말을 누르면 선택 한 번 더 누르면 선택 취소
     public void toggleHorseSelection(String color) {
         if (selectedColors.contains(color)) {
             selectedColors.remove(color);  // 선택 해제
