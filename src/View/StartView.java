@@ -87,7 +87,7 @@ public class StartView extends JPanel{
 
     //말 버튼
     private void addHorseButton(String color, int x) {
-        JButton btn = createButton("image/" + color + ".png", x, 401);
+        JButton btn = createButton("image/" + color + " 말.png", x, 401);
         btn.setVisible(false);
         horseButtons.put(color, btn);
         add(btn);
@@ -122,13 +122,11 @@ public class StartView extends JPanel{
                 break;
 
             case HORSE_SELECTION:
-                List<JButton> horses = new ArrayList<>(horseButtons.values());
-                horses.add(nextButton);
-                showOnly(horses.toArray(new JButton[0]));
+                showOnly(horseButtons.values().toArray(new JButton[0]));
                 break;
 
             case BOARD_SELECTION:
-                showOnly(squareBtn, pentagonBtn, hexagonBtn, playerCountBox, horseCountBox);
+                showOnly(squareBtn, pentagonBtn, hexagonBtn, playerCountBox, horseCountBox, nextButton);
                 break;
 
             default:
