@@ -36,7 +36,7 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 말 버튼 클릭 시, 말 선택 및 취소 처리
-                String color = ((JButton) e.getSource()).getText(); // 버튼에서 말 색상 가져오기
+                String color = e.getActionCommand(); // 버튼에서 말 색상 가져오기
                 startView.toggleHorseSelection(color);
 
                 int playerCount = startView.getPlayerCount();
@@ -59,7 +59,6 @@ public class GameController {
                     public void actionPerformed(ActionEvent e) {
                         // Square 버튼 클릭 시
                         startView.selectBoard("square");
-                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
                     }
                 },
                 new ActionListener() {
@@ -67,7 +66,6 @@ public class GameController {
                     public void actionPerformed(ActionEvent e) {
                         // Pentagon 버튼 클릭 시
                         startView.selectBoard("pentagon");
-                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
                     }
                 },
                 new ActionListener() {
@@ -75,7 +73,6 @@ public class GameController {
                     public void actionPerformed(ActionEvent e) {
                         // Hexagon 버튼 클릭 시
                         startView.selectBoard("hexagon");
-                        setState(GameState.GAME_PLAY); // 게임 화면으로 전환
                     }
                 }
         );
@@ -83,10 +80,19 @@ public class GameController {
         startView.addNextButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int playerCount = startView.getPlayerCount();
-                int horseCount = startView.getSelectedColors().size();
+                String selectedBoard = startView.getSelectedBoard();
+                List<String> selectedColors = startView.getSelectedColors();
 
-                startGame();
+                if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
+                    JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
+                    return;
+                }
+
+                // GameView로 전환
+                startView.setVisible(false);
+                gameView.setBoardType(selectedBoard);
+                gameView.placeHorses(selectedColors);
+                gameView.setVisible(true);
             }
         });
     }
