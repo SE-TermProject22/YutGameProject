@@ -2,53 +2,25 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
-import java.awt.event.ActionListener;
 
 public class GameView  extends JPanel {
-    private Image background, board;
+    private Image board;
     private JButton throwButton;
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
 
-    public GameView() { //생성자
-        setLayout(null); //수동으로 버튼 위치를 지정하기 위해 레이아웃 매니저를 쓰지 않겠다는 의미
-        loadImages(); //이미지 로딩 메서드
-        initUI();
+    public GameView() {
+        setLayout(null);
         horsePositions = new HashMap<>();
-    }
-
-    //게임판 선택
-    private void loadBoard(String boardType) {
-        switch (boardType) {
-            case "square":
-                board = new ImageIcon("image/사각형.png").getImage();
-                break;
-            case "pentagon":
-                board = new ImageIcon("image/오각형.png").getImage();
-                break;
-            case "hexagon":
-                board = new ImageIcon("image/육각형.png").getImage();
-                break;
-        }
-    }
-
-    public void setBoardType(String boardType) {
-        loadBoard(boardType);
-        repaint();
-    }
-
-    public void placeHorses(List<String> colors) {
-        for (String color : colors) {
-            setHorsePosition(color, 50, 50);
-        }
-        repaint();
+        horseImages = new HashMap<>();
+        loadImages();
+        initUI();
     }
 
     private void loadImages() {
-        background = new ImageIcon("image/background.png").getImage();
-        horseImages = new HashMap<>();
         horseImages.put("red", new ImageIcon("image/red.png").getImage());
         horseImages.put("blue", new ImageIcon("image/blue.png").getImage());
         horseImages.put("yellow", new ImageIcon("image/yellow.png").getImage());
@@ -73,12 +45,35 @@ public class GameView  extends JPanel {
 
     //기본 세팅
     private void initUI() {
-//        throwButton = createButton("image/.png", );
-//        add(throwButton);
-        throwButton = new JButton("Thorw");
+        throwButton = createButton("image/윷 던지기.png", 785, 410);
+        add(throwButton);
     }
 
-    //말 위치 정하기
+    public void setBoardType(String boardType) {
+        board = new ImageIcon("image/" + boardType + " board.png").getImage();
+        repaint();
+    }
+
+    //멀 위치 초기화 메서드
+    public void placeHorses(List<String> colors) {
+        for (String color : colors) {
+            //setHorsePosition(color, , );
+        }
+        repaint();
+    }
+
+//    public void placeHorses(List<String> colors) {
+//        int x = 50;  // x 좌표를 50부터 시작
+//        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
+//
+//        for (String color : colors) {
+//            setHorsePosition(color, x, y);
+//            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
+//        }
+//        repaint();
+//    }
+
+    //말 위치를 업데이트하는 메서드
     public void setHorsePosition(String color, int x, int y) {
         horsePositions.put(color, new Point(x,y));
         repaint();
@@ -88,19 +83,19 @@ public class GameView  extends JPanel {
         throwButton.addActionListener(listener);
     }
 
-    //JPanel이 화면에 그려질 때 호출되는 메서드
-    //이 메서드 안에서 배경 이미지를 그림
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         if (board != null) {
             g.drawImage(board, 0, 0, getWidth(), getHeight(), null);
         }
 
         for (String color : horsePositions.keySet()) {
             Image horseImage = horseImages.get(color);
-            if (horseImage != null) {
-                Point p = horsePositions.get(color);
-                g.drawImage(horseImages.get(color), p.x, p.y, 40, 40, null);
+            Point position = horsePositions.get(color);
+
+            if (horseImage != null && position != null) {
+                g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
     }
