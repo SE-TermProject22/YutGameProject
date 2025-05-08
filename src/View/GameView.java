@@ -5,17 +5,26 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameView  extends JPanel {
-    private Image board;
+    private Image board, currentImage;
     private JButton throwButton;
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
+
+    private List<Image> yutImages;
+    private List<Image> resultImages;
+
+    private Timer animationTimer;
+    private int yutIndex;
 
     public GameView() {
         setLayout(null);
         horsePositions = new HashMap<>();
         horseImages = new HashMap<>();
+
         loadImages();
         initUI();
     }
@@ -25,6 +34,23 @@ public class GameView  extends JPanel {
         horseImages.put("blue", new ImageIcon("image/blue.png").getImage());
         horseImages.put("yellow", new ImageIcon("image/yellow.png").getImage());
         horseImages.put("green", new ImageIcon("image/green.png").getImage());
+
+        yutImages = new ArrayList<>();
+        for (int i=1;i<=4;i++) {
+            Image img = new ImageIcon("image/yut/yut" + i + ".png").getImage();
+            if (img != null) {
+                yutImages.add(img);
+            }
+        }
+
+        resultImages = new ArrayList<>();
+        String[] resultImageNames = {"도.png", "개.png", "걸.png", "윷.png", "모.png", "백도.png"};
+        for (String imageName : resultImageNames) {
+            Image resultImg = new ImageIcon("image/" + imageName).getImage();
+            if (resultImg != null) {
+                resultImages.add(resultImg);
+            }
+        }
     }
 
     //버튼 생성 메서드
@@ -79,15 +105,52 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+    public void startYutAnimation() {
+        yutIndex = 0;
+
+        if (animationTimer != null) {
+            animationTimer.cancel();
+        }
+
+        animationTimer = new Timer();
+        animationTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (yutIndex < yutImages.size()) {
+                    setCurrentImage(yutImages.get(yutIndex));
+                    yutIndex++;
+                } else {
+                    animationTimer.cancel();
+                    showResultImage();
+                }
+            }
+        }, 0, 300);
+    }
+
+    private void showResultImage() {
+        Random random = new Random();
+        int index = random.nextInt(resultImages.size());
+        setCurrentImage(resultImages.get(index));
+    }
+
     public void addThrowButtonListener(ActionListener listener) {
         throwButton.addActionListener(listener);
     }
 
-    public void paintComponent(Graphics g) {
+    public void setCurrentImage (Image image) {
+        currentImage = image;
+        repaint();
+    }
+
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         if (board != null) {
             g.drawImage(board, 0, 0, getWidth(), getHeight(), null);
+        }
+
+        if (currentImage != null) {
+            g.drawImage(currentImage, 670, 80, null);
         }
 
         for (String color : horsePositions.keySet()) {
