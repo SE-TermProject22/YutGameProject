@@ -2,6 +2,7 @@ package Controller;
 
 import View.StartView;
 import View.GameView;
+import Model.Player;
 
 import java.awt.*;
 import java.util.*;
@@ -14,6 +15,7 @@ import java.awt.event.ActionListener;
 public class GameController {
     private StartView startView;
     private GameView gameView;
+    private Player currentPlayer;
 
     private GameState currentState = GameState.START_SCREEN;
 
@@ -109,6 +111,14 @@ public class GameController {
 
         long afterBoardCheckTime = System.currentTimeMillis();
         System.out.println("Board and color check time: " + (afterBoardCheckTime - startTime) + "ms");
+
+        List<Player> players = new ArrayList<>();
+        for (String color : selectedColors) {
+            players.add(new Player(color));
+        }
+
+        currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
+        gameView.setPlayer(currentPlayer);
 
         setState(GameState.GAME_PLAY); // 게임 상태로 전환
         startView.setVisible(false); // StartView 숨기기
