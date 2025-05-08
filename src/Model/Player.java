@@ -37,6 +37,7 @@ public class Player {
         }
         return value;
     }
+
     public void chooseResultOrder() {
         // 윷 결과 중 어느 것을 선택할지 결정
         System.out.println("적용할 윷 결과 순서를 선택합니다.");
