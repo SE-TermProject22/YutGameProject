@@ -82,21 +82,7 @@ public class GameController {
         startView.addNextButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedBoard = startView.getSelectedBoard();
-                int playerCount = startView.getPlayerCount();
-                List<String> selectedColors = startView.getSelectedColors();
-
-                if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
-                    JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
-                    return;
-                }
-
-                // GameView로 전환
-                startView.setVisible(false);
-                gameView.setBoardType(selectedBoard);
-                gameView.displayPlayers(playerCount);
-                gameView.placeHorses(selectedColors);
-                gameView.setVisible(true);
+                startGame();
             }
         });
 
@@ -109,13 +95,35 @@ public class GameController {
     }
 
     private void startGame() {
+        long startTime = System.currentTimeMillis();
+
+        String selectedBoard = startView.getSelectedBoard();
+        int playerCount = startView.getPlayerCount();
+        int horseCount = startView.getHorseCount();
+        List<String> selectedColors = startView.getSelectedColors();
+
+        if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
+            JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
+            return;
+        }
+
+        long afterBoardCheckTime = System.currentTimeMillis();
+        System.out.println("Board and color check time: " + (afterBoardCheckTime - startTime) + "ms");
+
         setState(GameState.GAME_PLAY); // 게임 상태로 전환
         startView.setVisible(false); // StartView 숨기기
         gameView.setVisible(true);   // GameView 보이기
 
-        // 게임 화면에 보드와 선택된 말 설정
-        gameView.setBoardType(startView.getSelectedBoard());
-        gameView.placeHorses(startView.getSelectedColors());
+        long afterVisibilityTime = System.currentTimeMillis();
+        System.out.println("Set visibility time: " + (afterVisibilityTime - afterBoardCheckTime) + "ms");
+
+        gameView.setBoardType(selectedBoard);
+        gameView.displayPlayers(playerCount);
+        gameView.displayHorses(selectedColors, playerCount, horseCount);
+        //gameView.placeHorses(selectedColors, playerCount);
+
+        long afterDisplayTime = System.currentTimeMillis();
+        System.out.println("Display setup time: " + (afterDisplayTime - afterVisibilityTime) + "ms");
     }
 
     private void setState(GameState newState) {
