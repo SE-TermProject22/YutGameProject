@@ -17,13 +17,6 @@ public class GameView  extends JPanel {
 
     private List<Image> yutImages;
     private List<Image> resultImages;
-    //위치 바꾸기
-    private Point [] playerPositions = {
-            new Point(709,499),
-            new Point(915, 499),
-            new Point(709, 575),
-            new Point(915, 575)
-    };
 
     private Timer animationTimer;
     private int yutIndex;
@@ -79,7 +72,7 @@ public class GameView  extends JPanel {
 
     //기본 세팅
     private void initUI() {
-        throwButton = createButton("image/윷 던지기.png", 785, 410);
+        throwButton = createButton("image/윷 던지기.png", 780, 410);
         add(throwButton);
     }
 
@@ -89,6 +82,13 @@ public class GameView  extends JPanel {
     }
 
     public void displayPlayers(int playerCount) {
+        Point [] playerPositions = {
+                new Point(672,502),
+                new Point(878, 502),
+                new Point(672, 578),
+                new Point(878, 578)
+        };
+
         for (int i=1;i<=playerCount;i++) {
             ImageIcon playerIcon = new ImageIcon("image/player" + i + ".png");
             JLabel playerLabel = new JLabel(playerIcon);
@@ -96,16 +96,33 @@ public class GameView  extends JPanel {
             Point pos = playerPositions[i-1];
             playerLabel.setBounds(pos.x, pos.y, playerIcon.getIconWidth(), playerIcon.getIconHeight());
 
-//            int width = playerIcon.getIconWidth();
-//            int height = playerIcon.getIconHeight();
-//
-//            int x=100*i;
-//            int y=200;
-//
-//            playerLabel.setBounds(x, y, width, height);
-//
-//            playerImages.add(playerLabel);
             add(playerLabel);
+        }
+        repaint();
+    }
+
+    public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
+        Point[] horsePositions = {
+                new Point(672,532),
+                new Point(878, 532),
+                new Point(672, 608),
+                new Point(878, 608),
+        };
+
+        for (int i=0;i<playerCount;i++) {
+            String color = selectedColors.get(i);
+            Point playerHorsePosition = horsePositions[i];
+
+            for (int j=0;j<horseCount;j++) {
+                ImageIcon horseIcon = new ImageIcon("image/" + color + ".png");
+                JLabel horseLabel = new JLabel(horseIcon);
+
+                int horseX = playerHorsePosition.x + (j*34);
+                int horseY = playerHorsePosition.y;
+
+                horseLabel.setBounds(horseX, horseY, horseIcon.getIconWidth(), horseIcon.getIconHeight());
+                add(horseLabel);
+            }
         }
         repaint();
     }
@@ -180,7 +197,7 @@ public class GameView  extends JPanel {
         }
 
         if (currentImage != null) {
-            g.drawImage(currentImage, 670, 80, null);
+            g.drawImage(currentImage, 655, 50, null);
         }
 
         for (String color : horsePositions.keySet()) {
