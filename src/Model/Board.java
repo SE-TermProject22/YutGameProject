@@ -40,6 +40,7 @@ public class Board {
         }
     }
 
+    // x,y 지시
     public void createNode_pentagon(){
 
     }
