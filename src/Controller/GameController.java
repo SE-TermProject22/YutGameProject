@@ -83,6 +83,7 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedBoard = startView.getSelectedBoard();
+                int playerCount = startView.getPlayerCount();
                 List<String> selectedColors = startView.getSelectedColors();
 
                 if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
@@ -93,6 +94,7 @@ public class GameController {
                 // GameView로 전환
                 startView.setVisible(false);
                 gameView.setBoardType(selectedBoard);
+                gameView.displayPlayers(playerCount);
                 gameView.placeHorses(selectedColors);
                 gameView.setVisible(true);
             }
