@@ -23,9 +23,9 @@ public class StartView extends JPanel{
     private GameState currentState = GameState.START_SCREEN;
 
     public StartView() { //생성자
-            setLayout(null); //수동으로 버튼 위치를 지정하기 위해 레이아웃 매니저를 쓰지 않겠다는 의미
-            loadImages();
-            setupInitialView();
+        setLayout(null); //수동으로 버튼 위치를 지정하기 위해 레이아웃 매니저를 쓰지 않겠다는 의미
+        loadImages();
+        setupInitialView();
     }
 
     //필요한 이미지 불러오기

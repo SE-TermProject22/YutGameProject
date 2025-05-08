@@ -11,11 +11,19 @@ import java.util.TimerTask;
 public class GameView  extends JPanel {
     private Image board, currentImage;
     private JButton throwButton;
+    private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
 
     private List<Image> yutImages;
     private List<Image> resultImages;
+    //위치 바꾸기
+    private Point [] playerPositions = {
+            new Point(709,499),
+            new Point(915, 499),
+            new Point(709, 575),
+            new Point(915, 575)
+    };
 
     private Timer animationTimer;
     private int yutIndex;
@@ -77,6 +85,28 @@ public class GameView  extends JPanel {
 
     public void setBoardType(String boardType) {
         board = new ImageIcon("image/" + boardType + " board.png").getImage();
+        repaint();
+    }
+
+    public void displayPlayers(int playerCount) {
+        for (int i=1;i<=playerCount;i++) {
+            ImageIcon playerIcon = new ImageIcon("image/player" + i + ".png");
+            JLabel playerLabel = new JLabel(playerIcon);
+
+            Point pos = playerPositions[i-1];
+            playerLabel.setBounds(pos.x, pos.y, playerIcon.getIconWidth(), playerIcon.getIconHeight());
+
+//            int width = playerIcon.getIconWidth();
+//            int height = playerIcon.getIconHeight();
+//
+//            int x=100*i;
+//            int y=200;
+//
+//            playerLabel.setBounds(x, y, width, height);
+//
+//            playerImages.add(playerLabel);
+            add(playerLabel);
+        }
         repaint();
     }
 
