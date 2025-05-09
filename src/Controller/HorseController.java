@@ -13,9 +13,9 @@ public class HorseController {
         this.gameView = gameView;
     }
 
-    public void moveHorse(Horse horse) {
+    /*public void moveHorse(Horse horse) {
         horse.move();
         gameView.updateHorse(horse);
-    }
+    }*/
 
 }

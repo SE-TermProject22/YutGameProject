@@ -12,7 +12,7 @@ public class Board {
         nodes = new ArrayList<Node>();
         if(n==4){
             createNode_square();
-            connectNode_square();
+            //connectNode_square();
         }
         else if(n==5){
             createNode_pentagon();
@@ -29,16 +29,16 @@ public class Board {
         int y = 1;
         for(int i = 0; i < 25; i++){
             if(i==10)
-                nodes.add(new DaegakNode(i, x++, y++); //x, y는 디자인 분들이 알려주세요
-            if(i==15)
+                nodes.add(new DaegakNode(i, x++, y++)); //x, y는 디자인 분들이 알려주세요
+            //if(i==15)
         }
     }
 
-    public void connectNode_square(){
+  /*  public void connectNode_square(){
         for(int i = 0; i < 25; i++){
             nodes.get(i).nextNode = nodes.get(nodes.get(i++));
         }
-    }
+    }*/
 
     // x,y 지시
     public void createNode_pentagon(){
