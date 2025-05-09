@@ -9,7 +9,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Horse Game");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1080, 720);
+            frame.setSize(1100, 700);
             frame.setLocationRelativeTo(null); // 화면 중앙에 배치
             frame.setResizable(false);
 
@@ -20,8 +20,8 @@ public class Main {
 
             // 패널들을 JFrame에 추가
             frame.setLayout(null);
-            startView.setBounds(0, 0, 1080, 720);
-            gameView.setBounds(0, 0, 1080, 720);
+            startView.setBounds(0, 0, 1100, 700);
+            gameView.setBounds(0, 0, 1100, 700);
 
             frame.add(startView);
             frame.add(gameView);
