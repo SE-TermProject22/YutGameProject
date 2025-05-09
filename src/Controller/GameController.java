@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 public class GameController {
     private StartView startView;
     private GameView gameView;
-    // private Player currentPlayer;
+    private Player currentPlayer;
 
     private GameState currentState = GameState.START_SCREEN;
 
