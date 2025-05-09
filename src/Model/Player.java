@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.YutResult;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,14 +11,16 @@ public class Player {
     // -- private int horseType; // 해당 player가 가지는 horse 색
     // -- private boolean isMyTurn; // 현재 턴인지 여부
     public int score;   // 점수 -  몇 개의 말이 들어왔는지
-    public List<Horse> horseList;   // 보유 말들 list - id만 가지고 있어도 되고 Horse 자체를 가지고 있어도 됨!
+    public List<Horse> horseList = new ArrayList<>();   // 보유 말들 list - id만 가지고 있어도 되고 Horse 자체를 가지고 있어도 됨!
 
     //추가
-    private String color;
+    public String color;
 
-    public Player(String color) {
+    public Player(int id, String color) {
         //추가
+        this.id = id;
         this.color = color;
+
     }
     // 던진 윷의 결과값(int)을 반환하는 함수
 
@@ -60,8 +63,6 @@ public class Player {
 //        this.horseType = horseType;
 //        System.out.println("선택한 말 종류: " + horseType);
 //    }
-
-
 }
 
 // player가 승리했는지 확인

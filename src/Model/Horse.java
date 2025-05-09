@@ -5,9 +5,12 @@ public class Horse {
     public int x, y, width, height;
     public Node currentNode;
     public Node prevNode;
-
+    public String color;
     // 생성자
-    public void Horse() {
+    public Horse(int id, String color, Node currentNode) {
+        this.id = id;
+        this.color = color;
+        this.currentNode = currentNode;
     }
 
     ;
