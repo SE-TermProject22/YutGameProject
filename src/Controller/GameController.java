@@ -157,7 +157,7 @@ public class GameController {
         }
 
         // 디버깅: 생성된 모든 플레이어 및 보유 말 출력
-        System.out.println("\n===== 생성된 플레이어(Players) 및 보유 말 =====");
+        System.out.println("\n===== 생성된 플레이어(Players) 및 보유 말 log=====");
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             System.out.printf("Player ID: %d, Color: %s, Horse Count: %d\n",
