@@ -103,7 +103,6 @@ public class GameController {
             public void actionPerformed(ActionEvent e) {
                 if (throwState) {
                     YutResult result = currentPlayer.throwYut();
-
                     System.out.println(result);
                     yutList.add(result);
                     gameView.startYutAnimation(result);
@@ -129,6 +128,12 @@ public class GameController {
                             });
                         });
                     }
+
+                    else{
+                        // 윷 선택창 띄위기
+                        move();
+                    }
+
                 }
             }
         });
@@ -208,6 +213,36 @@ public class GameController {
 
     private void updateViewState() {
         startView.setState(currentState);
+    }
+
+    public void move(){
+
+        while(!yutList.isEmpty()){
+            // 윷 선택
+            // YutResult result = gameView.selectYutResult(yutList);
+
+            YutResult result = yutList.get(0); // 위에거 test 용
+            yutList.remove(0);
+
+            // 말 선택
+            // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
+            int horse_id = currentPlayer.horseList.get(0).id;
+
+            System.out.println("horse_id" + horse_id);
+            Horse selectedHorse = horses.get(horse_id);
+            System.out.println("selected horse" + selectedHorse.id);
+
+            System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+            selectedHorse.move(result);
+            System.out.println("horse 움직임");
+            System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+
+            // 여기서 한번 repaint() 해 줄 지 고민
+
+            // finish 처리
+
+
+        }
     }
 }
 
