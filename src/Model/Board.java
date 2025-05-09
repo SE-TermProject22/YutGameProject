@@ -5,15 +5,12 @@ import java.util.List;
 import Model.Node;
 
 public class Board {
-    public int n_diagram;
     public List<Node> nodes;
-    // Node ArrayList로 구현하고 나중에 DaegakNode일 때는
     //
     public Board(String boardType) {
         nodes = new ArrayList<Node>();
-        createNode_square();
         if(boardType == "square") {
-            //createNode_square();
+            createNode_square();
             connectNode_square();
         }
         else if(boardType == "pentagon") {

@@ -36,13 +36,24 @@ public class GameView  extends JPanel {
     }
 
     private void loadImages() {
-        horseImages.put("red", new ImageIcon("image/red.png").getImage());
-        horseImages.put("blue", new ImageIcon("image/blue.png").getImage());
-        horseImages.put("yellow", new ImageIcon("image/yellow.png").getImage());
-        horseImages.put("green", new ImageIcon("image/green.png").getImage());
+        horseImages.clear();
+
+        String[] colors = {"red", "blue", "yellow", "green"};
+
+        for (String color : colors) {
+            for (int i = 1; i <= 5; i++) {
+                String key = color + i;
+                Image img = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
+                if (img != null) {
+                    horseImages.put(key, img);
+                } else {
+                    System.out.println("이미지 로드 실패: " + key);
+                }
+            }
+        }
 
         yutImages = new ArrayList<>();
-        for (int i=1;i<=4;i++) {
+        for (int i = 1; i <= 4; i++) {
             Image img = new ImageIcon("image/yut/yut" + i + ".png").getImage();
             if (img != null) {
                 yutImages.add(img);
@@ -79,6 +90,8 @@ public class GameView  extends JPanel {
     private void initUI() {
         throwButton = createButton("image/윷 던지기.png", 798, 405);
         add(throwButton);
+
+        repaint();
     }
 
     public void setBoardType(String boardType) {
@@ -87,18 +100,18 @@ public class GameView  extends JPanel {
     }
 
     public void displayPlayers(int playerCount) {
-        Point [] playerPositions = {
-                new Point(692,502),
+        Point[] playerPositions = {
+                new Point(692, 502),
                 new Point(898, 502),
                 new Point(692, 578),
                 new Point(898, 578)
         };
 
-        for (int i=1;i<=playerCount;i++) {
+        for (int i = 1; i <= playerCount; i++) {
             ImageIcon playerIcon = new ImageIcon("image/player" + i + ".png");
             JLabel playerLabel = new JLabel(playerIcon);
 
-            Point pos = playerPositions[i-1];
+            Point pos = playerPositions[i - 1];
             playerLabel.setBounds(pos.x, pos.y, playerIcon.getIconWidth(), playerIcon.getIconHeight());
 
             add(playerLabel);
@@ -108,25 +121,28 @@ public class GameView  extends JPanel {
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
-                new Point(692,532),
-                new Point(898, 532),
-                new Point(692, 608),
-                new Point(898, 608),
+                new Point(682, 522),
+                new Point(888, 522),
+                new Point(682, 598),
+                new Point(888, 598),
         };
 
-        for (int i=0;i<playerCount;i++) {
+        for (int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
             Point playerHorsePosition = horsePositions[i];
 
-            for (int j=0;j<horseCount;j++) {
-                ImageIcon horseIcon = new ImageIcon("image/" + color + ".png");
-                JLabel horseLabel = new JLabel(horseIcon);
+            for (int j = 1; j <= horseCount; j++) {
+                String key = color + j;
+                Image horseImage = horseImages.get(key);
+                if (horseImage != null) {
+                    JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
 
-                int horseX = playerHorsePosition.x + (j*34);
-                int horseY = playerHorsePosition.y;
+                    int horseX = playerHorsePosition.x + (j - 1) * 34;
+                    int horseY = playerHorsePosition.y;
 
-                horseLabel.setBounds(horseX, horseY, horseIcon.getIconWidth(), horseIcon.getIconHeight());
-                add(horseLabel);
+                    horseLabel.setBounds(horseX, horseY, 40, 40);
+                    add(horseLabel);
+                }
             }
         }
         repaint();
@@ -153,7 +169,7 @@ public class GameView  extends JPanel {
 
     //말 위치를 업데이트하는 메서드
     public void setHorsePosition(String color, int x, int y) {
-        horsePositions.put(color, new Point(x,y));
+        horsePositions.put(color, new Point(x, y));
         repaint();
     }
 
@@ -180,21 +196,9 @@ public class GameView  extends JPanel {
     }
 
     private void showResultImage() {
-//        Random random = new Random();
-//        int index = random.nextInt(resultImages.size());
-//        setCurrentImage(resultImages.get(index));
 
-        int yutResult = currentPlayer.throwYut(); // 이거 지워야댐 이자식들!!!
+        int yutResult = currentPlayer.throwYut();
 
-        // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
-//        String resultImagePath = getResultImagePathForYutValue(yutResult);
-//
-//        // resultImagePath를 ImageIcon으로 변환하고 Image를 얻음
-//        ImageIcon imageIcon = new ImageIcon(resultImagePath);
-//        Image resultImage = imageIcon.getImage();
-//
-//        // 화면에 현재 이미지 표시
-//        setCurrentImage(resultImage);
         Image resultImage = getResultImagePathForYutValue(yutResult);
 
         if (resultImage != null) {
@@ -228,7 +232,7 @@ public class GameView  extends JPanel {
         throwButton.addActionListener(listener);
     }
 
-    public void setCurrentImage (Image image) {
+    public void setCurrentImage(Image image) {
         currentImage = image;
         repaint();
     }
@@ -256,5 +260,12 @@ public class GameView  extends JPanel {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
+
+        // ★★★ 추가: 테스트용 이미지 출력 ★★★
+//        Image testImage = new ImageIcon("image/red.png").getImage();
+//        if (testImage != null) {
+//            // 원하는 좌표 (x, y)를 지정해서 이미지 출력
+//            g.drawImage(testImage, 555, 463, 40, 40, null);
+//        }
     }
 }
