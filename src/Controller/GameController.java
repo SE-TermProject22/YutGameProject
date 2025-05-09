@@ -124,8 +124,6 @@ public class GameController {
 
 
     private void startGame() {
-        long startTime = System.currentTimeMillis();
-
         String selectedBoard = startView.getSelectedBoard();
 
         // new 보드 연결

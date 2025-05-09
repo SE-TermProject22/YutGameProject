@@ -1,7 +1,6 @@
 package Model;
 
 import Controller.YutResult;
-
 import java.util.List;
 import java.util.Random;
 
@@ -20,8 +19,6 @@ public class Player {
         //추가
         this.color = color;
     }
-
-
     // 던진 윷의 결과값(int)을 반환하는 함수
 
     public YutResult throwYut() {

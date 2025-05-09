@@ -21,6 +21,7 @@ public class GameView  extends JPanel {
 
     private List<Image> yutImages;
     private List<Image> resultImages;
+    private Image notifyingImage;
 
     private Timer animationTimer;
     private int yutIndex;
@@ -47,8 +48,6 @@ public class GameView  extends JPanel {
                 Image img = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
                 if (img != null) {
                     horseImages.put(key, img);
-                } else {
-                    System.out.println("이미지 로드 실패: " + key);
                 }
             }
         }
@@ -150,12 +149,12 @@ public class GameView  extends JPanel {
     }
 
     //멀 위치 초기화 메서드
-    public void placeHorses(List<String> colors) {
-        for (String color : colors) {
-            //setHorsePosition(color, , );
-        }
-        repaint();
-    }
+//    public void placeHorses(List<String> colors) {
+//        for (String color : colors) {
+//            //setHorsePosition(color, , );
+//        }
+//        repaint();
+//    }
 
 //    public void placeHorses(List<String> colors) {
 //        int x = 50;  // x 좌표를 50부터 시작
@@ -169,10 +168,10 @@ public class GameView  extends JPanel {
 //    }
 
     //말 위치를 업데이트하는 메서드
-    public void setHorsePosition(String color, int x, int y) {
-        horsePositions.put(color, new Point(x, y));
-        repaint();
-    }
+//    public void setHorsePosition(String color, int x, int y) {
+//        horsePositions.put(color, new Point(x, y));
+//        repaint();
+//    }
 
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
@@ -217,9 +216,36 @@ public class GameView  extends JPanel {
 
         if (resultImage != null) {
             setCurrentImage(resultImage);
+
+        if (yutResult == 4) {
+            scheduleNotifyingImage("image/윷 한번더.png");
+        } else if (yutResult == 5) {
+            scheduleNotifyingImage("image/모 한번더.png");
         } else {
-            System.out.println("결과 이미지가 없습니다. yutResult: " + result);
+            notifyingImage = null;
+            repaint();
         }
+    }
+
+    //notifyingImage 출력 시간 제어
+    private void scheduleNotifyingImage(String imagePath) {
+        Timer notifyingTimer = new Timer();
+
+        notifyingTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                notifyingImage = new ImageIcon(imagePath).getImage();
+                repaint();
+
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        notifyingImage = null;
+                        repaint();
+                    }
+                }, 1100); //1.1초 뒤에 사라지기
+            }
+        }, 700); //윷 결과 출력되고 0.7초 뒤에 출력
     }
 
     // Yut 값에 맞는 이미지 경로를 반환하는 메서드
@@ -268,6 +294,10 @@ public class GameView  extends JPanel {
             g.drawImage(currentImage, 670, 40, null);
         }
 
+        if (notifyingImage != null) {
+            g.drawImage(notifyingImage, 291, 294, null);
+        }
+
         for (String color : horsePositions.keySet()) {
             Image horseImage = horseImages.get(color);
             Point position = horsePositions.get(color);
@@ -276,12 +306,5 @@ public class GameView  extends JPanel {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
-
-        // ★★★ 추가: 테스트용 이미지 출력 ★★★
-//        Image testImage = new ImageIcon("image/red.png").getImage();
-//        if (testImage != null) {
-//            // 원하는 좌표 (x, y)를 지정해서 이미지 출력
-//            g.drawImage(testImage, 555, 463, 40, 40, null);
-//        }
     }
 }

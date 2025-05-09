@@ -6,3 +6,4 @@ public class EndNode extends Node {
         this.isEndNode = true;
     }
 }
+
