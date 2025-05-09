@@ -118,8 +118,10 @@ public class GameController {
             accumulatedResults.add(result);
             System.out.println("던진 윷 결과: " + result);
 
-            if (result == 4 || result == 5) {
-                JOptionPane.showMessageDialog(null, "윷 or 모! 한 번 더 던집니다.");
+            if (result == 4) {
+                JOptionPane.showMessageDialog(null, "윷! 한 번 더 던집니다."); // view로 빼기
+            } else if (result == 5) {
+                JOptionPane.showMessageDialog(null, "모! 한 번 더 던집니다."); // view로 빼기
             } else {
                 break;
             }
@@ -128,29 +130,33 @@ public class GameController {
     }
 
     private void promptYutResultSelection() {
-        if (accumulatedResults.isEmpty()) return;
+        while (!accumulatedResults.isEmpty()) {
+            String[] resultOptions = new String[accumulatedResults.size()];
+            for (int i = 0; i < accumulatedResults.size(); i++) {
+                resultOptions[i] = convertResultToName(accumulatedResults.get(i));
+            }
 
-        String[] resultOptions = new String[accumulatedResults.size()];
-        for (int i = 0; i < accumulatedResults.size(); i++) {
-            resultOptions[i] = convertResultToName(accumulatedResults.get(i));
-        }
+            int selected = JOptionPane.showOptionDialog(
+                    null,
+                    "적용할 윷 결과를 선택하세요:",
+                    "윷 결과 선택",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    resultOptions,
+                    resultOptions[0]
+            );
 
-        int selected = JOptionPane.showOptionDialog(
-                null,
-                "적용할 윷 결과를 선택하세요:",
-                "윷 결과 선택",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                resultOptions,
-                resultOptions[0]
-        );
-
-        if (selected != -1) {
-            int selectedResult = accumulatedResults.get(selected);
-            promptHorseSelection(selectedResult);
+            if (selected != -1) {
+                int selectedResult = accumulatedResults.remove(selected);
+                promptHorseSelection(selectedResult);
+            } else {
+                // 사용자가 취소를 선택한 경우 루프 종료
+                break;
+            }
         }
     }
+
 
     private String convertResultToName(int value) {
         return switch (value) {
