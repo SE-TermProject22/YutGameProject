@@ -6,10 +6,11 @@ import java.util.Random;
 // Player Class
 public class Player {
     public int id;  // player 고유 id
-    private int horseType;
-    private boolean isMyTurn;
-    public int score;
-    public List<Horse> horseList;  // 말 목록
+
+    private int horseType; // 해당 player가 가지는 horse 색
+    private boolean isMyTurn; // 현재 턴인지 여부
+    public int score;   // 점수 -  몇 개의 말이 들어왔는지
+    public List<Horse> horseList;   // 보유 말들 list - id만 가지고 있어도 되고 Horse 자체를 가지고 있어도 됨!
 
     public String color;
     public String getColor() {
@@ -22,6 +23,8 @@ public class Player {
     }
 
     // 윷 던지기
+    // 던진 윷의 결과값(int)을 반환하는 함수
+    // yut이 던진 결과를 player에게 저장
     public int throwYut() {
         int[] values = {1, 2, 3, 4, 5, -1};
         Random rand = new Random();

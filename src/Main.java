@@ -1,5 +1,8 @@
 import javax.swing.*;
 import Controller.GameController;
+import Model.Board;
+import Model.DaegakNode;
+import Model.Node;
 import View.StartView;
 import View.GameView;
 
@@ -31,5 +34,8 @@ public class Main {
 
             frame.setVisible(true);
         });
+
     }
+
+
 }

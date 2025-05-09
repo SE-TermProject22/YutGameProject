@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Board;
 import View.StartView;
 import View.GameView;
 import Model.Player;
@@ -62,6 +63,14 @@ public class GameController {
 
     private void startGame() {
         String selectedBoard = startView.getSelectedBoard();
+
+        // new 보드 연결
+        // board = new Board();
+        // square board
+        // pentagon board
+        // hexagon board
+        Board board = new Board(selectedBoard);
+
         int playerCount = startView.getPlayerCount();
         int horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
@@ -96,14 +105,12 @@ public class GameController {
         startView.setVisible(false); // StartView 숨기기
         gameView.setVisible(true);   // GameView 보이기
 
-
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
 
       //gameView.placeHorses(selectedColors, playerCount);
 
-    }
 
     private void setState(GameState newState) {
         currentState = newState;
