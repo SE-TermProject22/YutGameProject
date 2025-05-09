@@ -1,6 +1,7 @@
 package View;
 
 import Controller.GameController;
+import Controller.YutResult;
 import Model.Player;
 
 import javax.swing.*;
@@ -24,7 +25,7 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
 
-    private Player currentPlayer;
+    // private Player currentPlayer;
 
     public GameView() {
         setLayout(null);
@@ -173,7 +174,7 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    public void startYutAnimation() {
+    public void startYutAnimation(YutResult result) {
         yutIndex = 0;
 
         if (animationTimer != null) {
@@ -189,39 +190,52 @@ public class GameView  extends JPanel {
                     yutIndex++;
                 } else {
                     animationTimer.cancel();
-                    showResultImage();
+                    showResultImage(result);
                 }
             }
         }, 0, 300);
     }
 
-    private void showResultImage() {
+    private void showResultImage(YutResult result) {
+//        Random random = new Random();
+//        int index = random.nextInt(resultImages.size());
+//        setCurrentImage(resultImages.get(index));
 
-        int yutResult = currentPlayer.throwYut();
+        // int yutResult = currentPlayer.throwYut();
 
-        Image resultImage = getResultImagePathForYutValue(yutResult);
+
+        // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
+//        String resultImagePath = getResultImagePathForYutValue(yutResult);
+//
+//        // resultImagePath를 ImageIcon으로 변환하고 Image를 얻음
+//        ImageIcon imageIcon = new ImageIcon(resultImagePath);
+//        Image resultImage = imageIcon.getImage();
+//
+//        // 화면에 현재 이미지 표시
+//        setCurrentImage(resultImage);
+        Image resultImage = getResultImagePathForYutValue(result);
 
         if (resultImage != null) {
             setCurrentImage(resultImage);
         } else {
-            System.out.println("결과 이미지가 없습니다. yutResult: " + yutResult);
+            System.out.println("결과 이미지가 없습니다. yutResult: " + result);
         }
     }
 
     // Yut 값에 맞는 이미지 경로를 반환하는 메서드
-    private Image getResultImagePathForYutValue(int yutValue) {
-        switch (yutValue) {
-            case 1:
+    private Image getResultImagePathForYutValue(YutResult result) {
+        switch (result) {
+            case YutResult.DO:
                 return resultImages.get(0);
-            case 2:
+            case YutResult.GAE:
                 return resultImages.get(1);
-            case 3:
+            case YutResult.GEOL:
                 return resultImages.get(2);
-            case 4:
+            case YutResult.YUT:
                 return resultImages.get(3);
-            case 5:
+            case YutResult.MO:
                 return resultImages.get(4);
-            case -1:
+            case YutResult.BackDo:
                 return resultImages.get(5);
             default:
                 return null;
@@ -237,9 +251,11 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+    /*
     public void setPlayer(Player player) {
         this.currentPlayer = player;
     }
+    */
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

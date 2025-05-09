@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.YutResult;
+
 import java.util.List;
 import java.util.Random;
 
@@ -19,27 +21,27 @@ public class Player {
         this.color = color;
     }
 
+
     // 던진 윷의 결과값(int)을 반환하는 함수
-    // yut이 던진 결과를 player에게 저장
-    public int throwYut() {
-        int[] values = { 1, 2, 3, 4, 5, -1 };
+
+    public YutResult throwYut() {
         Random rand = new Random();
         int r = rand.nextInt(100); // 0~99
-        int value;
+        YutResult result;
         if (r < 5) {             // 0~4 : 5%
-            value = -1;
+            result = YutResult.BackDo;
         } else if (r < 12) {     // 5~11 : 7%
-            value = 5;
+            result = YutResult.MO;
         } else if (r < 20) {     // 12~19 : 8%
-            value = 4;
+            result = YutResult.YUT;
         } else if (r < 45) {     // 20~44 : 25%
-            value = 3;
+            result = YutResult.GEOL;
         } else if (r < 75) {     // 45~74 : 30%
-            value = 2;
+            result = YutResult.GAE;
         } else {                 // 75~99 : 25%
-            value = 1;
+            result = YutResult.DO;
         }
-        return value;
+        return result;
     }
     public void chooseResultOrder() {
         // 윷 결과 중 어느 것을 선택할지 결정
