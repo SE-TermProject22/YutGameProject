@@ -101,28 +101,40 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(throwState) {
-                    // throwState = false;
+                if (throwState) {
                     YutResult result = currentPlayer.throwYut();
                     System.out.println(result);
                     yutList.add(result);
                     gameView.startYutAnimation(result);
 
-                    if(result==YutResult.MO||result==YutResult.YUT){
+                    if (result == YutResult.MO || result == YutResult.YUT) {
                         throwState = true;
-                        // 한 번 더 팝업창 띄우기
                         gameView.scheduleNotifyingImage(result);
+                    } else {
+                        throwState = false;
+
+                        //윷 결과 선택창
+                        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                            yutList.remove(chosenResult); // 선택한 결과 제거
+                            System.out.println("선택된 결과: " + chosenResult);
+
+                            //말 적용 선택창
+                            gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+                                System.out.println("선택된 말: " + selectedHorse.id);
+
+                                //이동 구현 필요
+                                yutList.clear();
+                                throwState = true;
+                            });
+                        });
                     }
+
                     else{
                         // 윷 선택창 띄위기
                         move();
                     }
 
-
-
                 }
-
-
             }
         });
     }

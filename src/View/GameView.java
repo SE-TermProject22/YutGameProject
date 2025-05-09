@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
+import Model.Horse;
 
 public class GameView  extends JPanel {
     private Image board, currentImage;
@@ -317,4 +319,100 @@ public class GameView  extends JPanel {
             }
         }
     }
+
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
+    }
+
+    public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
+        JDialog dialog = new JDialog((JFrame) null, "결과 적용 선택", true);  // 모달창
+        dialog.setSize(665, 298);
+        dialog.setLocationRelativeTo(null);
+        dialog.setUndecorated(true); // ✨ 윈도우 테두리 없애기
+
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image bg = new ImageIcon("image/결과 적용.png").getImage();
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        System.out.println("전달된 결과 리스트: " + yutResults);
+        panel.setLayout(null);
+        panel.setBounds(0, 0, 800, 600);
+
+        int x = 100;
+        int y = 100;
+
+        for (YutResult result : yutResults) {
+            String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
+            ImageIcon icon = new ImageIcon(imagePath);
+            JButton btn = new JButton(icon);
+            btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+
+            btn.addActionListener(e -> {
+                dialog.dispose();
+                onSelected.accept(result);
+            });
+
+            panel.add(btn);
+            x += icon.getIconWidth() + 20;
+        }
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
+    }
+
+    public void showHorseSelectionDialog(List<Horse> horses, Consumer<Horse> onSelected) {
+        JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
+        dialog.setSize(665, 298);
+        dialog.setLocationRelativeTo(null);
+        dialog.setUndecorated(true);
+
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image bg = new ImageIcon("image/말 적용.png").getImage();
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        panel.setLayout(null);
+
+        int x = 100;
+        int y = 100;
+
+        for (Horse horse : horses) {
+            String imagePath = "image/선택 " + horse.color + ((horse.id % 5) + 1) + ".png";
+            ImageIcon icon = new ImageIcon(imagePath);
+
+            JButton btn = new JButton(icon);
+            btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+
+            btn.addActionListener(e -> {
+                dialog.dispose();
+                onSelected.accept(horse);
+            });
+
+            panel.add(btn);
+            x += icon.getIconWidth() + 20;
+        }
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
+    }
+
+
 }
