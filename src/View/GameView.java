@@ -192,6 +192,7 @@ public class GameView  extends JPanel {
                     showResultImage(result);
                 }
             }
+
         }, 0, 300);
     }
 
@@ -216,10 +217,11 @@ public class GameView  extends JPanel {
 
         if (resultImage != null) {
             setCurrentImage(resultImage);
+        }
 
-        if (yutResult == 4) {
+        if (result == YutResult.YUT) {
             scheduleNotifyingImage("image/윷 한번더.png");
-        } else if (yutResult == 5) {
+        } else if (result == YutResult.MO) {
             scheduleNotifyingImage("image/모 한번더.png");
         } else {
             notifyingImage = null;

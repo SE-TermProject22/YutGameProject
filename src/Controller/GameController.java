@@ -143,10 +143,6 @@ public class GameController {
             return;
         }
 
-
-        long afterBoardCheckTime = System.currentTimeMillis();
-        System.out.println("Board and color check time: " + (afterBoardCheckTime - startTime) + "ms");
-
         players = new ArrayList<>();
         for (String color : selectedColors) {
             players.add(new Player(color));
