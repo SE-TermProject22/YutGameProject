@@ -99,7 +99,7 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(throwState) {
-                    throwState = false;
+                    //throwState = false;
                     YutResult result = currentPlayer.throwYut();
 
                     System.out.println(result);
@@ -169,6 +169,27 @@ public class GameController {
     private void updateViewState() {
         startView.setState(currentState);
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void applySelectedResult(int selectedResult, int selectedHorse) {
+        // 여기서 말 이동이나 결과 처리
+        // Player와 Horse 상태 업데이트 로직 처리
+        System.out.println("선택된 결과: " + selectedResult + ", 선택된 말: " + selectedHorse);
+    }
+
+
+
+    // 말 선택과 결과 적용 로직
+//    public void applySelectedResult(int selectedResult, int horseIndex) {
+//        // Model에 해당 말의 위치를 업데이트하는 요청을 보냄
+//        horse.updateHorsePosition(selectedResult, horseIndex);
+//
+//        // 업데이트된 상태를 View에 반영
+//        gameView.repaint();
+//    }
 }
 
 /*
