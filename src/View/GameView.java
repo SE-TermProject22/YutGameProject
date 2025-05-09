@@ -1,7 +1,7 @@
 package View;
 
 import Controller.GameController;
-import Model.Player;
+//import Model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
 
-    private Player currentPlayer;
+    // private Player currentPlayer;
 
     public GameView() {
         setLayout(null);
