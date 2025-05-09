@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Horse;
 import View.StartView;
 import View.GameView;
 import Model.Player;
@@ -16,6 +17,11 @@ public class GameController {
     private StartView startView;
     private GameView gameView;
     private Player currentPlayer;
+    private List<Player> players;
+    private Horse[] horses;
+    private boolean throwState = true;
+    private List<YutResult> yutList = new ArrayList<>();
+    ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
 
     private GameState currentState = GameState.START_SCREEN;
 
@@ -91,10 +97,30 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameView.startYutAnimation();
+                if(throwState) {
+                    throwState = false;
+                    YutResult result = currentPlayer.throwYut();
+
+                    System.out.println(result);
+                    yutList.add(result);
+                    gameView.startYutAnimation(result);
+
+
+                    if(result==YutResult.MO||result==YutResult.YUT){
+                        throwState = true;
+                        // 한 번 더 팝업창 띄우기
+                    }
+                    else{
+                        // 윷 선택창 띄우기
+                    }
+
+                }
+
+
             }
         });
     }
+
 
     private void startGame() {
         long startTime = System.currentTimeMillis();
@@ -104,6 +130,7 @@ public class GameController {
         int horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
 
+
         if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
             JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
             return;
@@ -112,13 +139,13 @@ public class GameController {
         long afterBoardCheckTime = System.currentTimeMillis();
         System.out.println("Board and color check time: " + (afterBoardCheckTime - startTime) + "ms");
 
-        List<Player> players = new ArrayList<>();
+        players = new ArrayList<>();
         for (String color : selectedColors) {
             players.add(new Player(color));
         }
 
         currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
-        gameView.setPlayer(currentPlayer);
+        // gameView.setPlayer(currentPlayer);
 
         setState(GameState.GAME_PLAY); // 게임 상태로 전환
         startView.setVisible(false); // StartView 숨기기
