@@ -23,12 +23,18 @@ public class GameView  extends JPanel {
     private List<Image> resultImages;
     private Image notifyingImage;
 
+    private int selectedResult;
+    private List<JButton> resultButtons = new ArrayList<>();
+    private List<JButton> horseButtons = new ArrayList<>();
+
     private Timer animationTimer;
     private int yutIndex;
 
     // private Player currentPlayer;
+    private GameController gameController;
 
     public GameView() {
+        this.gameController = gameController;
         setLayout(null);
         horsePositions = new HashMap<>();
         horseImages = new HashMap<>();
@@ -148,31 +154,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    //멀 위치 초기화 메서드
-//    public void placeHorses(List<String> colors) {
-//        for (String color : colors) {
-//            //setHorsePosition(color, , );
-//        }
-//        repaint();
-//    }
-
-//    public void placeHorses(List<String> colors) {
-//        int x = 50;  // x 좌표를 50부터 시작
-//        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
-//
-//        for (String color : colors) {
-//            setHorsePosition(color, x, y);
-//            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
-//        }
-//        repaint();
-//    }
-
-    //말 위치를 업데이트하는 메서드
-//    public void setHorsePosition(String color, int x, int y) {
-//        horsePositions.put(color, new Point(x, y));
-//        repaint();
-//    }
-
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
 
@@ -197,22 +178,6 @@ public class GameView  extends JPanel {
     }
 
     private void showResultImage(YutResult result) {
-//        Random random = new Random();
-//        int index = random.nextInt(resultImages.size());
-//        setCurrentImage(resultImages.get(index));
-
-        // int yutResult = currentPlayer.throwYut();
-
-
-        // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
-//        String resultImagePath = getResultImagePathForYutValue(yutResult);
-//
-//        // resultImagePath를 ImageIcon으로 변환하고 Image를 얻음
-//        ImageIcon imageIcon = new ImageIcon(resultImagePath);
-//        Image resultImage = imageIcon.getImage();
-//
-//        // 화면에 현재 이미지 표시
-//        setCurrentImage(resultImage);
         Image resultImage = getResultImagePathForYutValue(result);
 
         if (resultImage != null) {
@@ -267,6 +232,75 @@ public class GameView  extends JPanel {
                 return resultImages.get(5);
             default:
                 return null;
+        }
+    }
+
+    // 결과 버튼 생성 및 표시 메서드
+    public void displayResultButtons(List<Integer> yutResults) {
+        clearButtons(); // 기존 버튼들 삭제
+
+        int startX = 287;
+        int startY = 353;
+        int gap = 93;
+
+        for (int i = 0; i < yutResults.size(); i++) {
+            int result = yutResults.get(i);
+            String imagePath = "image/윷 결과 버튼" + result + ".png";  // 결과에 맞는 이미지 경로 (예: 1.png, 2.png 등)
+            JButton resultButton = createButton(imagePath, startX + (gap * i), startY);
+
+            resultButton.addActionListener(e -> {
+                selectedResult = result;
+                displayHorseButtons();
+            });
+
+            add(resultButton);
+            resultButtons.add(resultButton);
+        }
+
+        repaint();
+    }
+
+    // 말 선택 버튼 생성 및 표시 메서드
+    public void displayHorseButtons() {
+        clearButtons(); // 기존 버튼들 삭제
+        Player currentPlayer = gameController.getCurrentPlayer();
+
+        if (currentPlayer == null) return;
+
+        String playerColor = currentPlayer.getColor(); // 현재 플레이어의 색상 (예: "red", "blue" 등)
+        int horseCount = currentPlayer.getHorseCount();  // 플레이어가 가진 말의 개수
+
+        int startX = 327;
+        int startY = 353;
+        int gap = 93;
+
+        for (int i = 1; i <= horseCount; i++) {
+            String imagePath = "image/말 버튼/" + playerColor + "/" + i + ".png";  // 말 이미지 경로 (예: horse1.png, horse2.png 등)
+            JButton horseButton = createButton(imagePath, startX + (gap * (i - 1)), startY);
+
+            int horseIndex = i;
+            horseButton.addActionListener(e -> {
+                gameController.applySelectedResult(selectedResult, horseIndex);
+            });
+
+            add(horseButton);
+            horseButtons.add(horseButton);
+        }
+
+        repaint();
+    }
+
+    public void applySelectedResult(int selectedResult, int selectedHorse) {
+        gameController.applySelectedResult(selectedResult, selectedHorse);
+    }
+
+    // clearButtons 메서드 정의 (버튼들 숨기기)
+    private void clearButtons() {
+        for (JButton button : horseButtons) {
+            button.setVisible(false);
+        }
+        for (JButton button : resultButtons) {
+            button.setVisible(false);
         }
     }
 
