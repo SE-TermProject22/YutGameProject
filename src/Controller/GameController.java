@@ -97,8 +97,6 @@ public class GameController {
     }
 
     private void startGame() {
-        long startTime = System.currentTimeMillis();
-
         String selectedBoard = startView.getSelectedBoard();
         int playerCount = startView.getPlayerCount();
         int horseCount = startView.getHorseCount();
