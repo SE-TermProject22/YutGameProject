@@ -4,21 +4,26 @@ import Model.Board;
 import View.StartView;
 import View.GameView;
 import Model.Player;
+import Model.Horse;
+import Model.Node;
+import Model.EndNode;
+import Model.Board;
 
-import java.awt.*;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
 
 public class GameController {
     private StartView startView;
     private GameView gameView;
-    private Player currentPlayer;
 
     private GameState currentState = GameState.START_SCREEN;
+    private List<Player> players;
+    private Board board;
+    private Player currentPlayer;
+    private int currentPlayerIndex = 0;
+    private List<Integer> accumulatedResults = new ArrayList<>();
 
     public GameController(StartView startView, GameView gameView) {
         this.startView = startView;
@@ -29,77 +34,34 @@ public class GameController {
     }
 
     private void initializeListeners() {
-        startView.addStartButtonListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setState(GameState.HORSE_SELECTION);
-            }
-        });
+        startView.addStartButtonListener(e -> setState(GameState.HORSE_SELECTION));
 
-        // Horse Selection Listener
-        startView.setHorseSelectionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 말 버튼 클릭 시, 말 선택 및 취소 처리
-                String color = e.getActionCommand(); // 버튼에서 말 색상 가져오기
-                startView.toggleHorseSelection(color);
+        startView.setHorseSelectionListener(e -> {
+            String color = e.getActionCommand();
+            startView.toggleHorseSelection(color);
 
-                int playerCount = startView.getPlayerCount();
-                int selectedHorseCount = startView.getSelectedColors().size();
+            int playerCount = startView.getPlayerCount();
+            int selectedHorseCount = startView.getSelectedColors().size();
 
-                if (selectedHorseCount == playerCount) {
-                    // 말 수가 일치하면 보드 선택 화면으로 넘어감
-                    setState(GameState.BOARD_SELECTION);
-                } else if (selectedHorseCount > playerCount) {
-                    // 플레이어 수를 초과하면 경고
-                    JOptionPane.showMessageDialog(null, "플레이어 수에 맞게 말을 선택해주세요.");
-                    startView.toggleHorseSelection(""); // 선택 취소
-                }
+            if (selectedHorseCount == playerCount) {
+                setState(GameState.BOARD_SELECTION);
+            } else if (selectedHorseCount > playerCount) {
+                JOptionPane.showMessageDialog(null, "플레이어 수에 맞게 말을 선택해주세요.");
+                startView.toggleHorseSelection("");
             }
         });
 
         startView.setBoardSelectionListeners(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Square 버튼 클릭 시
-                        startView.selectBoard("square");
-                    }
-                },
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Pentagon 버튼 클릭 시
-                        startView.selectBoard("pentagon");
-                    }
-                },
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Hexagon 버튼 클릭 시
-                        startView.selectBoard("hexagon");
-                    }
-                }
+                e -> startView.selectBoard("square"),
+                e -> startView.selectBoard("pentagon"),
+                e -> startView.selectBoard("hexagon")
         );
 
-        startView.addNextButtonListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startGame();
-            }
-        });
-
-        gameView.addThrowButtonListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameView.startYutAnimation();
-            }
-        });
+        startView.addNextButtonListener(e -> startGame());
+        gameView.addThrowButtonListener(e -> handleYutThrow());
     }
 
     private void startGame() {
-        long startTime = System.currentTimeMillis();
-
         String selectedBoard = startView.getSelectedBoard();
 
         // new 보드 연결
@@ -113,17 +75,30 @@ public class GameController {
         int horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
 
-        if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
+        if (selectedBoard == null || selectedColors.size() != playerCount) {
             JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
             return;
         }
 
         List<Player> players = new ArrayList<>();
+
         for (String color : selectedColors) {
-            players.add(new Player(color));
+            Player player = new Player(color);
+            List<Horse> horseList = new ArrayList<>();
+
+            for (int i = 0; i < horseCount; i++) {
+                Horse h = new Horse();
+                h.id = i;
+                h.color = color;
+                h.currentNode = board.nodes.get(0);
+                horseList.add(h);
+            }
+            player.horseList = horseList;
+            players.add(player);
         }
 
-        currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
+        currentPlayerIndex = 0;
+        currentPlayer = players.get(currentPlayerIndex);
         gameView.setPlayer(currentPlayer);
 
         setState(GameState.GAME_PLAY); // 게임 상태로 전환
@@ -133,8 +108,9 @@ public class GameController {
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
-        //gameView.placeHorses(selectedColors, playerCount);
-    }
+
+      //gameView.placeHorses(selectedColors, playerCount);
+
 
     private void setState(GameState newState) {
         currentState = newState;
@@ -144,26 +120,174 @@ public class GameController {
     private void updateViewState() {
         startView.setState(currentState);
     }
-}
 
-/*
-// 뭐 이런식으로 turn 넘기고 한다는데 잘 모르겠고 일단 보자^^
-public void keyPressed(KeyEvent e) {
-    if (!turnController.isTurnActive()) return;
+    private void handleYutThrow() {
+        accumulatedResults.clear();
+        while (true) {
+            int result = currentPlayer.throwYut();
+            accumulatedResults.add(result);
+            System.out.println("던진 윷 결과: " + result);
 
-    Player player = playerController.getCurrentPlayer();
-    String pieceId = player.getPieceId();
+            if (result == 4) {
+                JOptionPane.showMessageDialog(null, "윷! 한 번 더 던집니다."); // view로 빼기
+            } else if (result == 5) {
+                JOptionPane.showMessageDialog(null, "모! 한 번 더 던집니다."); // view로 빼기
+            } else {
+                break;
+            }
+        }
+        promptYutResultSelection();
+    }
 
-    switch (e.getKeyCode()) {
-        case KeyEvent.VK_RIGHT -> pieceController.movePiece(pieceId, 10, 0);
-        case KeyEvent.VK_LEFT -> pieceController.movePiece(pieceId, -10, 0);
-        case KeyEvent.VK_UP -> pieceController.movePiece(pieceId, 0, -10);
-        case KeyEvent.VK_DOWN -> pieceController.movePiece(pieceId, 0, 10);
-        case KeyEvent.VK_ENTER -> {
-            turnController.endTurn();
-            playerController.nextPlayer();
-            turnController.startTurn();
+    private void promptYutResultSelection() {
+        while (!accumulatedResults.isEmpty()) {
+            String[] resultOptions = new String[accumulatedResults.size()];
+            for (int i = 0; i < accumulatedResults.size(); i++) {
+                resultOptions[i] = convertResultToName(accumulatedResults.get(i));
+            }
+
+            int selected = JOptionPane.showOptionDialog(
+                    null,
+                    "적용할 윷 결과를 선택하세요:",
+                    "윷 결과 선택",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    resultOptions,
+                    resultOptions[0]
+            );
+
+            if (selected != -1) {
+                int selectedResult = accumulatedResults.remove(selected);
+                promptHorseSelection(selectedResult);
+            } else {
+                // 사용자가 취소를 선택한 경우 루프 종료
+                break;
+            }
         }
     }
 
- */
+
+    private String convertResultToName(int value) {
+        return switch (value) {
+            case -1 -> "빽도";
+            case 1 -> "도";
+            case 2 -> "개";
+            case 3 -> "걸";
+            case 4 -> "윷";
+            case 5 -> "모";
+            default -> value + "";
+        };
+    }
+
+    private void promptHorseSelection(int selectedResult) {
+        if (currentPlayer.horseList == null || currentPlayer.horseList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "이 플레이어는 말을 가지고 있지 않습니다.");
+            return;
+        }
+
+        String[] horseOptions = new String[currentPlayer.horseList.size()];
+        for (int i = 0; i < horseOptions.length; i++) {
+            horseOptions[i] = "말 " + (i + 1);
+        }
+
+        int selected = JOptionPane.showOptionDialog(
+                null,
+                "어떤 말을 움직이시겠습니까?",
+                "말 선택",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                horseOptions,
+                horseOptions[0]
+        );
+
+        if (selected != -1) {
+            moveHorse(currentPlayer.horseList.get(selected), selectedResult);
+        }
+    }
+
+    private void moveHorse(Horse horse, int steps) {
+        if (horse.currentNode == null) return;
+
+        Node current = horse.currentNode;
+
+        for (int i = 0; i < Math.abs(steps); i++) {
+            if (steps > 0) {
+                if (current.nextNode != null) current = current.nextNode;
+            } else {
+                if (horse.prevNode != null) current = horse.prevNode;
+            }
+        }
+
+        horse.prevNode = horse.currentNode;
+        horse.currentNode = current;
+        gameView.setHorsePosition(horse.color, current.x, current.y);
+
+        // ✅ 업기 (같은 팀 말 함께 이동)
+        for (Player player : players) {
+            for (Horse teammate : player.horseList) {
+                if (teammate == horse) continue;
+                if (teammate.currentNode == horse.prevNode && teammate.color.equals(horse.color)) {
+                    teammate.prevNode = teammate.currentNode;
+                    teammate.currentNode = horse.currentNode;
+                    gameView.setHorsePosition(teammate.color, teammate.currentNode.x, teammate.currentNode.y);
+                }
+            }
+        }
+
+        // ✅ 완주 처리
+        if (horse.currentNode instanceof EndNode || horse.currentNode.isEndNode) {
+            horse.currentNode = null; // 말 제거
+            currentPlayer.score++;
+        }
+
+        // ✅ 말 잡기
+        checkHorseCollision(horse);
+
+        // ✅ 턴 넘기기 및 승리 확인
+        nextPlayer();
+        checkVictoryCondition();
+    }
+
+    private void checkHorseCollision(Horse movingHorse) {
+        for (Player player : players) {
+            for (Horse other : player.horseList) {
+                if (other == movingHorse) continue;
+                if (other.currentNode == movingHorse.currentNode) {
+                    if (!other.color.equals(movingHorse.color)) {
+                        other.currentNode = getStartNode();
+                        gameView.setHorsePosition(other.color, other.currentNode.x, other.currentNode.y);
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkVictoryCondition() {
+        for (Player player : players) {
+            boolean allFinished = true;
+            for (Horse horse : player.horseList) {
+                if (horse.currentNode != null) {
+                    allFinished = false;
+                    break;
+                }
+            }
+            if (allFinished) {
+                JOptionPane.showMessageDialog(null, "🎉 " + player.color + " 플레이어 승리!");
+                System.exit(0);
+            }
+        }
+    }
+
+    private Node getStartNode() {
+        return board.nodes.get(0);
+    }
+
+    private void nextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        currentPlayer = players.get(currentPlayerIndex);
+        gameView.setPlayer(currentPlayer);
+        JOptionPane.showMessageDialog(null, "다음 턴: " + currentPlayer.color + " 플레이어");
+    }
+}

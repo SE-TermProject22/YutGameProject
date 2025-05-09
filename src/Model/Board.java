@@ -6,8 +6,10 @@ import Model.Node;
 
 public class Board {
     public List<Node> nodes;
-    //
-    public Board(String boardType) {
+    // Node ArrayList로 구현하고 나중에 DaegakNode일 때는
+    public Board(int n) {
+        n_diagram = n;
+
         nodes = new ArrayList<Node>();
         if(boardType == "square") {
             createNode_square();
