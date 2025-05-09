@@ -7,8 +7,8 @@ import java.util.Random;
 // Player Class
 public class Player {
     public int id;  // player 고유 id
-    private int horseType; // 해당 player가 가지는 horse 색
-    private boolean isMyTurn; // 현재 턴인지 여부
+    // -- private int horseType; // 해당 player가 가지는 horse 색
+    // -- private boolean isMyTurn; // 현재 턴인지 여부
     public int score;   // 점수 -  몇 개의 말이 들어왔는지
     public List<Horse> horseList;   // 보유 말들 list - id만 가지고 있어도 되고 Horse 자체를 가지고 있어도 됨!
 

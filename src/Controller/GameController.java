@@ -99,17 +99,17 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(throwState) {
-                    throwState = false;
+                    //throwState = false;
                     YutResult result = currentPlayer.throwYut();
 
                     System.out.println(result);
                     yutList.add(result);
                     gameView.startYutAnimation(result);
 
-
                     if(result==YutResult.MO||result==YutResult.YUT){
                         throwState = true;
                         // 한 번 더 팝업창 띄우기
+                        gameView.scheduleNotifyingImage(result);
                     }
                     else{
                         // 윷 선택창 띄우기

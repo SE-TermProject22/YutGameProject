@@ -147,31 +147,31 @@ public class GameView  extends JPanel {
         }
         repaint();
     }
+    /*
+    //말 위치 초기화 메서드
+    public void placeHorses(List<String> colors) {
+        for (String color : colors) {
+            //setHorsePosition(color, , );
+        }
+        repaint();
+    }
+    */
+    public void placeHorses(List<String> colors) {
+        int x = 50;  // x 좌표를 50부터 시작
+        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
 
-    //멀 위치 초기화 메서드
-//    public void placeHorses(List<String> colors) {
-//        for (String color : colors) {
-//            //setHorsePosition(color, , );
-//        }
-//        repaint();
-//    }
-
-//    public void placeHorses(List<String> colors) {
-//        int x = 50;  // x 좌표를 50부터 시작
-//        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
-//
-//        for (String color : colors) {
-//            setHorsePosition(color, x, y);
-//            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
-//        }
-//        repaint();
-//    }
+        for (String color : colors) {
+            setHorsePosition(color, x, y);
+            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
+        }
+        repaint();
+    }
 
     //말 위치를 업데이트하는 메서드
-//    public void setHorsePosition(String color, int x, int y) {
-//        horsePositions.put(color, new Point(x, y));
-//        repaint();
-//    }
+    public void setHorsePosition(String color, int x, int y) {
+        horsePositions.put(color, new Point(x, y));
+        repaint();
+    }
 
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
@@ -218,7 +218,7 @@ public class GameView  extends JPanel {
         if (resultImage != null) {
             setCurrentImage(resultImage);
         }
-
+        /*
         if (result == YutResult.YUT) {
             scheduleNotifyingImage("image/윷 한번더.png");
         } else if (result == YutResult.MO) {
@@ -227,27 +227,35 @@ public class GameView  extends JPanel {
             notifyingImage = null;
             repaint();
         }
+
+        */
     }
 
     //notifyingImage 출력 시간 제어
-    private void scheduleNotifyingImage(String imagePath) {
-        Timer notifyingTimer = new Timer();
+    // public 으로 바꿈
+    public void scheduleNotifyingImage(YutResult result) {
+        String imagePath;
+        if(result == YutResult.YUT)
+            imagePath = "image/윷 한번더.png";
+        else
+            imagePath = "image/모 한번더.png";
 
+        Timer notifyingTimer = new Timer();
         notifyingTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 notifyingImage = new ImageIcon(imagePath).getImage();
-                repaint();
+                // repaint();
 
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         notifyingImage = null;
-                        repaint();
+                        // repaint();
                     }
                 }, 1100); //1.1초 뒤에 사라지기
             }
-        }, 700); //윷 결과 출력되고 0.7초 뒤에 출력
+        }, 1000); //윷 결과 출력되고 1초 뒤에 출력
     }
 
     // Yut 값에 맞는 이미지 경로를 반환하는 메서드
