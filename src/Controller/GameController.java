@@ -109,9 +109,6 @@ public class GameController {
             return;
         }
 
-        long afterBoardCheckTime = System.currentTimeMillis();
-        System.out.println("Board and color check time: " + (afterBoardCheckTime - startTime) + "ms");
-
         List<Player> players = new ArrayList<>();
         for (String color : selectedColors) {
             players.add(new Player(color));
@@ -124,16 +121,10 @@ public class GameController {
         startView.setVisible(false); // StartView 숨기기
         gameView.setVisible(true);   // GameView 보이기
 
-        long afterVisibilityTime = System.currentTimeMillis();
-        System.out.println("Set visibility time: " + (afterVisibilityTime - afterBoardCheckTime) + "ms");
-
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
         //gameView.placeHorses(selectedColors, playerCount);
-
-        long afterDisplayTime = System.currentTimeMillis();
-        System.out.println("Display setup time: " + (afterDisplayTime - afterVisibilityTime) + "ms");
     }
 
     private void setState(GameState newState) {
