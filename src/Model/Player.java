@@ -19,8 +19,16 @@ public class Player {
         //추가
         this.color = color;
     }
-    // 던진 윷의 결과값(int)을 반환하는 함수
 
+    public String getColor() {
+        return this.color;
+    }
+
+    public int getHorseCount() {
+        return this.horseList.size();
+    }
+
+    // 던진 윷의 결과값(int)을 반환하는 함수
     public YutResult throwYut() {
         Random rand = new Random();
         int r = rand.nextInt(100); // 0~99
@@ -40,20 +48,9 @@ public class Player {
         }
         return result;
     }
-    public void chooseResultOrder() {
-        // 윷 결과 중 어느 것을 선택할지 결정
-        System.out.println("적용할 윷 결과 순서를 선택합니다.");
-    }
 
-    public void chooseHorse() {
-        // 어떤 말을 사용할지 결정
-        System.out.println("적용할 말을 선택합니다.");
-    }
 
-    public void selectOrder() {
-        // 순서 선택 로직
-        System.out.println("순서를 선택합니다.");
-    }
+
 
 //    public void selectHorseType(String horseType) {
 //        // 말 종류를 설정
