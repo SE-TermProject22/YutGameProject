@@ -59,6 +59,15 @@ public class Player {
         System.out.println("순서를 선택합니다.");
     }
 
+    // horselist의 id를 ArrayList로 넘겨주는 함수
+    public List <Integer> getHorseListID(){
+        List<Integer> list = new ArrayList<>();
+        for(Horse horse : horseList){
+            list.add(horse.id);
+        }
+        return list;
+    }
+
 //    public void selectHorseType(String horseType) {
 //        // 말 종류를 설정
 //        this.horseType = horseType;
