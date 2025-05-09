@@ -7,7 +7,7 @@ public class Board {
     public int n_diagram;
     public List<Node> nodes;
     // Node ArrayList로 구현하고 나중에 DaegakNode일 때는
-    Board(int n) {
+    public Board(int n) {
         n_diagram = n;
         nodes = new ArrayList<Node>();
         if(n==4){
