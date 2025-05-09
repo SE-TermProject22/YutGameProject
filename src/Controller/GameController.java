@@ -180,6 +180,10 @@ public class GameController {
         System.out.println("선택된 결과: " + selectedResult + ", 선택된 말: " + selectedHorse);
     }
 
+    // 플레이어 설정 (예시: 게임 시작 시)
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayer = player;
+    }
 
 
     // 말 선택과 결과 적용 로직
