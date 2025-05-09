@@ -16,6 +16,8 @@ public class GameController {
     private StartView startView;
     private GameView gameView;
     private Player currentPlayer;
+    private Player[] players;
+
 
     private GameState currentState = GameState.START_SCREEN;
 
