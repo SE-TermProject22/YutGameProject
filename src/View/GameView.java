@@ -184,7 +184,7 @@ public class GameView  extends JPanel {
 //        int index = random.nextInt(resultImages.size());
 //        setCurrentImage(resultImages.get(index));
 
-        int yutResult = currentPlayer.throwYut();
+        int yutResult = currentPlayer.throwYut(); // 이거 지워야댐 이자식들!!!
 
         // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
 //        String resultImagePath = getResultImagePathForYutValue(yutResult);
