@@ -18,8 +18,11 @@ public class GameController {
     private StartView startView;
     private GameView gameView;
     private Player currentPlayer;
-    private List<Player> players;
-    private Horse[] horses;
+
+    private Board board;            // borad 지정
+    private List<Player> players = new ArrayList<>();   // players
+    private List<Horse> horses = new ArrayList<>();         // 전체 horse
+
     private boolean throwState = true;
     private List<YutResult> yutList = new ArrayList<>();
     ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
@@ -99,7 +102,7 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(throwState) {
-                    throwState = false;
+                    // throwState = false;
                     YutResult result = currentPlayer.throwYut();
 
                     System.out.println(result);
@@ -131,11 +134,42 @@ public class GameController {
         // square board
         // pentagon board
         // hexagon board
-        Board board = new Board(selectedBoard);
+        board = new Board(selectedBoard);
 
         int playerCount = startView.getPlayerCount();
         int horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
+
+        // 모든 말 생성
+        for(int i = 0; i < playerCount; i++) {
+            String color = selectedColors.get(i);
+            players.add(new Player(i, color));
+            for(int j = 0; j < horseCount; j++) {
+                horses.add(new Horse((i*horseCount+j), color, board.nodes.get(0)));
+                players.get(i).horseList.add(horses.get(i*horseCount+j));   // 일단 이렇게 바로 add를 하는데 나중에는 함수를 만들어서 하던지 합시다^
+            }
+        }
+
+        System.out.println("===== 생성된 말(Horses) =====");
+        for (Horse horse : horses) {
+            System.out.printf("Horse ID: %d, Color: %s, StartNode: (%d, %d)\n",
+                    horse.id, horse.color, horse.currentNode.x, horse.currentNode.y);
+        }
+
+        // 디버깅: 생성된 모든 플레이어 및 보유 말 출력
+        System.out.println("\n===== 생성된 플레이어(Players) 및 보유 말 =====");
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            System.out.printf("Player ID: %d, Color: %s, Horse Count: %d\n",
+                    player.id, player.color, player.horseList.size());
+
+            for (Horse horse : player.horseList) {
+                System.out.printf("  └─ Horse ID: %d, Color: %s, StartNode: (%d, %d)\n",
+                        horse.id, horse.color, horse.currentNode.x, horse.currentNode.y);
+            }
+        }
+
+
 
 
         if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
@@ -143,10 +177,7 @@ public class GameController {
             return;
         }
 
-        players = new ArrayList<>();
-        for (String color : selectedColors) {
-            players.add(new Player(color));
-        }
+
 
         currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
         // gameView.setPlayer(currentPlayer);

@@ -5,10 +5,10 @@ import java.util.List;
 import Model.Node;
 
 public class Board {
-    public List<Node> nodes;
+    public List<Node> nodes = new ArrayList<>();
     //
     public Board(String boardType) {
-        nodes = new ArrayList<Node>();
+        // nodes = new ArrayList<Node>();
         if(boardType == "square") {
             createNode_square();
             connectNode_square();
