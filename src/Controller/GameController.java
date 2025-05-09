@@ -116,6 +116,7 @@ public class GameController {
 
                         //윷 결과 선택창
                         gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                            yutList.remove(chosenResult); // 선택한 결과 제거
                             System.out.println("선택된 결과: " + chosenResult);
 
                             //말 적용 선택창
@@ -123,6 +124,7 @@ public class GameController {
                                 System.out.println("선택된 말: " + selectedHorse.id);
 
                                 //이동 구현 필요
+                                yutList.clear();
                                 throwState = true;
                             });
                         });
