@@ -13,6 +13,7 @@ public class Yut {
         YUT,       // 윷: 4칸 이동
         MO        // 모: 5칸 이동
     }
+    yutResult yutResult;
 
     // 랜덤하게 던저져서 결과 반환
     public List<yutResult> throwYut(){
