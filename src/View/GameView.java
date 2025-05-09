@@ -77,7 +77,7 @@ public class GameView  extends JPanel {
 
     //기본 세팅
     private void initUI() {
-        throwButton = createButton("image/윷 던지기.png", 780, 410);
+        throwButton = createButton("image/윷 던지기.png", 798, 405);
         add(throwButton);
     }
 
@@ -88,10 +88,10 @@ public class GameView  extends JPanel {
 
     public void displayPlayers(int playerCount) {
         Point [] playerPositions = {
-                new Point(672,502),
-                new Point(878, 502),
-                new Point(672, 578),
-                new Point(878, 578)
+                new Point(692,502),
+                new Point(898, 502),
+                new Point(692, 578),
+                new Point(898, 578)
         };
 
         for (int i=1;i<=playerCount;i++) {
@@ -108,10 +108,10 @@ public class GameView  extends JPanel {
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
-                new Point(672,532),
-                new Point(878, 532),
-                new Point(672, 608),
-                new Point(878, 608),
+                new Point(692,532),
+                new Point(898, 532),
+                new Point(692, 608),
+                new Point(898, 608),
         };
 
         for (int i=0;i<playerCount;i++) {
@@ -245,7 +245,7 @@ public class GameView  extends JPanel {
         }
 
         if (currentImage != null) {
-            g.drawImage(currentImage, 655, 50, null);
+            g.drawImage(currentImage, 670, 40, null);
         }
 
         for (String color : horsePositions.keySet()) {
