@@ -2,6 +2,7 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import Controller.GameController;
 
 
@@ -27,37 +28,21 @@ public class EndView extends JPanel {
         }
     }
 
-
-    public void setStartView(StartView startView) {
-        this.startView = startView;
-    }
-
-    private GameController controller;
-
-    public void setController(GameController controller) {
-        this.controller = controller;
-    }
-
-    public void initButtonActions() {
-        restartButton.addActionListener(e -> {
-            this.setVisible(false);
-            if (controller != null) {
-                controller.restartGame();  // 여기서 게임 초기화
-            }
-        });
-
-        exitButton.addActionListener(e -> System.exit(0));
-    }
-
-
     private void initUI() {
         restartButton = createImageButton("image/재시작버튼.png", 573, 84);
         exitButton = createImageButton("image/종료버튼.png", 353, 84);
 
-        exitButton.addActionListener(e -> System.exit(0));
-
         add(restartButton);
         add(exitButton);
+
+    }
+
+    public void addRestartButtonListener(ActionListener listener) {
+        restartButton.addActionListener(listener);
+    }
+
+    public void addExitButtonListener(ActionListener listener) {
+        exitButton.addActionListener(listener);
     }
 
     private JButton createImageButton(String path, int x, int y) {
@@ -75,6 +60,20 @@ public class EndView extends JPanel {
         repaint();
     }
 
+    // 보드 초기화
+    public void clearBoard() {
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+    }
+
+    // 말 초기화
+    public void clearHorses() {
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -82,7 +81,7 @@ public class EndView extends JPanel {
             g.drawImage(endBackground, 0, 0, getWidth(), getHeight(), null);
         }
         if (winnerId >= 1 && winnerId <= 4) {
-            g.drawImage(winnerImages[winnerId - 1], 433, 435, null);
+            g.drawImage(winnerImages[winnerId - 1], 516, 583, null);
         }
     }
 }
