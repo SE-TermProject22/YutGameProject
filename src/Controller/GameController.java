@@ -333,7 +333,7 @@ public class GameController {
                                 other.isDoubled = true;
 
                                 // view 건들기
-                                gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y) - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
+                                gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
                                 gameView.setHorseInvisible(other.id);
                                 gameView.setHorseInvisible(selectedHorse.id);
                                 currentPlayer.horseList.add(dh);
