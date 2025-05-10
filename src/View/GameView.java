@@ -29,6 +29,9 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
 
+//    //스코어 저장할 리스트
+//    private List<JLabel> scoreLabels = new ArrayList<>();
+
 
     // private Player currentPlayer;
 
@@ -100,18 +103,21 @@ public class GameView  extends JPanel {
         specialThrowButton = createButton("image/지정던지기 버튼.png", 940, 405);
         add(specialThrowButton);
 
-        // Test
-        JButton testEndButton = new JButton("종료 테스트"); //테스트용 버튼 나중에 지워야함
-        testEndButton.setBounds(798, 470, 120, 40);
-        add(testEndButton);
-
-        testEndButton.addActionListener(e -> {
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            EndView endView = new EndView();
-            endView.setWinner(1); // 예시
-            frame.setContentPane(endView);
-            frame.revalidate();
-        });
+//        // Test
+//        JButton testEndButton = new JButton("종료 테스트"); //테스트용 버튼 나중에 지워야함
+//        testEndButton.setBounds(798, 470, 120, 40);
+//        add(testEndButton);
+//
+//        testEndButton.addActionListener(e -> {
+//            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//            EndView endView = new EndView();
+////            endView.setWinner(1); // 예시
+//            frame.setContentPane(endView);
+//            //
+//            frame.pack(); // preferredSize 반영
+//            frame.setVisible(true); // 혹시라도 프레임이 안 보이는 경우
+//            frame.revalidate();
+//        });
 
         repaint();
     }
@@ -137,9 +143,24 @@ public class GameView  extends JPanel {
             playerLabel.setBounds(pos.x, pos.y, playerIcon.getIconWidth(), playerIcon.getIconHeight());
 
             add(playerLabel);
+
+//            // 점수 Label 생성 및 오른쪽에 배치
+//            JLabel scoreLabel = new JLabel("점수: 0");
+//            scoreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+//            scoreLabel.setForeground(Color.WHITE); // 필요 시 색상 조절
+//            scoreLabel.setBounds(pos.x + playerIcon.getIconWidth() + 10, pos.y + 10, 80, 20);
+//            add(scoreLabel);
+//            scoreLabels.add(scoreLabel);
         }
         repaint();
     }
+
+//    // index: 플레이어 ID, score: 새 점수
+//    public void updatePlayerScore(int index, int score) {
+//        if (index >= 0 && index < scoreLabels.size()) {
+//            scoreLabels.get(index).setText("점수: " + score);
+//        }
+//    }
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
@@ -461,6 +482,7 @@ public class GameView  extends JPanel {
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true); // ✨ 윈도우 테두리 없애기
+        dialog.setBackground(new Color(0, 0, 0, 0));  // 모달 창을 완전히 투명하게
 
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -471,6 +493,7 @@ public class GameView  extends JPanel {
         };
         System.out.println("전달된 결과 리스트: " + yutResults);
         panel.setLayout(null);
+        panel.setOpaque(false);  // 패널도 투명하게
         panel.setBounds(0, 0, 800, 600);
 
         int x = 100;
@@ -503,6 +526,7 @@ public class GameView  extends JPanel {
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true);
+        dialog.setBackground(new Color(0, 0, 0, 0));  // 모달 창을 완전히 투명하게
 
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -511,7 +535,9 @@ public class GameView  extends JPanel {
                 g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
             }
         };
+
         panel.setLayout(null);
+        panel.setOpaque(false);  // 패널도 투명하게
 
         int x = 100;
         int y = 100;
@@ -551,6 +577,7 @@ public class GameView  extends JPanel {
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true);
+        dialog.setBackground(new Color(0, 0, 0, 0));  // 모달 창을 완전히 투명하게
 
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -560,13 +587,14 @@ public class GameView  extends JPanel {
             }
         };
         panel.setLayout(null);
+        panel.setOpaque(false);  // 패널도 투명하게
 
         YutResult[] fixedResults = {
-                YutResult.DO, YutResult.GAE, YutResult.GEOL, YutResult.YUT, YutResult.MO
+                YutResult.DO, YutResult.GAE, YutResult.GEOL, YutResult.YUT, YutResult.MO, YutResult.BackDo
         };
 
-        int x = 100;
-        int y = 100;
+        int x = 20;
+        int y = 110;
 
         for (YutResult result : fixedResults) {
             String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";

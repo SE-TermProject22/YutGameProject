@@ -11,6 +11,8 @@ public class Horse {
     // public boolean isFinished = false; - 그냥 list에서 pop 하기로 함. 이때 꼭 setInvisable 해주기
     public boolean state = false;
     public boolean isDoubled = false;
+    private boolean HorseBackDoState = false;
+    public boolean isFinished = false;
 
     // 생성자
     public Horse(int id, String color, Node currentNode) {
@@ -37,12 +39,29 @@ public class Horse {
 
 
     public void move(YutResult result) {
-        /*
-        if(result==YutResult.BackDo)
-        */
-
-        // currentNode가 첫번째 node면 state = true 처리
-
+        if(result==YutResult.BackDo){
+            System.out.println("백도 처리 시작");
+            if(prevNode == null) {
+                System.out.println("출발점임");//출발점임
+            } else{
+                Node temp = currentNode;
+                currentNode = prevNode;
+                prevNode = temp;
+                x = currentNode.x;
+                y = currentNode.y;
+                if(currentNode.isFirstNode){
+                    HorseBackDoState = true;
+                }
+            }
+            return;
+        }
+        if(HorseBackDoState && result.ordinal() < 5 ){
+            //finish처리
+            isFinished = true;
+            state = false;  // 컨트롤러가 score++ 해줄 수 있도록
+            HorseBackDoState = false;
+            return;
+        }
         if(currentNode.isDaegak) {
             this.prevNode = currentNode; // 말이 자신의 prevNode 기억
             this.currentNode = ((DaegakNode)currentNode).DNode;
@@ -61,6 +80,7 @@ public class Horse {
 
         }
         for(int i=0; i< result.ordinal(); i++){
+            if(result == YutResult.BackDo) break; // 여기는 백도 처리 안함
             this.prevNode = currentNode; // 말이 자신의 prevNode 기억
             this.currentNode = currentNode.nextNode;
             // 원래 이부분은 마지막에만 해주면 됨
@@ -68,8 +88,10 @@ public class Horse {
             this.y = currentNode.y;
             System.out.println("HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
+        if (!currentNode.isFirstNode) {
+            HorseBackDoState = false;
+        }
 
-        prevNode = currentNode;
     }
 
 }
