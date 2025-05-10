@@ -4,7 +4,7 @@ import Controller.YutResult;
 
 public class Horse {
     public int id;
-    public int x, y, width, height;
+    public int x, y;
     public Node currentNode;
     public Node prevNode;
     public String color;
@@ -22,6 +22,20 @@ public class Horse {
 
     }
 
+    // 턴이 끝날때마다
+    public int checkSameNodeAndTeam(Horse other){
+        if (this.currentNode != other.currentNode) {
+            return -1; // 노드 다름 → 업기 or 잡기 불가
+        }
+
+        if (this.color.equals(other.color)) {
+            return 1;  // 같은 위치 + 같은 팀 → 업기 가능
+        } else {
+            return 0;  // 같은 위치 + 다른 팀 → 잡기 대상
+        }
+    }
+
+
     public void move(YutResult result) {
         /*
         if(result==YutResult.BackDo)
@@ -30,6 +44,7 @@ public class Horse {
         // currentNode가 첫번째 node면 state = true 처리
 
         if(currentNode.isDaegak) {
+            this.prevNode = currentNode; // 말이 자신의 prevNode 기억
             this.currentNode = ((DaegakNode)currentNode).DNode;
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
@@ -37,6 +52,7 @@ public class Horse {
             System.out.println("대각 : HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
         else {
+            this.prevNode = currentNode; // 말이 자신의 prevNode 기억
             this.currentNode = currentNode.nextNode;
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
@@ -45,6 +61,7 @@ public class Horse {
 
         }
         for(int i=0; i< result.ordinal(); i++){
+            this.prevNode = currentNode; // 말이 자신의 prevNode 기억
             this.currentNode = currentNode.nextNode;
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;

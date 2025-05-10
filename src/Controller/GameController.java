@@ -120,7 +120,7 @@ public class GameController {
 
                     else{
 
-                        javax.swing.Timer delayTimer = new javax.swing.Timer(1250, e2 -> {
+                        javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
                             move();
                         });
                         delayTimer.setRepeats(false);
@@ -221,6 +221,7 @@ public class GameController {
         startView.setState(currentState);
     }
 
+    // 팝업창 너무 빨리뜨는거 나중에 해결했으면 좋겠어요!
     public void move(){
 
         while(!yutList.isEmpty()){
@@ -252,9 +253,30 @@ public class GameController {
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         // 업기 처리
+                        for (Horse other : horses) {
+                            if (other == selectedHorse || !other.state) continue;
+
+                            int check = selectedHorse.checkSameNodeAndTeam(other);
+
+                            if (check == 1) {
+                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s\n", selectedHorse.id, other.id);
+                                // TODO: DoubledHorse 처리 로직
+                                break;
+                            } else if (check == 0) {
+                                System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+                                other.state = false;
+                                gameView.setHorseInvisible(other.id);
+                                other.currentNode = board.nodes.get(0); // 시작점으로
+                                other.x = other.currentNode.x;
+                                other.y = other.currentNode.y;
+                                gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
+                                break;
+                            }
+                        }
 
 
                     });
+
                 });
 
 
