@@ -262,7 +262,7 @@ public class GameController {
                     }
 
                     // ✅ 잡기 및 업기 처리
-                    for (Horse other : horses) {
+                    for (Horse other : new ArrayList<>(horses)) {
                         if (other == selectedHorse || !other.state) continue;
 
                         int check = selectedHorse.checkSameNodeAndTeam(other);
@@ -272,9 +272,17 @@ public class GameController {
 
                             // ✅ 업기 처리: DoubledHorse 생성
                             DoubledHorse newDh = new DoubledHorse(selectedHorse.id, selectedHorse.color, selectedHorse.currentNode);
-                            newDh.addHorse(selectedHorse);
-                            newDh.addHorse(other);
+                            if (selectedHorse instanceof DoubledHorse sh) {
+                                for (Horse h : sh.getCarriedHorses()) newDh.addHorse(h);
+                            } else {
+                                newDh.addHorse(selectedHorse);
+                            }
 
+                            if (other instanceof DoubledHorse oh) {
+                                for (Horse h : oh.getCarriedHorses()) newDh.addHorse(h);
+                            } else {
+                                newDh.addHorse(other);
+                            }
                             horses.remove(selectedHorse);
                             horses.remove(other);
                             horses.add(newDh);
@@ -287,24 +295,34 @@ public class GameController {
                             gameView.setHorseInvisible(other.id);
                             gameView.moveHorse(newDh.id, newDh.x, newDh.y);
                             gameView.setHorseVisible(newDh.id);
+                          //  selectedHorse = newDh;
 
                             break;
                         } else if (check == 0) {
                             System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
 
                             if (other instanceof DoubledHorse dh) {
-                                for (Horse carried : dh.getCarriedHorses()) {
-                                    carried.state = false;
-                                    carried.currentNode = board.nodes.get(0);
-                                    carried.x = carried.currentNode.x;
-                                    carried.y = carried.currentNode.y;
-                                    gameView.moveHorse(carried.id, carried.x, carried.y);
-                                    gameView.setHorseInvisible(carried.id);
-                                    currentPlayer.horseList.add(carried);
+                                List<Horse> carried = new ArrayList<>(dh.getCarriedHorses());
+
+                                for (Horse h : carried) {
+                                    h.state = false;
+                                    h.currentNode = board.nodes.get(0);
+                                    h.x = h.currentNode.x;
+                                    h.y = h.currentNode.y;
+                                    gameView.moveHorse(h.id, h.x, h.y);
+                                    gameView.setHorseInvisible(h.id);
+
+                                    if (!currentPlayer.horseList.contains(h)) {
+                                        currentPlayer.horseList.add(h);
+                                    }
+                                    if (!horses.contains(h)) {
+                                        horses.add(h);
+                                    }
                                 }
 
-                                horses.remove(dh);
                                 currentPlayer.horseList.remove(dh);
+                                horses.remove(dh);
+
                             } else {
                                 other.state = false;
                                 gameView.setHorseInvisible(other.id);
@@ -312,8 +330,14 @@ public class GameController {
                                 other.x = other.currentNode.x;
                                 other.y = other.currentNode.y;
                                 gameView.moveHorse(other.id, other.x, other.y);
-                            }
 
+                                if (!currentPlayer.horseList.contains(other)) {
+                                    currentPlayer.horseList.add(other);
+                                }
+                                if (!horses.contains(other)) {
+                                    horses.add(other);
+                                }
+                            }
                             break;
                         }
                     }
