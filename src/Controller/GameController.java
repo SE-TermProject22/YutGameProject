@@ -118,7 +118,7 @@ public class GameController {
                     }
 
                     else{
-                        // 윷 선택창 띄위기
+
                         move();
                         // 다시 throwYut true 처리하고 turn 넘겨주기 - 원래는 move 안에서 하려고 해는데 계속 버튼이 눌려서 여기로 옮김
                         throwState = true;
