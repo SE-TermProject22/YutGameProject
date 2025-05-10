@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import Controller.YutResult;
 
 public class Horse {
@@ -23,7 +24,7 @@ public class Horse {
     }
 
     // 턴이 끝날때마다
-    public int checkSameNodeAndTeam(Horse other){
+    public int checkSameNodeAndTeam (Horse other){
         if (this.currentNode != other.currentNode) {
             return -1; // 노드 다름 → 업기 or 잡기 불가
         }
@@ -36,7 +37,7 @@ public class Horse {
     }
 
 
-    public void move(YutResult result) {
+    public void move (YutResult result) {
         /*
         if(result==YutResult.BackDo)
         */

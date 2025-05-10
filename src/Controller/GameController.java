@@ -1,7 +1,10 @@
 package Controller;
 
 import Model.Board;
+import Model.DoubledHorse;
+import Model.Player;
 import Model.Horse;
+
 import View.StartView;
 import View.GameView;
 
@@ -11,7 +14,8 @@ import View.EndView;
 //
 
 
-import Model.Player;
+import java.awt.*;
+import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,8 @@ public class GameController {
     // turn 구현을 위한 1차례 2차례 이렇계 계속 늘어나는 변수
     private int turn = 0;
 
+    // 업기 구현을 위한 initial_id
+    private int d_init = 100;
     //
     public GameController(StartView startView, GameView gameView, EndView endView) {
         this.startView = startView;
@@ -259,11 +265,11 @@ public class GameController {
                     List<Horse> selectableHorseList = new ArrayList<>();
                     for (Horse horse : currentPlayer.horseList) {
                         if(horse.isDoubled)
-                            break;
+                            continue;
                         selectableHorseList.add(horse);
                     }
 
-                    gameView.showHorseSelectionDialog(selectableHorseList, selectedHorse -> {
+                    gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
                         // System.out.println("선택된 말: " + selectedHorse.id);
                         //이동 구현 필요
                         // yutList.clear();
@@ -283,11 +289,27 @@ public class GameController {
 
                             int check = selectedHorse.checkSameNodeAndTeam(other);
 
+                            // 같은 말 - 업기
                             if (check == 1) {
-                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s\n", selectedHorse.id, other.id);
+                                DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
+
+                                selectedHorse.isDoubled = true;
+                                other.isDoubled = true;
+
+                                // view 건들기
+                                // gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y) - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
+                                gameView.setHorseInvisible(other.id);
+                                gameView.setHorseInvisible(selectedHorse.id);
+                                currentPlayer.horseList.add(dh);
+
+                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+
                                 // TODO: DoubledHorse 처리 로직
                                 break;
-                            } else if (check == 0) {
+
+                            }
+                            // 다른 말 - 잡기
+                            else if (check == 0) {
                                 System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
                                 other.state = false;
                                 gameView.setHorseInvisible(other.id);

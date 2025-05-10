@@ -1,6 +1,6 @@
 package View;
 
-import Controller.GameController;
+// import Controller.GameController;
 import Controller.YutResult;
 import Model.Player;
 
@@ -22,12 +22,15 @@ public class GameView  extends JPanel {
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
 
+    private Map<Integer, JLabel> horseComponents = new HashMap<>();
+
     private List<Image> yutImages;
     private List<Image> resultImages;
     private Image notifyingImage;
 
     private Timer animationTimer;
     private int yutIndex;
+
 
 
     // private Player currentPlayer;
@@ -199,7 +202,7 @@ public class GameView  extends JPanel {
         }
     }
     */
-    private Map<Integer, JLabel> horseComponents = new HashMap<>();
+
 
     // 처음 말들을 다 만들기
     public void initHorses(List<String> colors, int horseCount) {
@@ -498,7 +501,7 @@ public class GameView  extends JPanel {
         dialog.setVisible(true);
     }
 
-    public void showHorseSelectionDialog(List<Horse> horses, Consumer<Horse> onSelected) {
+    public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
@@ -515,10 +518,19 @@ public class GameView  extends JPanel {
 
         int x = 100;
         int y = 100;
-        int i = 1;
 
         for (Horse horse : horses) {
-            String imagePath = "image/선택 " + horse.color + (i++) + ".png";
+            System.out.println(horse.id);
+            String imagePath;
+            // 여기서 id가 크면은 color.count로 해서 파일 받기
+            if(horse.id < 20) {
+                imagePath = "image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
+                System.out.println(horse.id);
+            }
+            else{
+                // 업은 말 선택
+                imagePath = "image/선택 " + horse.color + (horse.id % horseCount) + ".png";
+            }
             ImageIcon icon = new ImageIcon(imagePath);
 
             JButton btn = new JButton(icon);
