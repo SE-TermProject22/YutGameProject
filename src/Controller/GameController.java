@@ -230,8 +230,14 @@ public class GameController {
                     // System.out.println("선택된 결과: " + chosenResult);
 
                     //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
+                    List<Horse> selectableHorseList = new ArrayList<>();
+                    for (Horse horse : currentPlayer.horseList) {
+                        if(horse.isDoubled)
+                            break;
+                        selectableHorseList.add(horse);
+                    }
 
-                    gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+                    gameView.showHorseSelectionDialog(selectableHorseList, selectedHorse -> {
                         // System.out.println("선택된 말: " + selectedHorse.id);
                         //이동 구현 필요
                         // yutList.clear();
@@ -244,6 +250,9 @@ public class GameController {
                             gameView.setHorseVisible(selectedHorse.id);
                         }
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+
+                        // 업기 처리
+
 
                     });
                 });

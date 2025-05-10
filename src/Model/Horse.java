@@ -8,8 +8,9 @@ public class Horse {
     public Node currentNode;
     public Node prevNode;
     public String color;
-    public boolean isFinished = false;
+    // public boolean isFinished = false; - 그냥 list에서 pop 하기로 함. 이때 꼭 setInvisable 해주기
     public boolean state = false;
+    public boolean isDoubled = false;
 
     // 생성자
     public Horse(int id, String color, Node currentNode) {
