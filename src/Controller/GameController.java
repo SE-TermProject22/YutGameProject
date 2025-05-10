@@ -30,6 +30,9 @@ public class GameController {
 
     private GameState currentState = GameState.START_SCREEN;
 
+    // turn 구현을 위한 1차례 2차례 이렇계 계속 늘어나는 변수
+    private int turn = 0;
+
     public GameController(StartView startView, GameView gameView) {
         this.startView = startView;
         this.gameView = gameView;
@@ -115,10 +118,22 @@ public class GameController {
                     }
 
                     else{
-                        // 윷 선택창 띄위기
-                        move();
+
+                        javax.swing.Timer delayTimer = new javax.swing.Timer(1250, e2 -> {
+                            move();
+                        });
+                        delayTimer.setRepeats(false);
+                        delayTimer.start();
+
+
+
+                        // move();
                         // 다시 throwYut true 처리하고 turn 넘겨주기 - 원래는 move 안에서 하려고 해는데 계속 버튼이 눌려서 여기로 옮김
+                        /*
                         throwState = true;
+                        turn++;
+                        currentPlayer = players.get(turn%playerCount);
+                        */
                     }
 
                 }
@@ -209,7 +224,6 @@ public class GameController {
 
         while(!yutList.isEmpty()){
 
-
             //윷 결과 선택창
             gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
                 // yutList.remove(chosenResult); // 선택한 결과 제거
@@ -218,18 +232,18 @@ public class GameController {
                 //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
                 gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
                     System.out.println("선택된 말: " + selectedHorse.id);
-
                     //이동 구현 필요
                     // yutList.clear();
                     // throwState = true;
                 });
             });
 
+
             // 윷 선택
             // YutResult result = gameView.selectYutResult(yutList);
 
             YutResult result = yutList.get(0); // 위에거 test 용
-            yutList.remove(0);
+            yutList.remove(result);
 
             // 말 선택
             // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
@@ -268,6 +282,9 @@ public class GameController {
                 break;
             }
         }
+        throwState = true;
+        turn++;
+        currentPlayer = players.get(turn%playerCount);
 
     }
 }

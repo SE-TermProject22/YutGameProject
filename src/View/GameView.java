@@ -443,6 +443,7 @@ public class GameView  extends JPanel {
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true); // ✨ 윈도우 테두리 없애기
+        dialog.setBackground(new Color(0, 0, 0, 0));  // 모달 창을 완전히 투명하게
 
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -454,6 +455,7 @@ public class GameView  extends JPanel {
         System.out.println("전달된 결과 리스트: " + yutResults);
         panel.setLayout(null);
         panel.setBounds(0, 0, 800, 600);
+        panel.setOpaque(false);  // 패널도 투명하게
 
         int x = 100;
         int y = 100;
@@ -485,6 +487,7 @@ public class GameView  extends JPanel {
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true);
+        dialog.setBackground(new Color(0, 0, 0, 0));  // 모달 창을 완전히 투명하게
 
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -494,12 +497,14 @@ public class GameView  extends JPanel {
             }
         };
         panel.setLayout(null);
+        panel.setOpaque(false);  // 패널도 투명하게
 
         int x = 100;
         int y = 100;
+        int i = 1;
 
         for (Horse horse : horses) {
-            String imagePath = "image/선택 " + horse.color + ((horse.id % 5) + 1) + ".png";
+            String imagePath = "image/말 버튼/" + horse.color + "/" + (i++) + ".png";
             ImageIcon icon = new ImageIcon(imagePath);
 
             JButton btn = new JButton(icon);

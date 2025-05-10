@@ -41,6 +41,7 @@ public class Player {
         } else {                 // 75~99 : 25%
             result = YutResult.DO;
         }
+
         return result;
     }
     public void chooseResultOrder() {
