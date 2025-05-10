@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Board;
 import Model.Horse;
+import Model.Yut;
 import View.StartView;
 import View.GameView;
 import Model.Player;
@@ -223,18 +224,27 @@ public class GameController {
     public void move(){
 
         while(!yutList.isEmpty()){
-
                 //윷 결과 선택창
                 gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
                     // yutList.remove(chosenResult); // 선택한 결과 제거
-                    System.out.println("선택된 결과: " + chosenResult);
+                    // System.out.println("선택된 결과: " + chosenResult);
 
                     //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
+
                     gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
-                        System.out.println("선택된 말: " + selectedHorse.id);
+                        // System.out.println("선택된 말: " + selectedHorse.id);
                         //이동 구현 필요
                         // yutList.clear();
                         // throwState = true;
+                        YutResult result = chosenResult;
+                        yutList.remove(result);
+                        selectedHorse.move(result);
+                        if(selectedHorse.state == false){
+                            selectedHorse.state = true;
+                            gameView.setHorseVisible(selectedHorse.id);
+                        }
+                        gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+
                     });
                 });
 
@@ -242,33 +252,35 @@ public class GameController {
             // 윷 선택
             // YutResult result = gameView.selectYutResult(yutList);
 
-            YutResult result = yutList.get(0); // 위에거 test 용
-            yutList.remove(result);
+            // YutResult result = yutList.get(0); // 위에거 test 용
+            // yutList.remove(result);
 
             // 말 선택
             // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
-            int horse_id = currentPlayer.horseList.get(0).id;
+            // int horse_id = currentPlayer.horseList.get(0).id;
 
-            System.out.println("horse_id" + horse_id);
-            Horse selectedHorse = horses.get(horse_id);
-            System.out.println("selected horse" + selectedHorse.id);
+            // System.out.println("horse_id" + horse_id);
+            // Horse selectedHorse = horses.get(horse_id);
+            // System.out.println("selected horse" + selectedHorse.id);
 
-            System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-
+            // System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+            /*
             if(selectedHorse.state == false){
                 selectedHorse.state = true;
                 gameView.setHorseVisible(selectedHorse.id);
             }
+            */
 
-            selectedHorse.move(result);
+            // selectedHorse.move(result);
             // view 구현해보자
-            gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
-            System.out.println("horse 움직임");
-            System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+            // gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+            // System.out.println("horse 움직임");
+            // System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
 
             // 여기서 한번 repaint() 해 줄 지 고민
 
             // finish 처리
+            /*
             if(selectedHorse.currentNode.isEndNode){
                 selectedHorse.isFinished = true;
                 selectedHorse.state = false;
@@ -281,6 +293,8 @@ public class GameController {
                 System.out.println("끝남");
                 break;
             }
+
+            */
         }
         throwState = true;
         turn++;
