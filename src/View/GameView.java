@@ -497,9 +497,10 @@ public class GameView  extends JPanel {
 
         int x = 100;
         int y = 100;
+        int i = 1;
 
         for (Horse horse : horses) {
-            String imagePath = "image/선택 " + horse.color + ((horse.id % 5) + 1) + ".png";
+            String imagePath = "image/선택 " + horse.color + (i++) + ".png";
             ImageIcon icon = new ImageIcon(imagePath);
 
             JButton btn = new JButton(icon);
