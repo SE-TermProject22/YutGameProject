@@ -20,6 +20,8 @@ public class GameView  extends JPanel {
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
+    // 말의 쌓인 개수를 관리하는 Map
+    private Map<Point, List<Integer>> stackedHorses = new HashMap<>();
 
     private List<Image> yutImages;
     private List<Image> resultImages;
@@ -155,7 +157,6 @@ public class GameView  extends JPanel {
     // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
 
 
-
     /*
     //말 위치 초기화 메서드
     public void placeHorses(List<String> colors) {
@@ -222,7 +223,7 @@ public class GameView  extends JPanel {
     }
 
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
-    public void addHorseComponent(int horse_id){
+    public void addHorseComponent(int horse_id) {
         JLabel horseLabel = new JLabel(new ImageIcon(horseImages.get(horse_id))); // 약간 이런식으로해서
     }
 
@@ -230,25 +231,27 @@ public class GameView  extends JPanel {
 
 
     // horse를 setvisible하게 하는 함수
-    public void setHorseVisible(int horse_id){
+    public void setHorseVisible(int horse_id) {
         horseComponents.get(horse_id).setVisible(true);
         repaint();
     }
+
     // horse를 setInvisible 하는 함수
-    public void setHorseInvisible(int horse_id){
+    public void setHorseInvisible(int horse_id) {
         horseComponents.get(horse_id).setVisible(false);
         repaint();
     }
 
     // horse를 move하는 함수
-    public void moveHorse(int horse_id, int x, int y){
+    public void moveHorse(int horse_id, int x, int y) {
         horseComponents.get(horse_id).setLocation(x, y);
         repaint();
     }
+
     // 혹시 몰라서 여러 개 받으면 이렇게 처리
-    public void moveHorse(List<Integer> horse_id_list, int x, int y){
+    public void moveHorse(List<Integer> horse_id_list, int x, int y) {
         int i = 0;
-        for(Integer horse_id : horse_id_list){
+        for (Integer horse_id : horse_id_list) {
             horseComponents.get(horse_id_list.get(i)).setLocation(x, y);
             i++;
         }
@@ -274,9 +277,6 @@ public class GameView  extends JPanel {
         horsePositions.put(color, new Point(x, y));
         repaint();
     }
-
-
-
 
 
     // 윷 관련
@@ -342,7 +342,7 @@ public class GameView  extends JPanel {
     // public 으로 바꿈
     public void scheduleNotifyingImage(YutResult result) {
         String imagePath;
-        if(result == YutResult.YUT)
+        if (result == YutResult.YUT)
             imagePath = "image/윷 한번더.png";
         else
             imagePath = "image/모 한번더.png";
@@ -437,7 +437,6 @@ public class GameView  extends JPanel {
     }
 
 
-
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "결과 적용 선택", true);  // 모달창
         dialog.setSize(665, 298);
@@ -524,6 +523,50 @@ public class GameView  extends JPanel {
 
         dialog.setContentPane(panel);
         dialog.setVisible(true);
+    }
+
+    private JLabel findLabelForPosition(Point position) {
+        for (Component comp : getComponents()) {
+            if (comp instanceof JLabel) {
+                JLabel label = (JLabel) comp;
+                // 위치를 정확히 맞추려면 +10을 빼는 것이 맞을 수 있음
+                if (label.getBounds().x == position.x && label.getBounds().y == position.y) {
+                    return label;  // 해당 위치의 숫자 라벨 반환
+                }
+            }
+        }
+        return null;
+    }
+
+    public void stackHorseAtPosition(int horseId, Point position) {
+        // 해당 위치에 이미 쌓인 말이 있는지 확인
+        List<Integer> stackedHorsesList = stackedHorses.getOrDefault(position, new ArrayList<>());
+
+        // 말을 쌓기
+        stackedHorsesList.add(horseId);
+        stackedHorses.put(position, stackedHorsesList);
+
+        // 말을 해당 위치에 추가하기 (업힌 말)
+        moveHorse(horseId, position.x, position.y);  // 말 이동
+
+        // 업힌 말이 2개 이상이라면 UI에서 겹쳐있는 말의 개수로 처리
+        if (stackedHorsesList.size() > 1) {
+            JLabel stackedLabel = findLabelForPosition(position);
+            if (stackedLabel == null) {
+                // 새로운 레이블을 추가하여 쌓인 말의 수를 표시
+                stackedLabel = new JLabel(String.valueOf(stackedHorsesList.size()));
+                stackedLabel.setBounds(position.x, position.y - (stackedHorsesList.size() * 10), 40, 40); // 말 위에 표시되도록 위치 조정
+                stackedLabel.setFont(new Font("Arial", Font.BOLD, 16)); // 글자 크기 조정
+                stackedLabel.setForeground(Color.BLACK); // 글자 색 설정
+                add(stackedLabel);
+            } else {
+                // 이미 쌓인 말이 있으면 숫자 업데이트
+                stackedLabel.setText(String.valueOf(stackedHorsesList.size()));
+                stackedLabel.setBounds(position.x, position.y - (stackedHorsesList.size() * 10), 40, 40); // 겹쳐서 표시
+            }
+        }
+
+        repaint();
     }
 
 
