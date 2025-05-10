@@ -6,6 +6,9 @@ import Model.Node;
 import View.StartView;
 import View.GameView;
 
+//
+import View.EndView;
+
 public class Main {
     public static void main(String[] args) {
         // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
@@ -19,22 +22,34 @@ public class Main {
             // 뷰들 생성
             StartView startView = new StartView();
             GameView gameView = new GameView();
+
+            //
+            EndView endView = new EndView();
+
             gameView.setVisible(false); // 처음엔 안 보이게
+
+            //
+            endView.setVisible(false);
 
             // 패널들을 JFrame에 추가
             frame.setLayout(null);
             startView.setBounds(0, 0, 1100, 700);
             gameView.setBounds(0, 0, 1100, 700);
+            endView.setBounds(0, 0, 1100, 700);
+
 
             frame.add(startView);
             frame.add(gameView);
+            frame.add(endView);
 
             // 컨트롤러 생성
-            new GameController(startView, gameView);
+            new GameController(startView, gameView, endView);
 
             frame.setVisible(true);
         });
     }
+
+
 
 
 }

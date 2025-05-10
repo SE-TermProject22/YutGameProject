@@ -5,6 +5,11 @@ import Model.Horse;
 import Model.Yut;
 import View.StartView;
 import View.GameView;
+
+//
+import View.EndView;
+
+
 import Model.Player;
 
 import java.awt.*;
@@ -18,6 +23,9 @@ import java.awt.event.ActionListener;
 public class GameController {
     private StartView startView;
     private GameView gameView;
+
+    private EndView endView;
+
     private Player currentPlayer;
 
     private Board board;            // borad 지정
@@ -34,9 +42,13 @@ public class GameController {
     // turn 구현을 위한 1차례 2차례 이렇계 계속 늘어나는 변수
     private int turn = 0;
 
-    public GameController(StartView startView, GameView gameView) {
+    //
+    public GameController(StartView startView, GameView gameView, EndView endView) {
         this.startView = startView;
         this.gameView = gameView;
+
+        //
+        this.endView = endView;
 
         initializeListeners();
         updateViewState();
@@ -332,26 +344,21 @@ public class GameController {
         currentPlayer = players.get(turn%playerCount);
 
     }
-}
 
-/*
-// 뭐 이런식으로 turn 넘기고 한다는데 잘 모르겠고 일단 보자^^
-public void keyPressed(KeyEvent e) {
-    if (!turnController.isTurnActive()) return;
+    public void restartGame() {
+        players.clear();
+        horses.clear();
+        yutList.clear();
+        throwState = true;
+        turn = 0;
 
-    Player player = playerController.getCurrentPlayer();
-    String pieceId = player.getPieceId();
-
-    switch (e.getKeyCode()) {
-        case KeyEvent.VK_RIGHT -> pieceController.movePiece(pieceId, 10, 0);
-        case KeyEvent.VK_LEFT -> pieceController.movePiece(pieceId, -10, 0);
-        case KeyEvent.VK_UP -> pieceController.movePiece(pieceId, 0, -10);
-        case KeyEvent.VK_DOWN -> pieceController.movePiece(pieceId, 0, 10);
-        case KeyEvent.VK_ENTER -> {
-            turnController.endTurn();
-            playerController.nextPlayer();
-            turnController.startTurn();
-        }
+        startView.resetSelectionState();
+        gameView.setVisible(false);
+        endView.setVisible(false);
+        startView.setVisible(true);
     }
 
- */
+
+}
+
+

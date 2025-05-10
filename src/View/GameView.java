@@ -95,6 +95,19 @@ public class GameView  extends JPanel {
         throwButton = createButton("image/윷 던지기.png", 798, 405);
         add(throwButton);
 
+        // Test
+        JButton testEndButton = new JButton("종료 테스트"); //테스트용 버튼 나중에 지워야함
+        testEndButton.setBounds(798, 470, 120, 40);
+        add(testEndButton);
+
+        testEndButton.addActionListener(e -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            EndView endView = new EndView();
+            endView.setWinner(1); // 예시
+            frame.setContentPane(endView);
+            frame.revalidate();
+        });
+
         repaint();
     }
 

@@ -2,43 +2,88 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import Controller.GameController;
+
 
 public class EndView extends JPanel {
-
     private JButton restartButton;
     private JButton exitButton;
-    private JLabel messageLabel;
+    private StartView startView;
+
+    private Image endBackground;
+    private Image[] winnerImages = new Image[4];
+    private int winnerId = 1; // 기본값: 플레이어 1 우승
 
     public EndView() {
         setLayout(null);
+        loadImages();
         initUI();
     }
 
-    private void initUI() {
-        messageLabel = new JLabel("게임 종료!");
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        messageLabel.setBounds(400, 150, 200, 50);
-        add(messageLabel);
+    private void loadImages() {
+        endBackground = new ImageIcon("image/종료 화면.png").getImage();  // ✅ 배경 이미지 추가
+        for (int i = 0; i < 4; i++) {
+            winnerImages[i] = new ImageIcon("image/Winner" + (i + 1) + ".png").getImage();
+        }
+    }
 
-        restartButton = createButton("다시 시작", 400, 250);
-        exitButton = createButton("종료하기", 400, 350);
+
+    public void setStartView(StartView startView) {
+        this.startView = startView;
+    }
+
+    private GameController controller;
+
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    public void initButtonActions() {
+        restartButton.addActionListener(e -> {
+            this.setVisible(false);
+            if (controller != null) {
+                controller.restartGame();  // 여기서 게임 초기화
+            }
+        });
+
+        exitButton.addActionListener(e -> System.exit(0));
+    }
+
+
+    private void initUI() {
+        restartButton = createImageButton("image/재시작버튼.png", 573, 84);
+        exitButton = createImageButton("image/종료버튼.png", 353, 84);
+
+        exitButton.addActionListener(e -> System.exit(0));
 
         add(restartButton);
         add(exitButton);
     }
 
-    private JButton createButton(String text, int x, int y) {
-        JButton button = new JButton(text);
-        button.setBounds(x, y, 150, 50);
+    private JButton createImageButton(String path, int x, int y) {
+        ImageIcon icon = new ImageIcon(path);
+        JButton button = new JButton(icon);
+        button.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
         return button;
     }
 
-    public void addRestartListener(ActionListener listener) {
-        restartButton.addActionListener(listener);
+    public void setWinner(int playerId) {
+        this.winnerId = playerId;
+        repaint();
     }
 
-    public void addExitListener(ActionListener listener) {
-        exitButton.addActionListener(listener);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (endBackground != null) {
+            g.drawImage(endBackground, 0, 0, getWidth(), getHeight(), null);
+        }
+        if (winnerId >= 1 && winnerId <= 4) {
+            g.drawImage(winnerImages[winnerId - 1], 433, 435, null);
+        }
     }
 }
+
