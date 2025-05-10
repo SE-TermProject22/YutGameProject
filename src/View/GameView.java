@@ -242,10 +242,19 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+    /*
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
-    public void addHorseComponent(int horse_id){
-        JLabel horseLabel = new JLabel(new ImageIcon(horseImages.get(horse_id))); // 약간 이런식으로해서
+    public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
+        Image horseImage = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
+        JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+        horseLabel.setBounds(x, y, 40, 40);
+        horseLabel.setVisible(true); // 디버깅
+        horseComponents.put(horse_id, horseLabel); // model과 연동되는 고유 id = idCounter
+        add(horseLabel);
+        repaint();
     }
+    */
+
 
     // horse를 remove하는 함수 - 필요할까? 일단은
 
