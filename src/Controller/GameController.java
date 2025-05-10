@@ -30,6 +30,9 @@ public class GameController {
 
     private GameState currentState = GameState.START_SCREEN;
 
+    // turn 구현을 위한 1차례 2차례 이렇계 계속 늘어나는 변수
+    private int turn = 0;
+
     public GameController(StartView startView, GameView gameView) {
         this.startView = startView;
         this.gameView = gameView;
@@ -119,6 +122,8 @@ public class GameController {
                         move();
                         // 다시 throwYut true 처리하고 turn 넘겨주기 - 원래는 move 안에서 하려고 해는데 계속 버튼이 눌려서 여기로 옮김
                         throwState = true;
+                        turn++;
+                        currentPlayer = players.get(turn%playerCount);
                     }
 
                 }
