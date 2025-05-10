@@ -185,7 +185,7 @@ public class GameController {
                     } else {
                         throwState = false;
 
-                        javax.swing.Timer delayTimer = new javax.swing.Timer(1000, e2 -> {
+                        javax.swing.Timer delayTimer = new javax.swing.Timer(1250, e2 -> {
                             startYutApplication();
                         });
                         delayTimer.setRepeats(false);
