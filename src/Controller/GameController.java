@@ -2,18 +2,17 @@ package Controller;
 
 import Model.Board;
 import Model.Horse;
-import Model.Yut;
 import View.StartView;
 import View.GameView;
 
 //
 import View.EndView;
 
+//
+
 
 import Model.Player;
 
-import java.awt.*;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -152,6 +151,20 @@ public class GameController {
                 }
             }
         });
+
+        // 지정윷던지기 버튼 리스너
+        gameView.addSpecialThrowListener(e -> {
+            gameView.showFixedYutChoiceDialog(selectedResult -> {
+                System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
+
+                yutList.clear();
+                yutList.add(selectedResult);
+
+                move();
+            });
+        });
+
+
     }
 
 
