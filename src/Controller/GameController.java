@@ -213,22 +213,21 @@ public class GameController {
     public void move(){
 
         while(!yutList.isEmpty()){
+                //윷 결과 선택창
+                gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                    // yutList.remove(chosenResult); // 선택한 결과 제거
+                    System.out.println("선택된 결과: " + chosenResult);
 
+                    //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
+                    gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+                        System.out.println("선택된 말: " + selectedHorse.id);
 
-            //윷 결과 선택창
-            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                // yutList.remove(chosenResult); // 선택한 결과 제거
-                System.out.println("선택된 결과: " + chosenResult);
-
-                //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
-                gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
-                    System.out.println("선택된 말: " + selectedHorse.id);
-
-                    //이동 구현 필요
-                    // yutList.clear();
-                    // throwState = true;
+                        //이동 구현 필요
+                        // yutList.clear();
+                        // throwState = true;
+                    });
                 });
-            });
+
 
             // 윷 선택
             // YutResult result = gameView.selectYutResult(yutList);
