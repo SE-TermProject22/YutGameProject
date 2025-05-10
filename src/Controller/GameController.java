@@ -6,6 +6,7 @@ import Model.Yut;
 import View.StartView;
 import View.GameView;
 import Model.Player;
+import Model.DoubledHorse;
 
 import java.awt.*;
 import java.util.*;
@@ -106,7 +107,7 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(throwState) {
+                if (throwState) {
                     throwState = false;
                     YutResult result = currentPlayer.throwYut();
                     System.out.println(result);
@@ -116,16 +117,13 @@ public class GameController {
                     if (result == YutResult.MO || result == YutResult.YUT) {
                         throwState = true;
                         gameView.scheduleNotifyingImage(result);
-                    }
-
-                    else{
+                    } else {
 
                         javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
                             move();
                         });
                         delayTimer.setRepeats(false);
                         delayTimer.start();
-
 
 
                         // move();
@@ -158,12 +156,12 @@ public class GameController {
         List<String> selectedColors = startView.getSelectedColors();
 
         // 모든 말 생성
-        for(int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
             players.add(new Player(i, color));
-            for(int j = 0; j < horseCount; j++) {
-                horses.add(new Horse((i*horseCount+j), color, board.nodes.get(0)));
-                players.get(i).horseList.add(horses.get(i*horseCount+j));   // 일단 이렇게 바로 add를 하는데 나중에는 함수를 만들어서 하던지 합시다^
+            for (int j = 0; j < horseCount; j++) {
+                horses.add(new Horse((i * horseCount + j), color, board.nodes.get(0)));
+                players.get(i).horseList.add(horses.get(i * horseCount + j));   // 일단 이렇게 바로 add를 하는데 나중에는 함수를 만들어서 하던지 합시다^
             }
         }
 
@@ -191,12 +189,10 @@ public class GameController {
         gameView.initHorses(selectedColors, horseCount);
 
 
-
         if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
             JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
             return;
         }
-
 
 
         currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
@@ -222,136 +218,112 @@ public class GameController {
     }
 
     // 팝업창 너무 빨리뜨는거 나중에 해결했으면 좋겠어요!
-    public void move(){
+    public void move() {
+        while (!yutList.isEmpty()) {
+            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                List<Horse> selectableHorseList = new ArrayList<>();
 
-        while(!yutList.isEmpty()){
-                //윷 결과 선택창
-                gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                    // yutList.remove(chosenResult); // 선택한 결과 제거
-                    // System.out.println("선택된 결과: " + chosenResult);
-
-                    //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
-                    List<Horse> selectableHorseList = new ArrayList<>();
-                    for (Horse horse : currentPlayer.horseList) {
-                        if(horse.isDoubled)
+                for (Horse horse : currentPlayer.horseList) {
+                    // 🔒 DoubledHorse에 업힌 말은 선택 불가능
+                    boolean isCarried = false;
+                    for (Horse h : horses) {
+                        if (h instanceof DoubledHorse dh && dh.getCarriedHorses().contains(horse)) {
+                            isCarried = true;
                             break;
+                        }
+                    }
+                    if (!isCarried) {
                         selectableHorseList.add(horse);
                     }
+                }
 
-                    gameView.showHorseSelectionDialog(selectableHorseList, selectedHorse -> {
-                        // System.out.println("선택된 말: " + selectedHorse.id);
-                        //이동 구현 필요
-                        // yutList.clear();
-                        // throwState = true;
-                        YutResult result = chosenResult;
-                        yutList.remove(result);
-                        selectedHorse.move(result);
-                        if(selectedHorse.state == false){
-                            selectedHorse.state = true;
-                            gameView.setHorseVisible(selectedHorse.id);
+                gameView.showHorseSelectionDialog(selectableHorseList, selectedHorse -> {
+                    YutResult result = chosenResult;
+                    yutList.remove(result);
+
+                    // ✅ 말 이동
+                    selectedHorse.move(result);
+
+                    if (!selectedHorse.state) {
+                        selectedHorse.state = true;
+                        gameView.setHorseVisible(selectedHorse.id);
+                    }
+
+                    gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+
+                    // ✅ DoubledHorse라면 carriedHorses도 같이 이동
+                    if (selectedHorse instanceof DoubledHorse dh) {
+                        for (Horse carried : dh.getCarriedHorses()) {
+                            carried.currentNode = selectedHorse.currentNode;
+                            carried.x = selectedHorse.x;
+                            carried.y = selectedHorse.y;
+                            gameView.moveHorse(carried.id, carried.x, carried.y);
                         }
-                        gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+                    }
 
-                        // 업기 처리
-                        for (Horse other : horses) {
-                            if (other == selectedHorse || !other.state) continue;
+                    // ✅ 잡기 및 업기 처리
+                    for (Horse other : horses) {
+                        if (other == selectedHorse || !other.state) continue;
 
-                            int check = selectedHorse.checkSameNodeAndTeam(other);
+                        int check = selectedHorse.checkSameNodeAndTeam(other);
 
-                            if (check == 1) {
-                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s\n", selectedHorse.id, other.id);
-                                // TODO: DoubledHorse 처리 로직
-                                break;
-                            } else if (check == 0) {
-                                System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+                        if (check == 1) {
+                            System.out.printf("🔗 업기 발생: %s 업힌 대상: %s\n", selectedHorse.id, other.id);
+
+                            // ✅ 업기 처리: DoubledHorse 생성
+                            DoubledHorse newDh = new DoubledHorse(selectedHorse.id, selectedHorse.color, selectedHorse.currentNode);
+                            newDh.addHorse(selectedHorse);
+                            newDh.addHorse(other);
+
+                            horses.remove(selectedHorse);
+                            horses.remove(other);
+                            horses.add(newDh);
+
+                            currentPlayer.horseList.remove(selectedHorse);
+                            currentPlayer.horseList.remove(other);
+                            currentPlayer.horseList.add(newDh);
+
+                            gameView.setHorseInvisible(selectedHorse.id);
+                            gameView.setHorseInvisible(other.id);
+                            gameView.moveHorse(newDh.id, newDh.x, newDh.y);
+                            gameView.setHorseVisible(newDh.id);
+
+                            break;
+                        } else if (check == 0) {
+                            System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+
+                            if (other instanceof DoubledHorse dh) {
+                                for (Horse carried : dh.getCarriedHorses()) {
+                                    carried.state = false;
+                                    carried.currentNode = board.nodes.get(0);
+                                    carried.x = carried.currentNode.x;
+                                    carried.y = carried.currentNode.y;
+                                    gameView.moveHorse(carried.id, carried.x, carried.y);
+                                    gameView.setHorseInvisible(carried.id);
+                                    currentPlayer.horseList.add(carried);
+                                }
+
+                                horses.remove(dh);
+                                currentPlayer.horseList.remove(dh);
+                            } else {
                                 other.state = false;
                                 gameView.setHorseInvisible(other.id);
-                                other.currentNode = board.nodes.get(0); // 시작점으로
+                                other.currentNode = board.nodes.get(0);
                                 other.x = other.currentNode.x;
                                 other.y = other.currentNode.y;
-                                gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
-                                break;
+                                gameView.moveHorse(other.id, other.x, other.y);
                             }
+
+                            break;
                         }
-
-
-                    });
+                    }
 
                 });
-
-
-            // 윷 선택
-            // YutResult result = gameView.selectYutResult(yutList);
-
-            // YutResult result = yutList.get(0); // 위에거 test 용
-            // yutList.remove(result);
-
-            // 말 선택
-            // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
-            // int horse_id = currentPlayer.horseList.get(0).id;
-
-            // System.out.println("horse_id" + horse_id);
-            // Horse selectedHorse = horses.get(horse_id);
-            // System.out.println("selected horse" + selectedHorse.id);
-
-            // System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-            /*
-            if(selectedHorse.state == false){
-                selectedHorse.state = true;
-                gameView.setHorseVisible(selectedHorse.id);
-            }
-            */
-
-            // selectedHorse.move(result);
-            // view 구현해보자
-            // gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
-            // System.out.println("horse 움직임");
-            // System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-
-            // 여기서 한번 repaint() 해 줄 지 고민
-
-            // finish 처리
-            /*
-            if(selectedHorse.currentNode.isEndNode){
-                selectedHorse.isFinished = true;
-                selectedHorse.state = false;
-                currentPlayer.score++;
-                currentPlayer.horseList.remove(selectedHorse); // test 용임
-            }
-
-            if(currentPlayer.score==horseCount){
-                // view.finish 처리
-                System.out.println("끝남");
-                break;
-            }
-
-            */
+            });
         }
+
         throwState = true;
         turn++;
-        currentPlayer = players.get(turn%playerCount);
-
+        currentPlayer = players.get(turn % playerCount);
     }
 }
-
-/*
-// 뭐 이런식으로 turn 넘기고 한다는데 잘 모르겠고 일단 보자^^
-public void keyPressed(KeyEvent e) {
-    if (!turnController.isTurnActive()) return;
-
-    Player player = playerController.getCurrentPlayer();
-    String pieceId = player.getPieceId();
-
-    switch (e.getKeyCode()) {
-        case KeyEvent.VK_RIGHT -> pieceController.movePiece(pieceId, 10, 0);
-        case KeyEvent.VK_LEFT -> pieceController.movePiece(pieceId, -10, 0);
-        case KeyEvent.VK_UP -> pieceController.movePiece(pieceId, 0, -10);
-        case KeyEvent.VK_DOWN -> pieceController.movePiece(pieceId, 0, 10);
-        case KeyEvent.VK_ENTER -> {
-            turnController.endTurn();
-            playerController.nextPlayer();
-            turnController.startTurn();
-        }
-    }
-
- */
