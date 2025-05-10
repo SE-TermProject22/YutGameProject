@@ -5,6 +5,7 @@ import Model.Horse;
 import View.StartView;
 import View.GameView;
 import Model.Player;
+import Model.Node;
 
 import java.awt.*;
 import java.util.*;
@@ -27,6 +28,9 @@ public class GameController {
     private boolean throwState = true;
     private List<YutResult> yutList = new ArrayList<>();
     ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
+
+    // 말들이 겹쳐서 쌓이는 칸을 추적하는 맵
+    private Map<Point, List<Integer>> stackedHorses = new HashMap<>();
 
     private GameState currentState = GameState.START_SCREEN;
 
@@ -220,73 +224,215 @@ public class GameController {
         startView.setState(currentState);
     }
 
-    public void move(){
+    // 말을 업히는 메서드
+    public void stackHorseAtPosition(Horse horse, Point position) {
+        // 해당 위치에 이미 쌓인 말의 ID 목록을 가져옴
+        List<Integer> horsesAtPosition = stackedHorses.getOrDefault(position, new ArrayList<>());
 
-        while(!yutList.isEmpty()){
+        horsesAtPosition.add(horse.id);  // 말을 해당 위치에 추가
+        stackedHorses.put(position, horsesAtPosition);  // 맵에 저장
 
-            //윷 결과 선택창
-            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                // yutList.remove(chosenResult); // 선택한 결과 제거
-                System.out.println("선택된 결과: " + chosenResult);
+        // 뷰에 업힌 말 업데이트 (위치에 업힌 말들의 개수 표시 등)
+        gameView.stackHorseAtPosition(horse.id, position);
+    }
 
-                //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
-                gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
-                    System.out.println("선택된 말: " + selectedHorse.id);
-                    //이동 구현 필요
-                    // yutList.clear();
-                    // throwState = true;
-                });
-            });
+    // 말을 이동시킬 때 그룹 내 모든 말들이 함께 이동하도록
+    public void moveGroupedHorses(Point position, Node targetNode) {
+        // 해당 위치에 있는 말들이 있는지 확인
+        List<Integer> horsesAtPosition = stackedHorses.get(position);
 
+        if (horsesAtPosition != null) {
+            for (int horseId : horsesAtPosition) {
+                Horse horse = findHorseById(horseId);
 
-            // 윷 선택
-            // YutResult result = gameView.selectYutResult(yutList);
+                if (horse != null && !horse.isFinished) {
+                    // 말의 노드 위치 업데이트
+                    horse.currentNode = targetNode;
 
-            YutResult result = yutList.get(0); // 위에거 test 용
-            yutList.remove(result);
-
-            // 말 선택
-            // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
-            int horse_id = currentPlayer.horseList.get(0).id;
-
-            System.out.println("horse_id" + horse_id);
-            Horse selectedHorse = horses.get(horse_id);
-            System.out.println("selected horse" + selectedHorse.id);
-
-            System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-
-            if(selectedHorse.state == false){
-                selectedHorse.state = true;
-                gameView.setHorseVisible(selectedHorse.id);
+                    // 화면에서도 이동
+                    gameView.moveHorse(horse.id, targetNode.x, targetNode.y);
+                }
             }
 
-            selectedHorse.move(result);
-            // view 구현해보자
-            gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
-            System.out.println("horse 움직임");
-            System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+            // 그룹 이동 후, 새 위치에 해당 그룹을 업데이트
+            stackedHorses.remove(position);
+            stackedHorses.put(new Point(targetNode.x, targetNode.y), horsesAtPosition);
+        }
+    }
 
-            // 여기서 한번 repaint() 해 줄 지 고민
-
-            // finish 처리
-            if(selectedHorse.currentNode.isEndNode){
-                selectedHorse.isFinished = true;
-                selectedHorse.state = false;
-                currentPlayer.score++;
-                currentPlayer.horseList.remove(selectedHorse); // test 용임
-            }
-
-            if(currentPlayer.score==horseCount){
-                // view.finish 처리
-                System.out.println("끝남");
-                break;
+    // Horse ID로 Horse 객체를 찾는 메서드
+    private Horse findHorseById(int horseId) {
+        for (Horse horse : horses) {
+            if (horse.id == horseId) {
+                return horse;
             }
         }
+        return null; // Horse가 없는 경우
+    }
+
+
+    public void move() {
+
+        while (!yutList.isEmpty()) {
+
+            // 윷 결과 선택
+            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                System.out.println("선택된 결과: " + chosenResult);
+                yutList.remove(chosenResult);
+
+                // 말 선택
+                gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+                    System.out.println("선택된 말: " + selectedHorse.id);
+
+                    Node targetNode = selectedHorse.currentNode;
+
+                    // 이동할 거리만큼 노드 이동
+                    for (int i = 0; i < chosenResult.ordinal(); i++) {
+                        if (targetNode != null && targetNode.nextNode != null) {
+                            targetNode = targetNode.nextNode;
+                        }
+                    }
+
+                    System.out.println("이동할 노드: " + targetNode.id);
+
+                    // 말이 화면에 나타나지 않는 문제를 해결
+                    if (selectedHorse.state == false) {
+                        selectedHorse.state = true;  // 말 활성화
+                        gameView.setHorseVisible(selectedHorse.id);  // 말이 화면에 보이게 설정
+                    }
+
+                    // 현재 위치에 같은 색의 말이 있는지 확인 (업힐 수 있는지 체크)
+                    List<Horse> horsesOnSameNode = new ArrayList<>();
+                    for (Horse horse : horses) {
+                        if (horse.currentNode == targetNode && horse.color.equals(selectedHorse.color) && horse != selectedHorse) {
+                            horsesOnSameNode.add(horse);
+                        }
+                    }
+
+                    // 말이 업힐 경우 처리
+                    if (!horsesOnSameNode.isEmpty()) {
+                        // 두 번째로 온 말이 원래 있던 말에 업히는 방식으로 처리
+                        Horse carriedHorse = horsesOnSameNode.get(0);  // 첫 번째로 겹친 말 (즉, 업힐 대상 말)
+                        System.out.println("말이 업혔습니다: " + carriedHorse.id);
+
+                        // 업힌 말의 위치를 이동할 노드(targetNode)로 설정
+                        carriedHorse.currentNode = targetNode;
+
+                        // UI 업데이트: 업힌 말의 위치도 이동시키기
+                        gameView.moveHorse(carriedHorse.id, carriedHorse.x, carriedHorse.y);
+                    }
+
+                    // 선택된 말 이동
+                    if (!selectedHorse.isFinished) {
+                        System.out.println("말 이동: " + selectedHorse.id);
+                        selectedHorse.move(chosenResult);
+                        gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+
+                        // 도착 지점에 도착했을 경우 점수 처리
+                        if (selectedHorse.currentNode.isEndNode) {
+                            selectedHorse.isFinished = true;
+                            selectedHorse.state = false;
+                            currentPlayer.score++;
+                            currentPlayer.horseList.remove(selectedHorse);
+                            System.out.println("말이 끝에 도착했습니다: " + selectedHorse.id);
+                        }
+                    }
+
+                    // 게임 종료 조건 체크
+                    if (currentPlayer.score == horseCount) {
+                        System.out.println("플레이어 " + currentPlayer.id + "의 모든 말이 도착했습니다. 게임 종료.");
+                        return;
+                    }
+
+                    // targetNode의 x, y를 사용하여 Point 객체를 생성
+                    Point targetPosition = new Point(targetNode.x, targetNode.y);
+
+                    // targetPosition을 moveGroupedHorses로 전달
+                    List<Integer> horsesAtNewPosition = stackedHorses.get(targetPosition);  // 위치에 쌓인 말들 가져오기
+                    if (horsesAtNewPosition != null) {
+                        // 그룹으로 이동
+                        moveGroupedHorses(targetPosition, targetNode);
+                    }
+
+                });
+            });
+        }
+
         throwState = true;
         turn++;
-        currentPlayer = players.get(turn%playerCount);
-
+        currentPlayer = players.get(turn % playerCount);
     }
+
+
+//    public void move(){
+//
+//        while(!yutList.isEmpty()){
+//
+//            //윷 결과 선택창
+//            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+//                // yutList.remove(chosenResult); // 선택한 결과 제거
+//                System.out.println("선택된 결과: " + chosenResult);
+//
+//                //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
+//                gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+//                    System.out.println("선택된 말: " + selectedHorse.id);
+//                    //이동 구현 필요
+//                    // yutList.clear();
+//                    // throwState = true;
+//
+//
+//                });
+//            });
+//
+//
+//            // 윷 선택
+//            // YutResult result = gameView.selectYutResult(yutList);
+//
+//            YutResult result = yutList.get(0); // 위에거 test 용
+//            yutList.remove(result);
+//
+//            // 말 선택
+//            // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
+//            int horse_id = currentPlayer.horseList.get(0).id;
+//
+//            System.out.println("horse_id" + horse_id);
+//            Horse selectedHorse = horses.get(horse_id);
+//            System.out.println("selected horse" + selectedHorse.id);
+//
+//            System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+//
+//            if(selectedHorse.state == false){
+//                selectedHorse.state = true;
+//                gameView.setHorseVisible(selectedHorse.id);
+//            }
+//
+//            selectedHorse.move(result);
+//            // view 구현해보자
+//            gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+//            System.out.println("horse 움직임");
+//            System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+//
+//            // 여기서 한번 repaint() 해 줄 지 고민
+//
+//            // finish 처리
+//            if(selectedHorse.currentNode.isEndNode){
+//                selectedHorse.isFinished = true;
+//                selectedHorse.state = false;
+//                currentPlayer.score++;
+//                currentPlayer.horseList.remove(selectedHorse); // test 용임
+//            }
+//
+//            if(currentPlayer.score==horseCount){
+//                // view.finish 처리
+//                System.out.println("끝남");
+//                break;
+//            }
+//        }
+//        throwState = true;
+//        turn++;
+//        currentPlayer = players.get(turn%playerCount);
+//
+//    }
 }
 
 /*
