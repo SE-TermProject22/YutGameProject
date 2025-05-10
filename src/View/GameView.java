@@ -17,6 +17,8 @@ import Model.Horse;
 public class GameView  extends JPanel {
     private Image board, currentImage;
     private JButton throwButton;
+    //
+    private JButton specialThrowButton;
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
@@ -92,8 +94,24 @@ public class GameView  extends JPanel {
 
     //기본 세팅
     private void initUI() {
-        throwButton = createButton("image/윷 던지기.png", 798, 405);
+        //
+        throwButton = createButton("image/윷 던지기.png", 744, 405);
         add(throwButton);
+        //
+        specialThrowButton = createButton("image/지정던지기 버튼.png", 940, 405);
+        add(specialThrowButton);
+
+        JButton testEndButton = new JButton("종료 테스트"); //테스트용 버튼 나중에 지워야함
+        testEndButton.setBounds(798, 470, 120, 40);
+        add(testEndButton);
+
+        testEndButton.addActionListener(e -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            EndView endView = new EndView();
+            endView.setWinner(1); // 예시
+            frame.setContentPane(endView);
+            frame.revalidate();
+        });
 
         repaint();
     }
@@ -210,7 +228,7 @@ public class GameView  extends JPanel {
                     // horseLabel.setBounds(horseX, horseY, 40, 40); // 디버깅
                     horseLabel.setBounds(0, 0, 40, 40);
                     horseLabel.setVisible(false); // 처음엔 보이지 않게
-                    // horseLabel.setVisible(true); // 디버깅
+                    //horseLabel.setVisible(true); // 디버깅
 
                     horseComponents.put(idCounter, horseLabel); // model과 연동되는 고유 id = idCounter
                     add(horseLabel);

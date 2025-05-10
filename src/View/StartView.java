@@ -199,4 +199,32 @@ public class StartView extends JPanel{
     public Map<String, JButton> getHorseButtons() {
         return horseButtons;
     }
+
+    public void resetSelectionState() {
+        selectedColors.clear();       // 말 색상 초기화
+        selectedBoard = null;        // 보드 선택 초기화
+
+        // 콤보박스 초기화
+        playerCountBox.setSelectedIndex(0);
+        horseCountBox.setSelectedIndex(0);
+
+        // 말 버튼 초기화
+        for (JButton btn : horseButtons.values()) {
+            btn.setEnabled(true);
+            btn.setVisible(false); // 시작할 때는 안 보이게
+        }
+
+        // 보드 선택 버튼 숨기기
+        squareBtn.setVisible(false);
+        pentagonBtn.setVisible(false);
+        hexagonBtn.setVisible(false);
+        nextButton.setVisible(false);
+
+        // 상태를 다시 시작 화면으로
+        setState(GameState.START_SCREEN);
+    }
+
+
+
 }
+
