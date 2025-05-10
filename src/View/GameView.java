@@ -2,6 +2,7 @@ package View;
 
 // import Controller.GameController;
 import Controller.YutResult;
+import Model.DoubledHorse;
 import Model.Player;
 
 import javax.swing.*;
@@ -242,10 +243,10 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    /*
+
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
     public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
+        Image horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개"+ ".png").getImage();
         JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
         horseLabel.setBounds(x, y, 40, 40);
         horseLabel.setVisible(true); // 디버깅
@@ -253,7 +254,7 @@ public class GameView  extends JPanel {
         add(horseLabel);
         repaint();
     }
-    */
+
 
 
     // horse를 remove하는 함수 - 필요할까? 일단은
@@ -538,7 +539,7 @@ public class GameView  extends JPanel {
             }
             else{
                 // 업은 말 선택
-                imagePath = "image/선택 " + horse.color + (horse.id % horseCount) + ".png";
+                imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";
             }
             ImageIcon icon = new ImageIcon(imagePath);
 

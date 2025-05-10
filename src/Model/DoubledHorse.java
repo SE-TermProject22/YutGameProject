@@ -11,20 +11,20 @@ public class DoubledHorse extends Horse{
         super(id, horse1.color, horse1.currentNode);
         this.state = true;
         if(horse1 instanceof DoubledHorse) {
-            carriedHorses.add((DoubledHorse) ((DoubledHorse) horse1).carriedHorses);
-            horseCount = ((DoubledHorse) horse1).horseCount;
+            carriedHorses.addAll(((DoubledHorse) horse1).carriedHorses);
+            this.horseCount += ((DoubledHorse) horse1).horseCount;
         }
         else{
             carriedHorses.add(horse1);
-            horseCount++;
+            this.horseCount = horseCount + 1;
         }
         if(horse2 instanceof DoubledHorse) {
-            carriedHorses.add((DoubledHorse) ((DoubledHorse) horse2).carriedHorses);
-            horseCount = ((DoubledHorse) horse2).horseCount;
+            carriedHorses.addAll(((DoubledHorse) horse2).carriedHorses);
+            this.horseCount += ((DoubledHorse) horse2).horseCount;
         }
         else{
             carriedHorses.add(horse2);
-            horseCount++;
+            this.horseCount = horseCount + 1;
         }
     }
     public List<Horse> getCarriedHorses() {
