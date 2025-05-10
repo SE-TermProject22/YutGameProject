@@ -22,7 +22,8 @@ public class GameController {
     private Board board;            // borad 지정
     private List<Player> players = new ArrayList<>();   // players
     private List<Horse> horses = new ArrayList<>();         // 전체 horse
-
+    private int horseCount;
+    private int playerCount;
     private boolean throwState = true;
     private List<YutResult> yutList = new ArrayList<>();
     ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
@@ -101,7 +102,8 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (throwState) {
+                if(throwState) {
+                    throwState = false;
                     YutResult result = currentPlayer.throwYut();
                     System.out.println(result);
                     yutList.add(result);
@@ -110,28 +112,13 @@ public class GameController {
                     if (result == YutResult.MO || result == YutResult.YUT) {
                         throwState = true;
                         gameView.scheduleNotifyingImage(result);
-                    } else {
-                        throwState = false;
-
-                        //윷 결과 선택창
-                        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                            yutList.remove(chosenResult); // 선택한 결과 제거
-                            System.out.println("선택된 결과: " + chosenResult);
-
-                            //말 적용 선택창
-                            gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
-                                System.out.println("선택된 말: " + selectedHorse.id);
-
-                                //이동 구현 필요
-                                yutList.clear();
-                                throwState = true;
-                            });
-                        });
                     }
 
                     else{
                         // 윷 선택창 띄위기
                         move();
+                        // 다시 throwYut true 처리하고 turn 넘겨주기 - 원래는 move 안에서 하려고 해는데 계속 버튼이 눌려서 여기로 옮김
+                        throwState = true;
                     }
 
                 }
@@ -150,8 +137,8 @@ public class GameController {
         // hexagon board
         board = new Board(selectedBoard);
 
-        int playerCount = startView.getPlayerCount();
-        int horseCount = startView.getHorseCount();
+        playerCount = startView.getPlayerCount();
+        horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
 
         // 모든 말 생성
@@ -163,6 +150,7 @@ public class GameController {
                 players.get(i).horseList.add(horses.get(i*horseCount+j));   // 일단 이렇게 바로 add를 하는데 나중에는 함수를 만들어서 하던지 합시다^
             }
         }
+
 
         System.out.println("===== 생성된 말(Horses) =====");
         for (Horse horse : horses) {
@@ -183,6 +171,8 @@ public class GameController {
             }
         }
 
+        // 말 component 생성
+        gameView.initHorses(selectedColors, horseCount);
 
 
 
@@ -218,6 +208,23 @@ public class GameController {
     public void move(){
 
         while(!yutList.isEmpty()){
+
+
+            //윷 결과 선택창
+            gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+                // yutList.remove(chosenResult); // 선택한 결과 제거
+                System.out.println("선택된 결과: " + chosenResult);
+
+                //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
+                gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+                    System.out.println("선택된 말: " + selectedHorse.id);
+
+                    //이동 구현 필요
+                    // yutList.clear();
+                    // throwState = true;
+                });
+            });
+
             // 윷 선택
             // YutResult result = gameView.selectYutResult(yutList);
 
@@ -233,16 +240,35 @@ public class GameController {
             System.out.println("selected horse" + selectedHorse.id);
 
             System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
+
+            if(selectedHorse.state == false){
+                selectedHorse.state = true;
+                gameView.setHorseVisible(selectedHorse.id);
+            }
+
             selectedHorse.move(result);
+            // view 구현해보자
+            gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
             System.out.println("horse 움직임");
             System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
 
             // 여기서 한번 repaint() 해 줄 지 고민
 
             // finish 처리
+            if(selectedHorse.currentNode.isEndNode){
+                selectedHorse.isFinished = true;
+                selectedHorse.state = false;
+                currentPlayer.score++;
+                currentPlayer.horseList.remove(selectedHorse); // test 용임
+            }
 
-
+            if(currentPlayer.score==horseCount){
+                // view.finish 처리
+                System.out.println("끝남");
+                break;
+            }
         }
+
     }
 }
 

@@ -28,6 +28,7 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
 
+
     // private Player currentPlayer;
 
     public GameView() {
@@ -44,6 +45,7 @@ public class GameView  extends JPanel {
 
         String[] colors = {"red", "blue", "yellow", "green"};
 
+        // horseImage setting
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
@@ -53,7 +55,7 @@ public class GameView  extends JPanel {
                 }
             }
         }
-
+        // 윷 던지는 과정 animation 과정들 사진
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             Image img = new ImageIcon("image/yut/yut" + i + ".png").getImage();
@@ -61,7 +63,7 @@ public class GameView  extends JPanel {
                 yutImages.add(img);
             }
         }
-
+        // 윷 결과 이미지
         resultImages = new ArrayList<>();
         String[] resultImageNames = {"1.png", "2.png", "3.png", "4.png", "5.png", "-1.png"};
         for (String imageName : resultImageNames) {
@@ -149,6 +151,11 @@ public class GameView  extends JPanel {
         }
         repaint();
     }
+
+    // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
+
+
+
     /*
     //말 위치 초기화 메서드
     public void placeHorses(List<String> colors) {
@@ -158,6 +165,99 @@ public class GameView  extends JPanel {
         repaint();
     }
     */
+    /*
+    // 처음에 horses들 다 만들기
+    public void initHorses(List<String> colors){
+        String key = color + j;
+        Image horseImage = horseImages.get(key);
+        if (horseImage != null) {
+            JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+
+            int horseX = playerHorsePosition.x + (j - 1) * 34;
+            int horseY = playerHorsePosition.y;
+
+            horseLabel.setBounds(horseX, horseY, 40, 40);
+            add(horseLabel);
+        }
+    }
+    */
+    private Map<Integer, JLabel> horseComponents = new HashMap<>();
+
+    // 처음 말들을 다 만들기
+    public void initHorses(List<String> colors, int horseCount) {
+        int idCounter = 0;
+
+        for (String color : colors) {
+            for (int j = 1; j <= horseCount; j++) {
+                String key = color + j;
+                Image horseImage = horseImages.get(key);
+                if (horseImage != null) {
+                    JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+
+                    // 예시 초기 위치: 플레이어 말 대기 구역
+                    // 초기 위치 관계 없음 - 디버깅
+                    /*
+                    int horseX = 50 + j * 34;  // X좌표는 적당히 간격 조정
+                    int horseY = color.equals("RED") ? 400 : 450; // 플레이어 색상별 초기 Y좌표
+                    switch(color){
+                        case "red": horseY = 400; break;
+                        case "blue": horseY = 450; break;
+                        case "green": horseY = 550; break;
+                        case "yellow": horseY = 600; break;
+                    }
+                    */
+
+                    // horseLabel.setBounds(horseX, horseY, 40, 40); // 디버깅
+                    horseLabel.setBounds(0, 0, 40, 40);
+                    horseLabel.setVisible(false); // 처음엔 보이지 않게
+                    // horseLabel.setVisible(true); // 디버깅
+
+                    horseComponents.put(idCounter, horseLabel); // model과 연동되는 고유 id = idCounter
+                    add(horseLabel);
+                    idCounter++;
+                }
+            }
+        }
+        repaint();
+    }
+
+    // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
+    public void addHorseComponent(int horse_id){
+        JLabel horseLabel = new JLabel(new ImageIcon(horseImages.get(horse_id))); // 약간 이런식으로해서
+    }
+
+    // horse를 remove하는 함수 - 필요할까? 일단은
+
+
+    // horse를 setvisible하게 하는 함수
+    public void setHorseVisible(int horse_id){
+        horseComponents.get(horse_id).setVisible(true);
+        repaint();
+    }
+    // horse를 setInvisible 하는 함수
+    public void setHorseInvisible(int horse_id){
+        horseComponents.get(horse_id).setVisible(false);
+        repaint();
+    }
+
+    // horse를 move하는 함수
+    public void moveHorse(int horse_id, int x, int y){
+        horseComponents.get(horse_id).setLocation(x, y);
+        repaint();
+    }
+    // 혹시 몰라서 여러 개 받으면 이렇게 처리
+    public void moveHorse(List<Integer> horse_id_list, int x, int y){
+        int i = 0;
+        for(Integer horse_id : horse_id_list){
+            horseComponents.get(horse_id_list.get(i)).setLocation(x, y);
+            i++;
+        }
+        repaint();
+    }
+
+    // 그러면 나중에 마지막에 moveHorse()를 하면 됨
+
+    // 설명 필요 - 아래 두 함수
     public void placeHorses(List<String> colors) {
         int x = 50;  // x 좌표를 50부터 시작
         int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
@@ -175,6 +275,11 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+
+
+
+
+    // 윷 관련
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
 
@@ -330,6 +435,8 @@ public class GameView  extends JPanel {
             case BackDo -> "백도";
         };
     }
+
+
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "결과 적용 선택", true);  // 모달창

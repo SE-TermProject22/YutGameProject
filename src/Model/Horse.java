@@ -8,6 +8,9 @@ public class Horse {
     public Node currentNode;
     public Node prevNode;
     public String color;
+    public boolean isFinished = false;
+    public boolean state = false;
+
     // 생성자
     public Horse(int id, String color, Node currentNode) {
         this.id = id;
@@ -22,6 +25,8 @@ public class Horse {
         /*
         if(result==YutResult.BackDo)
         */
+
+        // currentNode가 첫번째 node면 state = true 처리
 
         if(currentNode.isDaegak) {
             this.currentNode = ((DaegakNode)currentNode).DNode;
