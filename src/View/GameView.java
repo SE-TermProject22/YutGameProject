@@ -17,6 +17,7 @@ import Model.Horse;
 public class GameView  extends JPanel {
     private Image board, currentImage;
     private JButton throwButton;
+    private JButton specialThrowButton; //지정던지기 버튼 추가
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
     private Map<String, Point> horsePositions;
@@ -92,8 +93,12 @@ public class GameView  extends JPanel {
 
     //기본 세팅
     private void initUI() {
-        throwButton = createButton("image/윷 던지기.png", 798, 405);
+        throwButton = createButton("image/윷 던지기.png", 744, 405);
         add(throwButton);
+
+        //지정던지기 버튼 화면에 띄우기
+        specialThrowButton = createButton("image/지정던지기 버튼.png", 940, 405);
+        add(specialThrowButton);
 
         // Test
         JButton testEndButton = new JButton("종료 테스트"); //테스트용 버튼 나중에 지워야함
@@ -534,6 +539,64 @@ public class GameView  extends JPanel {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
     }
+
+    public void addSpecialThrowListener(ActionListener listener) {
+        specialThrowButton.addActionListener(listener);
+    }
+
+
+    //지정윷던지기 창 구현
+    public void showFixedYutChoiceDialog(Consumer<YutResult> onSelected) {
+        JDialog dialog = new JDialog((JFrame) null, "윷 선택", true);
+        dialog.setSize(665, 298);
+        dialog.setLocationRelativeTo(null);
+        dialog.setUndecorated(true);
+
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image bg = new ImageIcon("image/결과 적용.png").getImage();
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        panel.setLayout(null);
+
+        YutResult[] fixedResults = {
+                YutResult.DO, YutResult.GAE, YutResult.GEOL, YutResult.YUT, YutResult.MO
+        };
+
+        int x = 100;
+        int y = 100;
+
+        for (YutResult result : fixedResults) {
+            String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
+            ImageIcon icon = new ImageIcon(imagePath);
+
+            JButton btn = new JButton(icon);
+            btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+
+            btn.addActionListener(e -> {
+                dialog.dispose();
+                onSelected.accept(result);
+            });
+
+            panel.add(btn);
+            x += icon.getIconWidth() + 20;
+        }
+
+        dialog.setContentPane(panel);
+        dialog.setVisible(true);
+    }
+
+    public JButton getSpecialThrowButton() {
+        return specialThrowButton;
+    }
+
+
+
 
 
 }
