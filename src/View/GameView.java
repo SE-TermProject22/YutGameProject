@@ -391,8 +391,10 @@ public class GameView  extends JPanel {
         int x = 100;
         int y = 100;
 
+        int index = 1;
         for (Horse horse : horses) {
-            String imagePath = "image/선택 " + horse.color + ((horse.id % 5) + 1) + ".png";
+            String imagePath = "image/선택 " + horse.color + index + ".png"; // ✔ 말 번호는 1, 2, ...
+
             ImageIcon icon = new ImageIcon(imagePath);
 
             JButton btn = new JButton(icon);
@@ -408,6 +410,7 @@ public class GameView  extends JPanel {
 
             panel.add(btn);
             x += icon.getIconWidth() + 20;
+            index++; //이걸로 플레이어가 가지고 있는 말 index를 ++해서 맞는 색의 버튼 생성
         }
 
         dialog.setContentPane(panel);

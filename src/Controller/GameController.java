@@ -27,6 +27,9 @@ public class GameController {
     private List<YutResult> yutList = new ArrayList<>();
     ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
 
+    // 컨트롤러 필드에 선택된 결과 저장
+    private YutResult pendingResult;
+
     private GameState currentState = GameState.START_SCREEN;
 
     public GameController(StartView startView, GameView gameView) {
@@ -36,6 +39,74 @@ public class GameController {
         initializeListeners();
         updateViewState();
     }
+
+//    private void handleYutResultSelection() {
+//        if (yutList.isEmpty()) {
+//            // 결과 다 사용했으면 턴 종료 or 다음 단계로
+//            throwState = true;
+//            return;
+//        }
+//
+//        // 결과 선택 창
+//        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+//            yutList.remove(chosenResult); // 결과 하나 제거
+//
+//            // 말 선택 창
+//            gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+//                System.out.println("말 ID: " + selectedHorse.id + " 에 결과: " + chosenResult + " 적용");
+//
+//                // 여기에 말 이동 처리 로직 추가 예정
+//
+//                // 다음 결과 선택 이어서 호출
+//                handleYutResultSelection();
+//            });
+//        });
+//    }
+
+    private int currentPlayerIndex = 0;
+
+    private void nextTurn() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        currentPlayer = players.get(currentPlayerIndex);
+        throwState = true;
+
+        System.out.println("==== 다음 턴 ====");
+        System.out.println("현재 플레이어: " + currentPlayer.color);
+    }
+
+
+
+    // 첫 번째: 윷 결과 선택만 처리
+    private void startYutApplication() {
+        if (yutList.isEmpty()) {
+            nextTurn(); // 결과 다 쓰면 턴 넘기기 등
+            return;
+        }
+
+        gameView.showYutResultChoiceDialog(yutList, result -> {
+            pendingResult = result;
+            yutList.remove(result);
+            showHorseSelectAfterResult();
+        });
+    }
+
+    // 두 번째: 말 선택을 따로 처리
+    private void showHorseSelectAfterResult() {
+        gameView.showHorseSelectionDialog(currentPlayer.horseList, horse -> {
+            System.out.println("▶ 말 ID: " + horse.id + " 에 결과: " + pendingResult + " 적용");
+
+            int horseId = horse.id;
+            YutResult selectedResult = pendingResult;
+
+            // TODO: 말 이동 처리
+
+            // 다음 결과로 계속
+            startYutApplication();
+        });
+    }
+
+
+
 
     private void initializeListeners() {
         startView.addStartButtonListener(new ActionListener() {
@@ -114,20 +185,26 @@ public class GameController {
                     } else {
                         throwState = false;
 
-                        //윷 결과 선택창
-                        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                            yutList.remove(chosenResult); // 선택한 결과 제거
-                            System.out.println("선택된 결과: " + chosenResult);
-
-                            //말 적용 선택창
-                            gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
-                                System.out.println("선택된 말: " + selectedHorse.id);
-
-                                //이동 구현 필요
-                                yutList.clear();
-                                throwState = true;
-                            });
+                        javax.swing.Timer delayTimer = new javax.swing.Timer(1000, e2 -> {
+                            startYutApplication();
                         });
+                        delayTimer.setRepeats(false);
+                        delayTimer.start();
+
+//                        //윷 결과 선택창
+//                        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+//                            yutList.remove(chosenResult); // 선택한 결과 제거
+//                            System.out.println("선택된 결과: " + chosenResult);
+//
+//                            //말 적용 선택창
+//                            gameView.showHorseSelectionDialog(currentPlayer.horseList, selectedHorse -> {
+//                                System.out.println("선택된 말: " + selectedHorse.id);
+//
+//                                //이동 구현 필요
+//                                yutList.clear();
+//                                throwState = true;
+//                            });
+//                        });
                     }
                 }
             }
