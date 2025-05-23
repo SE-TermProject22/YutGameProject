@@ -31,10 +31,13 @@ public class Horse {
         boolean bothInCenter = currentNode.isCenterNode && other.currentNode.isCenterNode;
         boolean bothInStart = currentNode.isFirstNode && other.currentNode.isLastNode;
         boolean sameTeam = this.color.equals(other.color);
+        boolean bothInEnd = currentNode.isLastNode && other.currentNode.isFirstNode;
 
-        if (sameNode || bothInCenter || bothInStart) {
+        if (sameNode || bothInCenter || bothInStart || bothInEnd) {
             return sameTeam ? 1 : 0; // 1: 업기 가능, 0: 잡기 가능
         }
+        // currentnode.x = other.x
+        // currentnode.y = other.y
 
         return -1; // 서로 다른 위치, 상호작용 없음
     }
@@ -66,6 +69,9 @@ public class Horse {
 
             return;
         }
+
+        // 30번 노드로 확인
+        // finish처리 다시 확인하기 -> endnode로하게끔
         if(HorseBackDoState && result.ordinal() < 5 ){
             //finish처리
             isFinished = true;
@@ -80,7 +86,6 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
-            System.out.println("대각 : HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
         else {
             this.prevNode = currentNode; // 말이 자신의 prevNode 기억
@@ -88,8 +93,6 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
-            System.out.println("HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
-
         }
         for(int i=0; i< result.ordinal(); i++){
             if(result == YutResult.BackDo) break; // 여기는 백도 처리 안함
@@ -98,7 +101,6 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
-            System.out.println("HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
         if (!currentNode.isFirstNode) {
             HorseBackDoState = false;

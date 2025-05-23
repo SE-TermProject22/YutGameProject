@@ -19,6 +19,8 @@ public class Node {
         this.id = id;
     }
 
+    // getter써서 x,y값 확인
+
     public void setNextNode(Node nextNode) {
         this.nextNode = nextNode;
     }
