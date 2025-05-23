@@ -31,6 +31,7 @@ public class Main {
             //
             endView.setVisible(false);
 
+
             // 패널들을 JFrame에 추가
             frame.setLayout(null);
             startView.setBounds(0, 0, 1100, 700);
