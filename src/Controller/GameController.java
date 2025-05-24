@@ -7,12 +7,7 @@ import Model.Horse;
 
 import View.StartView;
 import View.GameView;
-
-//
 import View.EndView;
-
-//
-
 
 import java.awt.*;
 import java.util.*;
@@ -26,11 +21,9 @@ import java.awt.event.ActionListener;
 public class GameController {
     private StartView startView;
     private GameView gameView;
-
     private EndView endView;
 
     private Player currentPlayer;
-
     private Board board;            // borad 지정
     private List<Player> players = new ArrayList<>();   // players
     private List<Horse> horses = new ArrayList<>();         // 전체 horse
@@ -296,7 +289,7 @@ public class GameController {
                             gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
 
                             // 말 상태 변경
-                            selectedHorse.state = false;
+                            // selectedHorse.state = false; -> 한 번 더 가야
 
                             // 플레이어 점수 +1
                             // 업기 할때 수정필요
@@ -304,7 +297,7 @@ public class GameController {
                             currentPlayer.score++;
 
                             // 말 숨기기
-                            gameView.setHorseInvisible(selectedHorse.id);
+                            // gameView.setHorseInvisible(selectedHorse.id); -> 그 다음 움직임부터 invisible 필요 **
 
 //                            // View에게 점수 갱신 알림 갱신하는건가???
 //                            gameView.updatePlayerScore(currentPlayer.id, currentPlayer.score);

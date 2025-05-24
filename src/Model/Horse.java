@@ -49,6 +49,9 @@ public class Horse {
             if(currentNode.backDoNode == null) {
                 System.out.println("출발점임");//출발점임
             } else if(currentNode.backDoPrev) {
+                // op1. 아무 행동도 안하고 턴 넘기기
+                // op2. 은진이 아이디어
+            } else{
                 Node temp = currentNode;
                 currentNode = prevNode;
                 prevNode = temp;
@@ -65,8 +68,6 @@ public class Horse {
                     HorseBackDoState = true; // 다음에 도~모가 나오면 Finish 처리
                 }
             }
-
-
             return;
         }
 
@@ -86,6 +87,7 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
+            System.out.println("대각 : HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
         else {
             this.prevNode = currentNode; // 말이 자신의 prevNode 기억
@@ -93,6 +95,8 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
+            System.out.println("HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
+
         }
         for(int i=0; i< result.ordinal(); i++){
             if(result == YutResult.BackDo) break; // 여기는 백도 처리 안함
@@ -101,6 +105,7 @@ public class Horse {
             // 원래 이부분은 마지막에만 해주면 됨
             this.x = currentNode.x;
             this.y = currentNode.y;
+            System.out.println("HORSECLASS : horse x: " + this.x + "y: %d"+ this.y);
         }
         if (!currentNode.isFirstNode) {
             HorseBackDoState = false;
