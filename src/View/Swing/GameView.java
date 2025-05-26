@@ -73,7 +73,7 @@ public class GameView  extends JPanel {
                     horseImages.put(key, horseImg);
                 }
 
-                Image scoreImg = new ImageIcon(getClass().getResource("image/스코어 말/" + color + "/" + i + ".png")).getImage();
+                Image scoreImg = new ImageIcon(getClass().getResource("/image/스코어 말/" + color + "/" + i + ".png")).getImage();
                 if (scoreImg != null) {
                     scoreHorseImages.put(key, scoreImg);
                 }
