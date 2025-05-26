@@ -115,7 +115,7 @@ public class GameView  extends JPanel {
 
     //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y) {
-        ImageIcon icon = new ImageIcon(imagePath);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/" + imagePath));
         JButton button = new JButton(icon);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
