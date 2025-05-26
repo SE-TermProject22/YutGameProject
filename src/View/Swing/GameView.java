@@ -58,7 +58,7 @@ public class GameView  extends JPanel {
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image img = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
+                Image img = new ImageIcon("image/말 이동/" + color + "/" + i + ".png").getImage();
                 if (img != null) {
                     horseImages.put(key, img);
                 }
@@ -578,7 +578,7 @@ public class GameView  extends JPanel {
             String imagePath;
             // 여기서 id가 크면은 color.count로 해서 파일 받기
             if(horse.id < 20) {
-                imagePath = "image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
+                imagePath = "image/선택 " + horse.color + "/" + (horse.id % horseCount+1) + ".png";
                 System.out.println(horse.id);
             }
             else{
