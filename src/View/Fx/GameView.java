@@ -422,7 +422,7 @@ public class GameView extends Pane {
         for (Horse horse : horses) {
             String imagePath;
             if (horse.id < 20) {
-                imagePath = "image/선택 " + horse.color + (horse.id % horseCount + 1) + ".png";
+                imagePath = "image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
                 System.out.println(horse.id);
             } else {
                 imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";

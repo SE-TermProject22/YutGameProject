@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dceb7324-cf32-49b0-9c95-7d7b8c010858" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/../image/blue/blue1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/blue/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/blue/blue2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/blue/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/blue/blue3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/blue/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/blue/blue4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/blue/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/blue/blue5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/blue/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/green/green1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/green/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/green/green2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/green/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/green/green3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/green/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/green/green4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/green/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/green/green5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/green/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/red/red1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/red/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/red/red2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/red/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/red/red3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/red/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/red/red4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/red/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/red/red5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/red/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/yellow/yellow1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/yellow/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/yellow/yellow2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/yellow/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/yellow/yellow3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/yellow/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/yellow/yellow4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/yellow/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/yellow/yellow5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/스코어 말/yellow/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/선택 red/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/선택 red/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/선택 red/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/선택 red/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/선택 red/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/선택 red/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/선택 red/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/선택 red/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../image/선택 red/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../image/선택 red/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/javafx_swt.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaFX.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/Winner1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/Winner2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/Winner3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/Winner4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue 말.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue/blue1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue/blue2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue/blue3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue/blue4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/blue/blue5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green 말.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green/green1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green/green2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green/green3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green/green4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/green/green5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/hexagon board.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/pentagon board.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/player1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/player2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/player3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/player4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red 말.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red/red1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red/red2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red/red3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red/red4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/red/red5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/square board.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow 말.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow/yellow1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow/yellow2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow/yellow3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow/yellow4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yellow/yellow5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yut/yut1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yut/yut2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yut/yut3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/yut/yut4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/결과 적용.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/끝난 말.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/다음.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/blue/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/blue/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/blue/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/blue/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/blue/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/green/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/green/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/green/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/green/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/green/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/red/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/red/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/red/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/red/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/red/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/yellow/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/yellow/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/yellow/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/yellow/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 버튼/yellow/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 선택.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/blue/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/blue/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/blue/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/blue/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/blue/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/green/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/green/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/green/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/green/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/green/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/red/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/red/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/red/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/red/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/red/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/yellow/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/yellow/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/yellow/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/yellow/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 이동/yellow/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/말 적용.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/모 한번더.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/사각형.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 blue1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 blue2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 blue3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 blue4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 blue5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 green1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 green2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 green3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 green4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 green5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red/선택 red1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red/선택 red2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red/선택 red3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red/선택 red4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red/선택 red5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 red5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 yellow1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 yellow2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 yellow3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 yellow4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 yellow5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 걸.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 도.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 모.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 백도.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/선택 윷 결과/선택 윷.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/시작 버튼.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/시작 화면.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업었다.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/blue/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/blue/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/blue/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/blue/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/green/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/green/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/green/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/green/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/red/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/red/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/red/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/red/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/yellow/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/yellow/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/yellow/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말 버튼/yellow/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/blue/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/blue/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/blue/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/blue/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/green/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/green/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/green/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/green/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/red/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/red/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/red/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/red/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/yellow/2개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/yellow/3개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/yellow/4개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/업힌 말/yellow/5개.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/오각형.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/육각형.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 결과 버튼/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 던지기.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/윷 한번더.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/잡았다.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/재시작버튼.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/종료 화면.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/종료버튼.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/지정던지기 버튼.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/판 선택.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/GameController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/GameState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/YutResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Board.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/DaegakNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/DoubledHorse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/EndNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Horse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Node.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Player.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Yut.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/EndView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/GameView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/StartView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/View/Fx/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/View/Fx/GameView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/View/Swing/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/View/Swing/GameView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2xZy9WuQfuCUmXkUnSobILni1KI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;eunjilee&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/eunji/Desktop/소프트웨어공학/YutGameProject/JavaFX/module-info/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="dceb7324-cf32-49b0-9c95-7d7b8c010858" name="변경" comment="" />
+      <created>1748159739658</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748159739658</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/module-info/src/Main.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
