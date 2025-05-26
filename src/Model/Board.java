@@ -44,7 +44,6 @@ public class Board {
         nodes.add(new Node(13, 93, 376));
         nodes.add(new Node(14, 93, 463));
         nodes.add(new Node(15, 93, 562));
-        nodes.get(15).backDoPrev = true;
         nodes.add(new Node(16, 192, 565));
         nodes.add(new Node(17, 281, 565));
         nodes.add(new Node(18, 369, 565));
@@ -52,46 +51,52 @@ public class Board {
         nodes.add(new Node(20, 470, 183));
         nodes.add(new Node(21, 402, 253));
         nodes.add(new DaegakNode(22, 326, 330));
-        nodes.get(22).isCenterNode = true;
         nodes.add(new Node(23, 247, 407));
         nodes.add(new Node(24, 176, 480));
         nodes.add(new Node(25, 177, 181));
         nodes.add(new Node(26, 248, 252));
         nodes.add(new Node(27, 326, 330));
-        nodes.get(27).isCenterNode = true;
         nodes.add(new Node(28, 401, 409));
         nodes.add(new Node(29, 474, 480));
         nodes.add(new Node(30, 555, 560));
         nodes.get(30).isLastNode = true;
-        nodes.get(30).backDoPrev = true;
 
         // EndNode
         nodes.add(new EndNode(31, 555, 560));
         nodes.add(new EndNode(32, 555, 560));
         nodes.add(new EndNode(33, 555, 560));
         nodes.add(new EndNode(34, 555, 560));
+        nodes.add(new EndNode(35, 555, 560));
+
+        // 15부분에 노드 하나더 추가
+        nodes.add(new Node(36, 93, 562));
+        nodes.add(new Node(37, 555, 560));
 
     }
 
     public void connectNode_square(){
-        for(int i = 0; i < 34; i++){
+        for(int i = 0; i < 35; i++){
             nodes.get(i).nextNode = nodes.get(i+1);
         }
         ((DaegakNode)nodes.get(5)).DNode = nodes.get(20);
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(25);
         ((DaegakNode)nodes.get(22)).DNode = nodes.get(28);
 
-        nodes.get(24).nextNode = nodes.get(15);
+        nodes.get(24).nextNode = nodes.get(36);
+        nodes.get(36).nextNode = nodes.get(16);
         nodes.get(19).nextNode = nodes.get(30);
+        nodes.get(35).nextNode = null;
     }
     public void backDo_connect_square(){
-        for(int i = 30; i > 0; i--){
+        for(int i = 30; i > 1; i--){
             nodes.get(i).backDoNode = nodes.get(i-1);
         }
-        nodes.get(0).backDoNode = nodes.get(19);
+        nodes.get(1).backDoNode = nodes.get(37);
+        nodes.get(0).backDoNode = nodes.get(0);
+        nodes.get(37).backDoNode = nodes.get(19);
         nodes.get(20).backDoNode = nodes.get(5);
         nodes.get(25).backDoNode = nodes.get(10);
-
+        nodes.get(36).backDoNode = nodes.get(24);
     }
 
     // x,y 지시
@@ -118,14 +123,11 @@ public class Board {
         nodes.add(new Node(18, 429, 143));
         nodes.add(new Node(19, 382, 107));
         nodes.add(new Node(20, 328, 76));
-        nodes.get(20).backDoPrev = true;
         nodes.add(new Node(21, 272, 106));
         nodes.add(new Node(22, 224, 142));
         nodes.add(new Node(23, 170, 178));
         nodes.add(new Node(24, 119, 220));
         nodes.add(new Node(25, 67, 257));
-        nodes.get(25).backDoPrev = true;
-        nodes.get(25).isLastNode = true;
 
         //EndNode
         nodes.add(new EndNode(26, 67, 257));
@@ -137,19 +139,19 @@ public class Board {
 
         nodes.add(new Node(31, 216, 494));
         nodes.add(new Node(32, 268, 419));
-        nodes.add(new DaegakNode(33, 328, 341));
-        nodes.get(33).backDoPrev = true;
-        nodes.get(33).isCenterNode = true;
+        nodes.add(new DaegakNode(33, 328, 341)); // center
         nodes.add(new Node(34, 328, 253));
         nodes.add(new Node(35, 328, 163));
         nodes.add(new Node(36, 436, 493));
         nodes.add(new Node(37, 382, 419));
         nodes.add(new DaegakNode(38, 500, 287));
         nodes.add(new Node(39, 414, 314));
-        nodes.add(new Node(40, 328, 341));
-        nodes.get(40).isCenterNode = true;
+        nodes.add(new DaegakNode(40, 328, 341)); // center
         nodes.add(new Node(41, 238, 316));
         nodes.add(new Node(42,150,286));
+        nodes.add(new DaegakNode(43, 328, 341)); // center
+        nodes.add(new Node(44, 67, 257)); // 끝부분
+        nodes.add(new Node(45,328, 76)); // 20번 노드랑 겹침
     }
     public void connectNode_pentagon(){
         for(int i = 0; i < 42; i++){
@@ -158,11 +160,17 @@ public class Board {
         ((DaegakNode)nodes.get(5)).DNode = nodes.get(31);
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(36);
         ((DaegakNode)nodes.get(15)).DNode = nodes.get(38);
-        ((DaegakNode)nodes.get(33)).DNode = nodes.get(41);
+        ((DaegakNode)nodes.get(33)).DNode = nodes.get(41); // center
+        ((DaegakNode)nodes.get(40)).DNode = nodes.get(41); // center
+        ((DaegakNode)nodes.get(43)).DNode = nodes.get(41); // center
 
-        nodes.get(37).nextNode = nodes.get(33);
-        nodes.get(35).nextNode = nodes.get(20);
-        nodes.get(42).nextNode = nodes.get(25);
+        nodes.get(37).nextNode = nodes.get(43);
+        nodes.get(43).nextNode = nodes.get(34); // center
+        nodes.get(40).nextNode = nodes.get(34); // center
+        nodes.get(35).nextNode = nodes.get(45);
+        nodes.get(42).nextNode = nodes.get(44);
+        nodes.get(44).nextNode = nodes.get(26);
+        nodes.get(45).nextNode = nodes.get(21); // 20번
 
         nodes.get(30).nextNode = null; //마지막 EndNode는 null
 
@@ -177,10 +185,15 @@ public class Board {
         for(int i = 42; i>37; i--){
             nodes.get(i).backDoNode = nodes.get(i-1);
         }
+        nodes.get(0).backDoNode = nodes.get(0);
+        nodes.get(1).backDoNode = nodes.get(25);
         nodes.get(31).backDoNode = nodes.get(5); // 예외처리
         nodes.get(38).backDoNode = nodes.get(15);
         nodes.get(37).backDoNode = nodes.get(36);
         nodes.get(36).backDoNode = nodes.get(10);
+        nodes.get(43).backDoNode = nodes.get(37);
+        nodes.get(44).backDoNode = nodes.get(42);
+        nodes.get(45).backDoNode = nodes.get(35); // 20번
     }
 
     // 육각형 보드 수정해야함
@@ -211,6 +224,7 @@ public class Board {
         nodes.add(new Node(18, 499, 181));
         nodes.add(new Node(19, 475, 140));
         nodes.add(new DaegakNode(20, 449, 99));
+
         nodes.add(new Node(21, 397, 99));
         nodes.add(new Node(22, 347, 99));
         nodes.add(new Node(23, 296, 99));
@@ -232,7 +246,7 @@ public class Board {
 
         nodes.add(new Node(36, 232, 480));
         nodes.add(new Node(37, 272, 407));
-        nodes.add(new DaegakNode(38, 317, 322));
+        nodes.add(new DaegakNode(38, 317, 322)); // center
         nodes.add(new Node(39, 275, 245));
         nodes.add(new Node(40, 232, 172));
 
@@ -247,6 +261,12 @@ public class Board {
 
         nodes.add(new Node(47, 219, 324));
         nodes.add(new Node(48, 135, 324));
+        nodes.add(new DaegakNode(49, 317, 322)); // center
+        nodes.add(new DaegakNode(50, 317, 322)); // center
+        nodes.add(new DaegakNode(51, 317, 322)); // center
+
+        nodes.add(new Node(52, 191, 99)); // 25랑 겹치는
+        nodes.add(new Node(53, 52, 323)); // 0이랑 겹치는
     }
 
     public void connectNode_Hexagon(){
@@ -257,21 +277,56 @@ public class Board {
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(41);
         ((DaegakNode)nodes.get(15)).DNode = nodes.get(43);
         ((DaegakNode)nodes.get(20)).DNode = nodes.get(45);
-        ((DaegakNode)nodes.get(38)).DNode = nodes.get(47);
+        ((DaegakNode)nodes.get(38)).DNode = nodes.get(47); // center
+        ((DaegakNode)nodes.get(49)).DNode = nodes.get(47); // center
+        ((DaegakNode)nodes.get(50)).DNode = nodes.get(47); // center
+        ((DaegakNode)nodes.get(51)).DNode = nodes.get(47); // center
 
-        nodes.get(42).nextNode = nodes.get(38);
-        nodes.get(44).nextNode = nodes.get(38);
-        nodes.get(46).nextNode = nodes.get(38);
-        nodes.get(40).nextNode = nodes.get(25);
-        nodes.get(48).nextNode = nodes.get(30);
+        nodes.get(49).nextNode = nodes.get(39); // center
+        nodes.get(51).nextNode = nodes.get(39); // center
+        nodes.get(50).nextNode = nodes.get(39); // center
+
+        nodes.get(42).nextNode = nodes.get(49); // to center
+        nodes.get(44).nextNode = nodes.get(50); // to center
+        nodes.get(46).nextNode = nodes.get(51); // to center
+
+        nodes.get(40).nextNode = nodes.get(52);
+        nodes.get(52).nextNode = nodes.get(26); // 25와 겹치는
+
+        nodes.get(48).nextNode = nodes.get(53);
+        nodes.get(53).nextNode = nodes.get(31); // 0과 겹치는
 
         nodes.get(35).nextNode = null; //마지막 EndNode는 null
     }
 
     public void backDo_connect_hexagon(){
+        for(int i = 35; i > 0; i--){
+            nodes.get(i).backDoNode = nodes.get(i-1);
+        }
+        nodes.get(52).backDoNode = nodes.get(40); // 25의 백도는 40
+        nodes.get(40).backDoNode = nodes.get(39);
+        nodes.get(39).backDoNode = nodes.get(49);
+        nodes.get(49).backDoNode = nodes.get(42);
+        nodes.get(42).backDoNode = nodes.get(41);
+        nodes.get(41).backDoNode = nodes.get(10);
+
+        nodes.get(51).backDoNode = nodes.get(46);
+        nodes.get(46).backDoNode = nodes.get(45);
+        nodes.get(45).backDoNode = nodes.get(20);
+
+        nodes.get(53).backDoNode = nodes.get(48);
+        nodes.get(48).backDoNode = nodes.get(47);
+        nodes.get(47).backDoNode = nodes.get(50); // to center
+        nodes.get(50).backDoNode = nodes.get(44);
+        nodes.get(44).backDoNode = nodes.get(43);
+        nodes.get(43).backDoNode = nodes.get(15);
+
+        nodes.get(38).backDoNode = nodes.get(37);
+        nodes.get(37).backDoNode = nodes.get(36);
+        nodes.get(36).backDoNode = nodes.get(5);
+
+        nodes.get(0).backDoNode = nodes.get(0);
+        nodes.get(1).backDoNode = nodes.get(30); // 출발점
 
     }
 }
-
-// Board를 생성할 때 Node도 같이 생성!
-// 보드 선택에 따라서 적절하게 Node를 생성
