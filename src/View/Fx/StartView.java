@@ -155,6 +155,7 @@ public class StartView extends StackPane {
             case BOARD_SELECTION:
                 background.setImage(boardSelectionBackground);
                 showOnly(squareBtn, pentagonBtn, hexagonBtn, nextButton);
+                startButton.setVisible(false);
                 break;
         }
     }
