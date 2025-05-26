@@ -1,4 +1,4 @@
-package View;
+package View.Fx;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;

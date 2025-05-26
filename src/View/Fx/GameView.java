@@ -1,4 +1,4 @@
-package View;
+package View.Fx;
 
 import Controller.YutResult;
 import Model.DoubledHorse;

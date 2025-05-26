@@ -1,4 +1,4 @@
-package View;
+package View.Fx;
 
 import Controller.GameState;
 import javafx.event.ActionEvent;
