@@ -10,8 +10,8 @@ public class Horse {
     public String color;
     public boolean state = false;
     public boolean isDoubled = false;
-    private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
-    public boolean isFinished = false;
+    // private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
+    // public boolean isFinished = false;
 
     // 생성자
     public Horse(int id, String color, Node currentNode) {
@@ -46,18 +46,11 @@ public class Horse {
     public void move(YutResult result) {
         if(result==YutResult.BackDo){
             System.out.println("백도 처리 시작");
-            if(currentNode.backDoNode == null) {
-                System.out.println("출발점임");//출발점임
-            }
-            else{
-                this.currentNode = currentNode.backDoNode;
 
-                this.x = currentNode.x;
-                this.y = currentNode.y;
-                if (currentNode.isFirstNode) {
-                    HorseBackDoState = true; // 다음에 도~모가 나오면 Finish 처리
-                }
-            }
+
+            this.currentNode = currentNode.backDoNode;
+            this.x = currentNode.x;
+            this.y = currentNode.y;
             return;
         }
 
@@ -90,10 +83,10 @@ public class Horse {
             this.x = currentNode.x;
             this.y = currentNode.y;
         }
-        if (!currentNode.isFirstNode) {
-            HorseBackDoState = false;
-        }
+
 
     }
+
+
 
 }

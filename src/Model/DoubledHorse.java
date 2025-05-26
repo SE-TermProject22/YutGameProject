@@ -28,7 +28,9 @@ public class DoubledHorse extends Horse{
         }
         System.out.println("!!!업기 발생!!!" + horseCount + " horses and " + carriedHorses.size());
     }
+
     public List<Horse> getCarriedHorses() {
         return carriedHorses;
     }
+
 }

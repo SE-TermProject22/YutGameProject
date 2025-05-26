@@ -318,21 +318,49 @@ public class GameController {
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         ////////// finish 처리 /////////
-                        if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished) {
+                        //if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished)
+                        if (selectedHorse.currentNode.isEndNode) {
+
                             System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
+                            if(selectedHorse instanceof DoubledHorse) {
+                                ArrayList<Horse> doubledHorseList = new ArrayList<>();
+                                doubledHorseList.addAll(((DoubledHorse) selectedHorse).getCarriedHorses());
+                                for(Horse horse : doubledHorseList){
+                                    // horse 부분이 selected horse여도 되긴 하지만 논리적으로 조금 맞지 않음
+                                    // horse로 하면 회색 처리도 됨 - 논리적으로 맞음
+                                    gameView.setHorseToGray(horse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
 
-                            gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
+                                    // 말 상태 변경
+                                    horse.state = false;
 
-                            // 말 상태 변경
-                            selectedHorse.state = false;
+                                    // 플레이어 점수 +1
+                                    // 업기 할때 수정필요
+                                    currentPlayer.horseList.remove(horse);
+                                    currentPlayer.score++;
 
-                            // 플레이어 점수 +1
-                            // 업기 할때 수정필요
-                            currentPlayer.horseList.remove(selectedHorse);
-                            currentPlayer.score++;
+                                    // 말 숨기기
+                                    gameView.setHorseInvisible(horse.id);
+                                }
+                                // 사용자 list에서도 없어지고, setInVisible
+                                selectedHorse.state = false;
+                                gameView.setHorseInvisible(selectedHorse.id);
+                                currentPlayer.horseList.remove(selectedHorse);
+                            }
+                            else{
+                                gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
 
-                            // 말 숨기기
-                            gameView.setHorseInvisible(selectedHorse.id);
+                                // 말 상태 변경
+                                selectedHorse.state = false;
+
+                                // 플레이어 점수 +1
+                                // 업기 할때 수정필요
+                                currentPlayer.horseList.remove(selectedHorse);
+                                currentPlayer.score++;
+
+                                // 말 숨기기
+                                gameView.setHorseInvisible(selectedHorse.id);
+                            }
+
 
 //                            // View에게 점수 갱신 알림 갱신하는건가???
 //                            gameView.updatePlayerScore(currentPlayer.id, currentPlayer.score);
@@ -352,41 +380,65 @@ public class GameController {
                         }
 
                         // 업기 처리
-                        for (Horse other : horses) {
-                            if (other == selectedHorse || !other.state) continue;
+                        for (Player players : players) {
+                            for(Horse other : players.horseList) {
+                                if (other == selectedHorse || !other.state || other.isDoubled) continue;
 
-                            int check = selectedHorse.checkSameNodeAndTeam(other);
+                                int check = selectedHorse.checkSameNodeAndTeam(other);
 
-                            // 같은 말 - 업기
-                            if (check == 1) {
-                                DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
+                                // 같은 말 - 업기
+                                if (check == 1) {
+                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
 
-                                selectedHorse.isDoubled = true;
-                                other.isDoubled = true;
+                                    selectedHorse.isDoubled = true;
+                                    other.isDoubled = true;
 
-                                // view 건들기
-                                gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
-                                gameView.setHorseInvisible(other.id);
-                                gameView.setHorseInvisible(selectedHorse.id);
-                                currentPlayer.horseList.add(dh);
+                                    // view 건들기
+                                    gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
+                                    gameView.setHorseInvisible(other.id);
+                                    gameView.setHorseInvisible(selectedHorse.id);
+                                    currentPlayer.horseList.add(dh);
 
-                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+                                    System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
 
-                                // TODO: DoubledHorse 처리 로직
-                                break;
+                                    // TODO: DoubledHorse 처리 로직
+                                    // break;
+                                    return;
 
+                                }
+                                // 다른 말 - 잡기
+                                else if (check == 0) {
+                                    System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+                                    if(other instanceof DoubledHorse) {
+                                        ArrayList<Horse> doubledHorseList = new ArrayList<>();
+                                        doubledHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
+                                        for(Horse horse : doubledHorseList){
+                                            horse.state = false;
+                                            gameView.setHorseInvisible(horse.id);
+                                            horse.currentNode = board.nodes.get(0); // 시작점으로
+                                            horse.x = horse.currentNode.x;
+                                            horse.y = horse.currentNode.y;
+                                            horse.isDoubled = false;
+                                            gameView.moveHorse(horse.id, horse.x, horse.y);  // 잡힌 말 다시 그리기
+                                        }
+                                        // 사용자 list에서도 없어지고, setInVisible
+                                        gameView.setHorseInvisible(other.id);
+                                        players.horseList.remove(other);
+                                    }
+                                    else{
+                                        other.state = false;
+                                        gameView.setHorseInvisible(other.id);
+                                        other.currentNode = board.nodes.get(0); // 시작점으로
+                                        other.x = other.currentNode.x;
+                                        other.y = other.currentNode.y;
+                                        gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
+
+                                    }
+                                    //break;
+                                    return;
+                                }
                             }
-                            // 다른 말 - 잡기
-                            else if (check == 0) {
-                                System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
-                                other.state = false;
-                                gameView.setHorseInvisible(other.id);
-                                other.currentNode = board.nodes.get(0); // 시작점으로
-                                other.x = other.currentNode.x;
-                                other.y = other.currentNode.y;
-                                gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
-                                break;
-                            }
+
                         }
 
 
