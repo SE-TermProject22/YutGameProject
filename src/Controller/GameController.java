@@ -169,7 +169,6 @@ public class GameController {
             throwState = false;
             YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
-                System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
                 yutList.add(selectedResult);
             });
             result = yutList.get(yutList.size() - 1);
