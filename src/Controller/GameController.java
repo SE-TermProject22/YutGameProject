@@ -334,6 +334,7 @@ public class GameController {
                                 currentPlayer.horseList.add(dh);
 
                                 System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+                                gameView.showEventImage("/image/업었다.png");
 
                                 // TODO: DoubledHorse 처리 로직
                                 break;
@@ -342,6 +343,7 @@ public class GameController {
                             // 다른 말 - 잡기
                             else if (check == 0) {
                                 System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+                                gameView.showEventImage("/image/잡았다.png");
                                 other.state = false;
                                 gameView.setHorseInvisible(other.id);
                                 other.currentNode = board.nodes.get(0); // 시작점으로

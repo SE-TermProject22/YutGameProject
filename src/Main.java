@@ -10,7 +10,7 @@ import View.Swing.EndView;
 public class Main {
     public static void main(String[] args) {
 
-        String uiMode = "fx";
+        String uiMode = "swing";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();
@@ -31,8 +31,6 @@ public class Main {
             // 뷰들 생성
             StartView startView = new StartView();
             GameView gameView = new GameView();
-
-            //
             EndView endView = new EndView();
 
             gameView.setVisible(false); // 처음엔 안 보이게
