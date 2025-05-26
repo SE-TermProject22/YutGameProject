@@ -12,7 +12,7 @@ public class Horse {
     // public boolean isFinished = false; - 그냥 list에서 pop 하기로 함. 이때 꼭 setInvisable 해주기
     public boolean state = false;
     public boolean isDoubled = false;
-    private boolean HorseBackDoState = false;
+    private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
     public boolean isFinished = false;
 
     // 생성자
