@@ -45,7 +45,7 @@ public class Main {
             frame.add(endView);
 
             // 컨트롤러 생성
-            new GameController(startView, gameView, endView);
+            new GameController(frame, startView, gameView, endView);
 
             frame.setVisible(true);
         });
