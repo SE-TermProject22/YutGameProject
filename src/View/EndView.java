@@ -13,7 +13,7 @@ public class EndView extends JPanel {
 
     private Image endBackground;
     private Image[] winnerImages = new Image[4];
-    private int winnerId = 1; // 기본값: 플레이어 1 우승
+    private int winnerId = 1; // 기본값: 플레이어 1 우승 -> controller finish처리에서 값받아와서 후에 reset
 
     public EndView() {
         setLayout(null);

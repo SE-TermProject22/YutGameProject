@@ -31,6 +31,8 @@ public class GameView  extends JPanel {
 
     private Timer animationTimer;
     private int yutIndex;
+    private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
+
 
 //    //스코어 저장할 리스트
 //    private List<JLabel> scoreLabels = new ArrayList<>();
@@ -80,6 +82,21 @@ public class GameView  extends JPanel {
                 resultImages.add(resultImg);
             }
         }
+    }
+
+
+    // finish처리 된 말 색깔 회색으로 변경
+    // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
+    public void setHorseToGray(int horse_id){
+        JLabel horseLabel = waitingHorseLabels.get(horse_id);
+        if (horseLabel != null) {
+            Image grayImage = new ImageIcon("image/끝난 말.png").getImage();
+            horseLabel.setIcon(new ImageIcon(grayImage));
+            repaint();
+        } else {
+            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
+        }
+        repaint();
     }
 
     //버튼 생성 메서드
@@ -174,6 +191,8 @@ public class GameView  extends JPanel {
                 new Point(888, 598),
         };
 
+        int horseId = 0;
+
         for (int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
             Point playerHorsePosition = horsePositions[i];
@@ -189,6 +208,10 @@ public class GameView  extends JPanel {
 
                     horseLabel.setBounds(horseX, horseY, 40, 40);
                     add(horseLabel);
+
+                    // ✅ Map에 저장 (말 ID 기준)
+                    waitingHorseLabels.put(horseId, horseLabel);
+                    horseId++;
                 }
             }
         }
@@ -644,9 +667,6 @@ public class GameView  extends JPanel {
     public JButton getSpecialThrowButton() {
         return specialThrowButton;
     }
-
-
-
 
 
 }
