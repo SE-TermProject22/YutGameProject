@@ -48,7 +48,14 @@ public class GameController {
     // 업기 구현을 위한 initial_id
     private int d_init = 100;
     //
-    public GameController(StartView startView, GameView gameView, EndView endView) {
+
+    private JFrame frame;
+
+
+    public GameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
+
+        this.frame = frame;
+
         this.startView = startView;
         this.gameView = gameView;
 
@@ -160,14 +167,32 @@ public class GameController {
 
         // 지정윷던지기 버튼 리스너
         gameView.addSpecialThrowListener(e -> {
+            throwState = false;
+            YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
-
-                yutList.clear();
                 yutList.add(selectedResult);
-
-                move();
             });
+            result = yutList.get(yutList.size() - 1);
+
+            System.out.println(result);
+            // yutList.add(result);
+            gameView.startYutAnimation(result);
+
+            if (result == YutResult.MO || result == YutResult.YUT) {
+                throwState = true;
+                gameView.scheduleNotifyingImage(result);
+            }
+
+            else {
+
+                javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
+                    move();
+                });
+                delayTimer.setRepeats(false);
+                delayTimer.start();
+
+            }
         });
 
         // EndView - 재시작 버튼 리스너
@@ -282,11 +307,14 @@ public class GameController {
                         // throwState = true;
                         YutResult result = chosenResult;
                         yutList.remove(result);
+
                         selectedHorse.move(result);
+
                         if(selectedHorse.state == false){
                             selectedHorse.state = true;
                             gameView.setHorseVisible(selectedHorse.id);
                         }
+
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         ////////// finish 처리 /////////
@@ -419,7 +447,7 @@ public class GameController {
         currentPlayer = players.get(turn%playerCount);
 
     }
-
+/*
     // 게임 데이터를 초기화하는 메서드
     private void resetGame() {
         currentPlayer = null;
@@ -448,7 +476,71 @@ public class GameController {
         endView.setVisible(false);
     }
 
+*/
 
+    private void restartGame(){
+        currentPlayer = null;
+        players.clear();
+        horses.clear();
+        horseCount = 0;
+        playerCount = 0;
+        throwState = true;
+        yutList.clear();
+        turn = 0;
+        d_init = 100;
+
+        setState(GameState.START_SCREEN);
+
+        frame.setVisible(false);
+
+
+        // JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startView);
+        frame.getContentPane().removeAll(); // 모든 컴포넌트 제거
+        System.out.println("컴포넌트 수: " + frame.getContentPane().getComponentCount());
+
+        startView = null;
+        gameView = null;
+        endView = null;
+
+        // StartView oldStartView = startView;
+        // GameView oldGameView = gameView;
+        // EndView oldEndView = endView;
+
+
+        startView = new StartView();
+        startView.setVisible(true);
+
+        gameView = new GameView();
+        gameView.setVisible(false); // 처음엔 안 보이게
+
+        endView = new EndView();
+        endView.setVisible(false);
+
+        // frame.setLayout(null);
+        startView.setBounds(0, 0, 1100, 700);
+        gameView.setBounds(0, 0, 1100, 700);
+        endView.setBounds(0, 0, 1100, 700);
+
+        frame.add(startView);
+        frame.revalidate();
+        frame.repaint();
+
+        frame.add(gameView);
+        frame.revalidate();
+        frame.repaint();
+
+        frame.add(endView);
+        frame.revalidate();
+        frame.repaint();
+
+        frame.setVisible(true);
+
+        System.out.println("컴포넌트 수: " + frame.getContentPane().getComponentCount());
+
+        initializeListeners();
+        updateViewState();
+
+    }
 }
 
 

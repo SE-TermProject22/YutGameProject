@@ -43,6 +43,8 @@ public class Player {
         }
         return result;
     }
+
+    /*
     public void chooseResultOrder() {
         // 윷 결과 중 어느 것을 선택할지 결정
         System.out.println("적용할 윷 결과 순서를 선택합니다.");
@@ -57,7 +59,8 @@ public class Player {
         // 순서 선택 로직
         System.out.println("순서를 선택합니다.");
     }
-
+*/
+/*
     // horselist의 id를 ArrayList로 넘겨주는 함수
     public List <Integer> getHorseListID(){
         List<Integer> list = new ArrayList<>();
@@ -66,6 +69,8 @@ public class Player {
         }
         return list;
     }
+
+ */
 
 //    public void selectHorseType(String horseType) {
 //        // 말 종류를 설정

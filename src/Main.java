@@ -10,6 +10,7 @@ import View.GameView;
 import View.EndView;
 
 public class Main {
+
     public static void main(String[] args) {
         // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
         SwingUtilities.invokeLater(() -> {
@@ -44,7 +45,7 @@ public class Main {
             frame.add(endView);
 
             // 컨트롤러 생성
-            new GameController(startView, gameView, endView);
+            new GameController(frame, startView, gameView, endView);
 
             frame.setVisible(true);
         });

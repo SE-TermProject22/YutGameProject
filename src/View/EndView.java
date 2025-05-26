@@ -59,7 +59,7 @@ public class EndView extends JPanel {
         this.winnerId = playerId;
         repaint();
     }
-
+/*
     // 보드 초기화
     public void clearBoard() {
         this.removeAll();
@@ -73,7 +73,7 @@ public class EndView extends JPanel {
         this.revalidate();
         this.repaint();
     }
-
+*/
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
