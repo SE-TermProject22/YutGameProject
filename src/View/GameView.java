@@ -16,6 +16,33 @@ import java.util.function.Consumer;
 import Model.Horse;
 
 public class GameView  extends JPanel {
+    // 팝업 창들 list 모아놓음//
+    // 종료되면 팝업창들 전부 처리//
+    private List<JDialog> openDialogs = new ArrayList<>();
+
+    public List<JDialog> getOpenDialogs() {
+        return openDialogs;
+    }
+
+    public void addDialog(JDialog dialog) {
+        openDialogs.add(dialog);
+    }
+
+    public void removeDialog(JDialog dialog) {
+        openDialogs.remove(dialog);
+    }
+
+    public void disposeAllDialogs() {
+        System.out.println("🧹 모든 팝업 닫기 시도 (총 " + openDialogs.size() + "개)");
+
+        for (JDialog dialog : new ArrayList<>(openDialogs)) {
+            if (dialog != null && dialog.isDisplayable()) {
+                dialog.dispose();
+            }
+        }
+        openDialogs.clear();
+    }
+    /////////////////////////////////////////
     private Image board, currentImage;
     private JButton throwButton;
     private JButton specialThrowButton; //지정던지기 버튼 추가
@@ -165,23 +192,9 @@ public class GameView  extends JPanel {
 
             add(playerLabel);
 
-//            // 점수 Label 생성 및 오른쪽에 배치
-//            JLabel scoreLabel = new JLabel("점수: 0");
-//            scoreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-//            scoreLabel.setForeground(Color.WHITE); // 필요 시 색상 조절
-//            scoreLabel.setBounds(pos.x + playerIcon.getIconWidth() + 10, pos.y + 10, 80, 20);
-//            add(scoreLabel);
-//            scoreLabels.add(scoreLabel);
         }
         repaint();
     }
-
-//    // index: 플레이어 ID, score: 새 점수
-//    public void updatePlayerScore(int index, int score) {
-//        if (index >= 0 && index < scoreLabels.size()) {
-//            scoreLabels.get(index).setText("점수: " + score);
-//        }
-//    }
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
@@ -218,37 +231,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
-
-
-
-    /*
-    //말 위치 초기화 메서드
-    public void placeHorses(List<String> colors) {
-        for (String color : colors) {
-            //setHorsePosition(color, , );
-        }
-        repaint();
-    }
-    */
-    /*
-    // 처음에 horses들 다 만들기
-    public void initHorses(List<String> colors){
-        String key = color + j;
-        Image horseImage = horseImages.get(key);
-        if (horseImage != null) {
-            JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
-
-            int horseX = playerHorsePosition.x + (j - 1) * 34;
-            int horseY = playerHorsePosition.y;
-
-            horseLabel.setBounds(horseX, horseY, 40, 40);
-            add(horseLabel);
-        }
-    }
-    */
-
-
     // 처음 말들을 다 만들기
     public void initHorses(List<String> colors, int horseCount) {
         int idCounter = 0;
@@ -259,19 +241,6 @@ public class GameView  extends JPanel {
                 Image horseImage = horseImages.get(key);
                 if (horseImage != null) {
                     JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
-
-                    // 예시 초기 위치: 플레이어 말 대기 구역
-                    // 초기 위치 관계 없음 - 디버깅
-                    /*
-                    int horseX = 50 + j * 34;  // X좌표는 적당히 간격 조정
-                    int horseY = color.equals("RED") ? 400 : 450; // 플레이어 색상별 초기 Y좌표
-                    switch(color){
-                        case "red": horseY = 400; break;
-                        case "blue": horseY = 450; break;
-                        case "green": horseY = 550; break;
-                        case "yellow": horseY = 600; break;
-                    }
-                    */
 
                     // horseLabel.setBounds(horseX, horseY, 40, 40); // 디버깅
                     horseLabel.setBounds(0, 0, 40, 40);
@@ -350,10 +319,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-
-
-
-
     // 윷 관련
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
@@ -379,38 +344,12 @@ public class GameView  extends JPanel {
     }
 
     private void showResultImage(YutResult result) {
-//        Random random = new Random();
-//        int index = random.nextInt(resultImages.size());
-//        setCurrentImage(resultImages.get(index));
-
-        // int yutResult = currentPlayer.throwYut();
-
-
-        // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
-//        String resultImagePath = getResultImagePathForYutValue(yutResult);
-//
-//        // resultImagePath를 ImageIcon으로 변환하고 Image를 얻음
-//        ImageIcon imageIcon = new ImageIcon(resultImagePath);
-//        Image resultImage = imageIcon.getImage();
-//
-//        // 화면에 현재 이미지 표시
-//        setCurrentImage(resultImage);
         Image resultImage = getResultImagePathForYutValue(result);
 
         if (resultImage != null) {
             setCurrentImage(resultImage);
         }
-        /*
-        if (result == YutResult.YUT) {
-            scheduleNotifyingImage("image/윷 한번더.png");
-        } else if (result == YutResult.MO) {
-            scheduleNotifyingImage("image/모 한번더.png");
-        } else {
-            notifyingImage = null;
-            repaint();
-        }
 
-        */
     }
 
     //notifyingImage 출력 시간 제어
@@ -469,11 +408,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    /*
-    public void setPlayer(Player player) {
-        this.currentPlayer = player;
-    }
-    */
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -515,6 +449,8 @@ public class GameView  extends JPanel {
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "결과 적용 선택", true);  // 모달창
+        addDialog(dialog);  // ✅ GameView에 등록 // 후에 팝업 finish처리 때문
+
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true); // ✨ 윈도우 테두리 없애기
@@ -545,6 +481,7 @@ public class GameView  extends JPanel {
             btn.setFocusPainted(false);
 
             btn.addActionListener(e -> {
+                removeDialog(dialog); // ✅ 닫을 때 제거
                 dialog.dispose();
                 onSelected.accept(result);
             });
@@ -559,6 +496,7 @@ public class GameView  extends JPanel {
 
     public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
+        addDialog(dialog);  // ✅ GameView에 등록 // 후에 팝업창 다 없애기위해
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true);
@@ -599,6 +537,7 @@ public class GameView  extends JPanel {
             btn.setFocusPainted(false);
 
             btn.addActionListener(e -> {
+                removeDialog(dialog);
                 dialog.dispose();
                 onSelected.accept(horse);
             });
@@ -619,6 +558,7 @@ public class GameView  extends JPanel {
     //지정윷던지기 창 구현
     public void showFixedYutChoiceDialog(Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "윷 선택", true);
+        addDialog(dialog);  // ✅ GameView에 등록 // 후에 팝업창 다 없애기위해
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
         dialog.setUndecorated(true);
@@ -652,6 +592,7 @@ public class GameView  extends JPanel {
             btn.setFocusPainted(false);
 
             btn.addActionListener(e -> {
+                removeDialog(dialog);
                 dialog.dispose();
                 onSelected.accept(result);
             });

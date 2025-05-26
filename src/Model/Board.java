@@ -59,7 +59,6 @@ public class Board {
         nodes.add(new Node(28, 401, 409));
         nodes.add(new Node(29, 474, 480));
         nodes.add(new Node(30, 555, 560));
-        nodes.get(30).isLastNode = true;
 
         // EndNode
         nodes.add(new EndNode(31, 555, 560));
@@ -91,7 +90,7 @@ public class Board {
         for(int i = 30; i > 1; i--){
             nodes.get(i).backDoNode = nodes.get(i-1);
         }
-        nodes.get(1).backDoNode = nodes.get(37);
+        nodes.get(1).backDoNode = nodes.get(30);
         nodes.get(0).backDoNode = nodes.get(0);
         nodes.get(37).backDoNode = nodes.get(19);
         nodes.get(20).backDoNode = nodes.get(5);

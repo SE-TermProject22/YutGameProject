@@ -51,7 +51,6 @@ public class GameController {
 
     private JFrame frame;
 
-
     public GameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
 
         this.frame = frame;
@@ -318,7 +317,7 @@ public class GameController {
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         ////////// finish 처리 /////////
-                        if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished) {
+                        if (selectedHorse.currentNode.isEndNode) {
                             System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
 
                             gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
@@ -327,19 +326,23 @@ public class GameController {
                             selectedHorse.state = false;
 
                             // 플레이어 점수 +1
-                            // 업기 할때 수정필요
+                            // 업기 할때 수정필요!!!!
                             currentPlayer.horseList.remove(selectedHorse);
                             currentPlayer.score++;
 
                             // 말 숨기기
                             gameView.setHorseInvisible(selectedHorse.id);
 
-//                            // View에게 점수 갱신 알림 갱신하는건가???
-//                            gameView.updatePlayerScore(currentPlayer.id, currentPlayer.score);
 
                             // 승리 조건 체크
                             if (currentPlayer.score >= horseCount) {
                                 System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
+                                // ✅ [1] 윷 리스트 모두 비우기
+                                yutList.clear();
+
+                                // ✅ [2] 남아있는 팝업 모두 닫기
+                                gameView.disposeAllDialogs();
+
                                 endView.setWinner(currentPlayer.id + 1); // 승리자 id넘겨주기 // 원래 이거 안했었음 -> 이번에 추가(예나-5/23)
 
                                 setState(GameState.GAME_OVER);    // ✅ 게임 종료 상태로 전환
@@ -393,92 +396,15 @@ public class GameController {
                     });
 
                 });
-
-
-            // 윷 선택
-            // YutResult result = gameView.selectYutResult(yutList);
-
-            // YutResult result = yutList.get(0); // 위에거 test 용
-            // yutList.remove(result);
-
-            // 말 선택
-            // int horse_id = view.selectHorse(currentPlayer.getHorseListID());
-            // int horse_id = currentPlayer.horseList.get(0).id;
-
-            // System.out.println("horse_id" + horse_id);
-            // Horse selectedHorse = horses.get(horse_id);
-            // System.out.println("selected horse" + selectedHorse.id);
-
-            // System.out.println("현재 : horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-            /*
-            if(selectedHorse.state == false){
-                selectedHorse.state = true;
-                gameView.setHorseVisible(selectedHorse.id);
-            }
-            */
-
-            // selectedHorse.move(result);
-            // view 구현해보자
-            // gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
-            // System.out.println("horse 움직임");
-            // System.out.println("horse x: " + selectedHorse.x + "y: "+ selectedHorse.y);
-
-            // 여기서 한번 repaint() 해 줄 지 고민
-
-            // finish 처리
-            /*
-            if(selectedHorse.currentNode.isEndNode){
-                selectedHorse.isFinished = true;
-                selectedHorse.state = false;
-                currentPlayer.score++;
-                currentPlayer.horseList.remove(selectedHorse); // test 용임
-            }
-
-            if(currentPlayer.score==horseCount){
-                // view.finish 처리
-                System.out.println("끝남");
-                break;
-            }
-
-            */
         }
         throwState = true;
         turn++;
         currentPlayer = players.get(turn%playerCount);
 
     }
-/*
-    // 게임 데이터를 초기화하는 메서드
-    private void resetGame() {
-        currentPlayer = null;
-        players.clear();
-        horses.clear();
-        horseCount = 0;
-        playerCount = 0;
-        throwState = true;
-        yutList.clear();
-        turn = 0;
-
-        // 뷰 초기화
-        endView.clearBoard();
-        endView.clearHorses();
-        endView.clearBoard();   // EndView의 보드 초기화
-        endView.clearHorses();  // EndView의 말 초기화
-        //endView.setWinner(currentPlayer.id);   // 초기값으로 설정 (1번 플레이어로 설정)
-    }
-
-    // 게임이 끝났을 때 재시작 버튼을 띄우고, 클릭 시 게임을 초기화하고 재시작
-    private void restartGame() {
-        resetGame();
-        setState(GameState.START_SCREEN);
-        startView.setVisible(true);
-        gameView.setVisible(false);
-        endView.setVisible(false);
-    }
-
-*/
 
     private void restartGame(){
+        gameView.disposeAllDialogs(); // ✅ 재시작 시에도 팝업 다 닫기
         currentPlayer = null;
         players.clear();
         horses.clear();
