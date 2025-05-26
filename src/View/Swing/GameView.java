@@ -1,9 +1,8 @@
-package View;
+package View.Swing;
 
 // import Controller.GameController;
 import Controller.YutResult;
 import Model.DoubledHorse;
-import Model.Player;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,9 +1,8 @@
-package View;
+package View.Swing;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import Controller.GameController;
 
 
 public class EndView extends JPanel {

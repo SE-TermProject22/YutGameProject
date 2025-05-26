@@ -5,17 +5,14 @@ import Model.DoubledHorse;
 import Model.Player;
 import Model.Horse;
 
-import View.StartView;
-import View.GameView;
+import View.Swing.StartView;
+import View.Swing.GameView;
 
 //
-import View.EndView;
+import View.Swing.EndView;
 
 //
 
-
-import java.awt.*;
-import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +48,6 @@ public class GameController {
     public GameController(StartView startView, GameView gameView, EndView endView) {
         this.startView = startView;
         this.gameView = gameView;
-
-        //
         this.endView = endView;
 
         initializeListeners();
