@@ -20,6 +20,7 @@ public class GameView  extends JPanel {
     private JButton specialThrowButton; //지정던지기 버튼 추가
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
+    private Map<String, Image> scoreHorseImages;
     private Map<String, Point> horsePositions;
 
     private Map<Integer, JLabel> horseComponents = new HashMap<>();
@@ -44,6 +45,7 @@ public class GameView  extends JPanel {
         setLayout(null);
         horsePositions = new HashMap<>();
         horseImages = new HashMap<>();
+        scoreHorseImages = new HashMap<>();
 
         loadImages();
         initUI();
@@ -51,6 +53,7 @@ public class GameView  extends JPanel {
 
     private void loadImages() {
         horseImages.clear();
+        scoreHorseImages.clear();
 
         String[] colors = {"red", "blue", "yellow", "green"};
 
@@ -58,9 +61,15 @@ public class GameView  extends JPanel {
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image img = new ImageIcon("image/말 이동/" + color + "/" + i + ".png").getImage();
-                if (img != null) {
-                    horseImages.put(key, img);
+
+                Image horseImg = new ImageIcon("image/말 이동/" + color + "/" + i + ".png").getImage();
+                if (horseImg != null) {
+                    horseImages.put(key, horseImg);
+                }
+
+                Image scoreImg = new ImageIcon("image/스코어 말/" + color + "/" + i + ".png").getImage();
+                if (scoreImg != null) {
+                    scoreHorseImages.put(key, scoreImg);
                 }
             }
         }
@@ -198,18 +207,18 @@ public class GameView  extends JPanel {
 
             for (int j = 1; j <= horseCount; j++) {
                 String key = color + j;
-                Image horseImage = horseImages.get(key);
-                if (horseImage != null) {
-                    JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+                Image scoreHorse = scoreHorseImages.get(key);
+                if (scoreHorse != null) {
+                    JLabel scoreHorseLabel = new JLabel(new ImageIcon(scoreHorse));
 
                     int horseX = playerHorsePosition.x + (j - 1) * 34;
                     int horseY = playerHorsePosition.y;
 
-                    horseLabel.setBounds(horseX, horseY, 40, 40);
-                    add(horseLabel);
+                    scoreHorseLabel.setBounds(horseX, horseY, 40, 40);
+                    add(scoreHorseLabel);
 
                     // ✅ Map에 저장 (말 ID 기준)
-                    waitingHorseLabels.put(horseId, horseLabel);
+                    waitingHorseLabels.put(horseId, scoreHorseLabel);
                     horseId++;
                 }
             }
@@ -578,6 +587,7 @@ public class GameView  extends JPanel {
             String imagePath;
             // 여기서 id가 크면은 color.count로 해서 파일 받기
             if(horse.id < 20) {
+                //imagePath = "image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
                 imagePath = "image/선택 " + horse.color + "/" + (horse.id % horseCount+1) + ".png";
                 System.out.println(horse.id);
             }
