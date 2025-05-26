@@ -5,17 +5,14 @@ import Model.DoubledHorse;
 import Model.Player;
 import Model.Horse;
 
-import View.StartView;
-import View.GameView;
+import View.Swing.StartView;
+import View.Swing.GameView;
 
 //
-import View.EndView;
+import View.Swing.EndView;
 
 //
 
-
-import java.awt.*;
-import java.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
