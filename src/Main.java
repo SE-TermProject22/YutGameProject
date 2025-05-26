@@ -2,20 +2,20 @@ import javax.swing.*;
 import Controller.GameController;
 import View.Swing.StartView;
 import View.Swing.GameView;
+
+import View.Fx.MainFX;
+//
 import View.Swing.EndView;
-import View.Fx.MainApp;
-import javafx.application.Application;
 
 public class Main {
     public static void main(String[] args) {
 
-        String uiMode = "swing";
+        String uiMode = "fx";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();
         } else if (uiMode.equalsIgnoreCase("fx")) {
-            //View.Fx.StartView.launch(View.Fx.StartView.class);
-            Application.launch(MainApp.class);
+            MainFX.launchApp();
         }
     }
 
@@ -31,8 +31,6 @@ public class Main {
             // 뷰들 생성
             StartView startView = new StartView();
             GameView gameView = new GameView();
-
-            //
             EndView endView = new EndView();
 
             gameView.setVisible(false); // 처음엔 안 보이게

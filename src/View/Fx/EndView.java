@@ -44,9 +44,9 @@ public class EndView extends AnchorPane {
     }
 
     private void loadImages() {
-        endBackground = new Image(getClass().getResourceAsStream("image/종료 화면.png"));
+        endBackground = new Image(getClass().getResourceAsStream("/image/종료 화면.png"));
         for (int i = 0; i < 4; i++) {
-            winnerImages[i] = new Image(getClass().getResourceAsStream("image/Winner" + (i + 1) + ".png"));
+            winnerImages[i] = new Image(getClass().getResourceAsStream("/image/Winner" + (i + 1) + ".png"));
         }
     }
 
@@ -73,8 +73,8 @@ public class EndView extends AnchorPane {
 
     private void initUI() {
         // 버튼 생성 및 이미지 설정
-        restartButton = createButton("image/재시작버튼.png", 573, 84);
-        exitButton = createButton("image/종료버튼.png", 353, 84);
+        restartButton = createButton("/image/재시작버튼.png", 573, 84);
+        exitButton = createButton("/image/종료버튼.png", 353, 84);
 
         anchorRoot.getChildren().addAll(restartButton, exitButton);
     }

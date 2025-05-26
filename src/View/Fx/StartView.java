@@ -1,20 +1,18 @@
 package View.Fx;
 
+
+
 import Controller.GameState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
@@ -51,12 +49,22 @@ public class StartView extends StackPane {
         this.getChildren().add(anchorRoot);
 
         setState(currentState);
+
+        startButton.setVisible(true);
+        startButton.setDisable(false);
+        startButton.setOnAction(e -> System.out.println("✅ 눌림!"));
     }
 
     private void loadImages() {
-        startBackground = new Image(getClass().getResourceAsStream("image/시작 화면.png"));
-        horseSelectionBackground = new Image(getClass().getResourceAsStream("image/말 선택.png"));
-        boardSelectionBackground = new Image(getClass().getResourceAsStream("image/판 선택.png"));
+        try {
+            startBackground = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/시작 화면.png")));
+            horseSelectionBackground = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/말 선택.png")));
+            boardSelectionBackground = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/판 선택.png")));
+
+        } catch (Exception e) {
+            System.err.println("이미지 로드 실패: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private Button createButton(String imagePath, double x, double y) {
@@ -69,7 +77,7 @@ public class StartView extends StackPane {
         Button button = new Button("", imageView);
         button.setStyle(
                 "-fx-background-color: transparent;" +
-                        "-fx-border-color: transparnet;" +
+                        "-fx-border-color: transparent;" +
                         "-fx-focus-color: transparent;" +
                         "-fx-faint-focus-color: transparent;"
         );
@@ -83,12 +91,15 @@ public class StartView extends StackPane {
     private void setupInitialView() {
         anchorRoot = new AnchorPane();
 
-        startButton = createButton("image/시작 버튼.png", 386, 420);
+        // 배경을 먼저 추가
+        anchorRoot.getChildren().add(background);
+
+        startButton = createButton("/image/시작 버튼.png", 386, 420);
         anchorRoot.getChildren().add(startButton);
 
-        squareBtn = createButton("image/사각형.png", 50, 217);
-        pentagonBtn = createButton("image/오각형.png", 396, 217);
-        hexagonBtn = createButton("image/육각형.png", 742, 217);
+        squareBtn = createButton("/image/사각형.png", 50, 217);
+        pentagonBtn = createButton("/image/오각형.png", 396, 217);
+        hexagonBtn = createButton("/image/육각형.png", 742, 217);
         anchorRoot.getChildren().addAll(squareBtn, pentagonBtn, hexagonBtn);
 
         playerCountBox = new ComboBox<>();
@@ -113,13 +124,13 @@ public class StartView extends StackPane {
         addHorseButton("yellow", 578);
         addHorseButton("green", 793);
 
-        nextButton = createButton("image/다음.png", 432, 575);
+        nextButton = createButton("/image/다음.png", 432, 575);
         nextButton.setVisible(false);
         anchorRoot.getChildren().add(nextButton);
     }
 
     private void addHorseButton(String color, double x) {
-        Button btn = createButton("image/" + color + " 말.png", x, 401);
+        Button btn = createButton("/image/" + color + " 말.png", x, 401);
         btn.setOnAction(e -> toggleHorseSelection(color)); //color 값을 그대로 전달
         btn.setVisible(false);
         horseButtons.put(color, btn);
@@ -137,18 +148,22 @@ public class StartView extends StackPane {
             case HORSE_SELECTION:
                 background.setImage(horseSelectionBackground);
                 showOnly(horseButtons.values().toArray(new Button[0]));
+                startButton.setVisible(false);
                 playerCountBox.setVisible(true);
-                playerCountBox.setVisible(true);
+                horseCountBox.setVisible(true);
                 break;
             case BOARD_SELECTION:
                 background.setImage(boardSelectionBackground);
                 showOnly(squareBtn, pentagonBtn, hexagonBtn, nextButton);
+                startButton.setVisible(false);
                 break;
         }
     }
 
     private void showOnly(Node... visibleNodes) {
         Set<Node> visibleSet = new HashSet<>(Arrays.asList(visibleNodes));
+        visibleSet.add(background);
+        visibleSet.add(startButton);
 
         for (Node node : contentPane.getChildren()) {
             node.setVisible(visibleSet.contains(node));
@@ -226,4 +241,5 @@ public class StartView extends StackPane {
 
         setState(GameState.START_SCREEN);
     }
+
 }

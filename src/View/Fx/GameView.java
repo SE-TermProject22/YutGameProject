@@ -56,7 +56,7 @@ public class GameView extends Pane {
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image image = new Image(getClass().getResourceAsStream("image/말 이동/" + color + "/" + i + ".png"));
+                Image image = new Image(getClass().getResourceAsStream("/image/말 이동/" + color + "/" + i + ".png"));
                 if (image != null && !image.isError()) {
                     horseImages.put(key, image);
                 } else {
@@ -67,7 +67,7 @@ public class GameView extends Pane {
 
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
-            Image image = new Image(getClass().getResourceAsStream("image/yut/yut" + i + ".png"));
+            Image image = new Image(getClass().getResourceAsStream("/image/yut/yut" + i + ".png"));
             if (image != null && !image.isError()) {
                 yutImages.add(image);
             } else {
@@ -78,7 +78,7 @@ public class GameView extends Pane {
         resultImages = new ArrayList<>();
         String[] resultImageNames = {"1.png", "2.png", "3.png", "4.png", "5.png", "-1.png"};
         for (String imageName : resultImageNames) {
-            Image image = new Image(getClass().getResourceAsStream("image/" + imageName));
+            Image image = new Image(getClass().getResourceAsStream("/image/" + imageName));
             if (image != null && !image.isError()) {
                 resultImages.add(image);
             } else {
@@ -120,11 +120,11 @@ public class GameView extends Pane {
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
 
-        throwButton = createButton("image/윷 던지기.png", 744, 405);
+        throwButton = createButton("/image/윷 던지기.png", 744, 405);
         this.getChildren().add(throwButton);
 
         // 지정던지기 버튼
-        specialThrowButton = createButton("image/지정던지기 버튼.png", 940, 405);
+        specialThrowButton = createButton("/image/지정던지기 버튼.png", 940, 405);
         this.getChildren().add(specialThrowButton);
     }
 
@@ -410,7 +410,7 @@ public class GameView extends Pane {
         root.setPrefSize(665, 298);
         root.setStyle("-fx-background-color: transparent;");
 
-        Image modalImage = new Image(getClass().getResourceAsStream("image/말 적용.png"));
+        Image modalImage = new Image(getClass().getResourceAsStream("/image/말 적용.png"));
         ImageView modalView = new ImageView(modalImage);
         modalView.setFitWidth(665);
         modalView.setFitHeight(298);
