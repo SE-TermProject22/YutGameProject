@@ -350,10 +350,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-
-
-
-
     // 윷 관련
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
