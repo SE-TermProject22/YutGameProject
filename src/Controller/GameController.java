@@ -167,14 +167,32 @@ public class GameController {
 
         // 지정윷던지기 버튼 리스너
         gameView.addSpecialThrowListener(e -> {
+            throwState = false;
+            YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
-
-                yutList.clear();
                 yutList.add(selectedResult);
-
-                move();
             });
+            result = yutList.get(yutList.size() - 1);
+
+            System.out.println(result);
+            // yutList.add(result);
+            gameView.startYutAnimation(result);
+
+            if (result == YutResult.MO || result == YutResult.YUT) {
+                throwState = true;
+                gameView.scheduleNotifyingImage(result);
+            }
+
+            else {
+
+                javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
+                    move();
+                });
+                delayTimer.setRepeats(false);
+                delayTimer.start();
+
+            }
         });
 
         // EndView - 재시작 버튼 리스너
@@ -289,11 +307,14 @@ public class GameController {
                         // throwState = true;
                         YutResult result = chosenResult;
                         yutList.remove(result);
+
                         selectedHorse.move(result);
+
                         if(selectedHorse.state == false){
                             selectedHorse.state = true;
                             gameView.setHorseVisible(selectedHorse.id);
                         }
+
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         ////////// finish 처리 /////////

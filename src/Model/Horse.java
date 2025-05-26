@@ -27,13 +27,13 @@ public class Horse {
 
     // 잡기 확인(같은 노드인지, 같은 팀인지)
     public int checkSameNodeAndTeam(Horse other) {
-        boolean sameNode = this.currentNode == other.currentNode;
-        boolean bothInCenter = currentNode.isCenterNode && other.currentNode.isCenterNode;
-        boolean bothInStart = currentNode.isFirstNode && other.currentNode.isLastNode;
+        boolean sameNode = (this.x == other.x)&&(this.y == other.y);
+        //boolean bothInCenter = currentNode.isCenterNode && other.currentNode.isCenterNode;
+        //boolean bothInStart = currentNode.isFirstNode && other.currentNode.isLastNode;
         boolean sameTeam = this.color.equals(other.color);
-        boolean bothInEnd = currentNode.isLastNode && other.currentNode.isFirstNode;
+        //boolean bothInEnd = currentNode.isLastNode && other.currentNode.isFirstNode;
 
-        if (sameNode || bothInCenter || bothInStart || bothInEnd) {
+        if (sameNode){ //|| bothInCenter || bothInStart || bothInEnd) {
             return sameTeam ? 1 : 0; // 1: 업기 가능, 0: 잡기 가능
         }
         // currentnode.x = other.x
