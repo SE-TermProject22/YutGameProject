@@ -20,6 +20,9 @@ public class GameView  extends JPanel {
     private JButton specialThrowButton; //지정던지기 버튼 추가
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
+
+    private Map<String, Image> scoreHorseImages;
+  
     private Map<String, Point> horsePositions;
 
     private Map<Integer, JLabel> horseComponents = new HashMap<>();
@@ -30,8 +33,10 @@ public class GameView  extends JPanel {
 
     private Timer animationTimer;
     private int yutIndex;
-
+  
     private Image eventNotifyingImage;
+    private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
+
 
 //    //스코어 저장할 리스트
 //    private List<JLabel> scoreLabels = new ArrayList<>();
@@ -44,6 +49,8 @@ public class GameView  extends JPanel {
         setLayout(null);
         horsePositions = new HashMap<>();
         horseImages = new HashMap<>();
+      
+        scoreHorseImages = new HashMap<>();
 
         loadImages();
         initUI();
@@ -52,15 +59,23 @@ public class GameView  extends JPanel {
     private void loadImages() {
         horseImages.clear();
 
+        scoreHorseImages.clear();
+
         String[] colors = {"red", "blue", "yellow", "green"};
 
         // horseImage setting
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image img = new ImageIcon(getClass().getResource("/image/" + color + "/" + color + i + ".png")).getImage();
-                if (img != null) {
-                    horseImages.put(key, img);
+
+                Image horseImg = new ImageIcon(getClass().getResource("/image/말 이동/" + color + "/" + i + ".png")).getImage();
+                if (horseImg != null) {
+                    horseImages.put(key, horseImg);
+                }
+
+                Image scoreImg = new ImageIcon(getClass().getResource("image/스코어 말/" + color + "/" + i + ".png")).getImage();
+                if (scoreImg != null) {
+                    scoreHorseImages.put(key, scoreImg);
                 }
             }
         }
@@ -77,15 +92,30 @@ public class GameView  extends JPanel {
         String[] resultImageNames = {"1.png", "2.png", "3.png", "4.png", "5.png", "-1.png"};
         for (String imageName : resultImageNames) {
             Image resultImg = new ImageIcon(getClass().getResource("/image/" + imageName)).getImage();
+          
             if (resultImg != null) {
                 resultImages.add(resultImg);
             }
         }
     }
 
+    // finish처리 된 말 색깔 회색으로 변경
+    // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
+    public void setHorseToGray(int horse_id){
+        JLabel horseLabel = waitingHorseLabels.get(horse_id);
+        if (horseLabel != null) {
+            Image grayImage = new ImageIcon("image/끝난 말.png").getImage();
+            horseLabel.setIcon(new ImageIcon(grayImage));
+            repaint();
+        } else {
+            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
+        }
+        repaint();
+    }
+
     //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y) {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/" + imagePath));
+        ImageIcon icon = new ImageIcon(imagePath);
         JButton button = new JButton(icon);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
@@ -175,21 +205,30 @@ public class GameView  extends JPanel {
                 new Point(888, 598),
         };
 
+
+        int horseId = 0;
+      
         for (int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
             Point playerHorsePosition = horsePositions[i];
 
             for (int j = 1; j <= horseCount; j++) {
                 String key = color + j;
-                Image horseImage = horseImages.get(key);
-                if (horseImage != null) {
-                    JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+
+                Image scoreHorse = scoreHorseImages.get(key);
+                if (scoreHorse != null) {
+                    JLabel scoreHorseLabel = new JLabel(new ImageIcon(scoreHorse));
 
                     int horseX = playerHorsePosition.x + (j - 1) * 34;
                     int horseY = playerHorsePosition.y;
 
-                    horseLabel.setBounds(horseX, horseY, 40, 40);
-                    add(horseLabel);
+
+                    scoreHorseLabel.setBounds(horseX, horseY, 40, 40);
+                    add(scoreHorseLabel);
+
+                    // Map에 저장 (말 ID 기준)
+                    waitingHorseLabels.put(horseId, scoreHorseLabel);
+                    horseId++;
                 }
             }
         }
@@ -327,10 +366,6 @@ public class GameView  extends JPanel {
         horsePositions.put(color, new Point(x, y));
         repaint();
     }
-
-
-
-
 
     // 윷 관련
     public void startYutAnimation(YutResult result) {
@@ -567,7 +602,8 @@ public class GameView  extends JPanel {
             String imagePath;
             // 여기서 id가 크면은 color.count로 해서 파일 받기
             if(horse.id < 20) {
-                imagePath = "/image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
+
+                imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount+1) + ".png";
                 System.out.println(horse.id);
             }
             else{
@@ -666,9 +702,6 @@ public class GameView  extends JPanel {
 
         repaint();
     }
-
-
-
 
 
 }

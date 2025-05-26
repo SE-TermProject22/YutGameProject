@@ -1,9 +1,11 @@
 package View.Fx;
 
 
+
 import Controller.GameState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -141,8 +143,6 @@ public class StartView extends StackPane {
         switch (state) {
             case START_SCREEN:
                 background.setImage(startBackground);
-
-//                background.toFront();
                 showOnly(startButton);
                 break;
             case HORSE_SELECTION:
@@ -162,8 +162,6 @@ public class StartView extends StackPane {
 
     private void showOnly(Node... visibleNodes) {
         Set<Node> visibleSet = new HashSet<>(Arrays.asList(visibleNodes));
-
-        //
         visibleSet.add(background);
         visibleSet.add(startButton);
 

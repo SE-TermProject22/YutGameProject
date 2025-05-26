@@ -12,6 +12,7 @@ public class EndView extends JPanel {
 
     private Image endBackground;
     private Image[] winnerImages = new Image[4];
+  
     private int winnerId = 1; // 기본값: 플레이어 1 우승
 
     public EndView() {

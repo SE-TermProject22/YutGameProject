@@ -284,14 +284,17 @@ public class GameController {
                         }
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
-                        ////////// finish 처리
+                        ////////// finish 처리 /////////
                         if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished) {
                             System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
+
+                            gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
 
                             // 말 상태 변경
                             selectedHorse.state = false;
 
                             // 플레이어 점수 +1
+                            // 업기 할때 수정필요
                             currentPlayer.horseList.remove(selectedHorse);
                             currentPlayer.score++;
 
@@ -303,7 +306,8 @@ public class GameController {
 
                             // 승리 조건 체크
                             if (currentPlayer.score >= horseCount) {
-                                System.out.printf("🎉 플레이어 %s 승리!\n", currentPlayer.color);
+                                System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
+                                endView.setWinner(currentPlayer.id + 1); // 승리자 id넘겨주기 // 원래 이거 안했었음 -> 이번에 추가(예나-5/23)
 
                                 setState(GameState.GAME_OVER);    // ✅ 게임 종료 상태로 전환
 
@@ -429,7 +433,7 @@ public class GameController {
         endView.clearHorses();
         endView.clearBoard();   // EndView의 보드 초기화
         endView.clearHorses();  // EndView의 말 초기화
-        endView.setWinner(1);   // 초기값으로 설정 (1번 플레이어로 설정)
+        //endView.setWinner(currentPlayer.id);   // 초기값으로 설정 (1번 플레이어로 설정)
     }
 
     // 게임이 끝났을 때 재시작 버튼을 띄우고, 클릭 시 게임을 초기화하고 재시작

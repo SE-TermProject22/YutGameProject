@@ -56,7 +56,7 @@ public class GameView extends Pane {
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image image = new Image(getClass().getResourceAsStream("/image/" + color + "/" + color + i + ".png"));
+                Image image = new Image(getClass().getResourceAsStream("/image/말 이동/" + color + "/" + i + ".png"));
                 if (image != null && !image.isError()) {
                     horseImages.put(key, image);
                 } else {
@@ -410,7 +410,7 @@ public class GameView extends Pane {
         root.setPrefSize(665, 298);
         root.setStyle("-fx-background-color: transparent;");
 
-        Image modalImage = new Image(getClass().getResourceAsStream("image/결과 적용.png"));
+        Image modalImage = new Image(getClass().getResourceAsStream("/image/말 적용.png"));
         ImageView modalView = new ImageView(modalImage);
         modalView.setFitWidth(665);
         modalView.setFitHeight(298);
@@ -422,7 +422,7 @@ public class GameView extends Pane {
         for (Horse horse : horses) {
             String imagePath;
             if (horse.id < 20) {
-                imagePath = "image/선택 " + horse.color + (horse.id % horseCount + 1) + ".png";
+                imagePath = "image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
                 System.out.println(horse.id);
             } else {
                 imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
