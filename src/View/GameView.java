@@ -617,19 +617,19 @@ public class GameView  extends JPanel {
             }
             else {
                 // 업은 말 선택
-                if (horseCount ==2) {
+                if (((DoubledHorse)horse).horseCount == 2) {
                     switch (horse.color) {
                         case "blue" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-bdouble%2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-bdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "red" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-rdouble%2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-rdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "green" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-gdouble%2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-gdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "yellow" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-ydouble%2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-ydouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         default :
                             imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
