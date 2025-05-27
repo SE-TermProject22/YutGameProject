@@ -75,12 +75,24 @@ public class StartView extends StackPane {
         imageView.setFitHeight(image.getHeight());
 
         Button button = new Button("", imageView);
+//        button.setStyle(
+//                "-fx-background-color: transparent;" +
+//                        "-fx-border-color: transparent;" +
+//                        "-fx-focus-color: transparent;" +
+//                        "-fx-faint-focus-color: transparent;"
+//        );
         button.setStyle(
                 "-fx-background-color: transparent;" +
                         "-fx-border-color: transparent;" +
                         "-fx-focus-color: transparent;" +
-                        "-fx-faint-focus-color: transparent;"
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-padding: 0;" +
+                        "-fx-opacity: 1;"
         );
+
+        // 버튼 눌리는 효과 적용
+        button.setOnMousePressed(e -> imageView.setOpacity(0.7));
+        button.setOnMouseReleased(e -> imageView.setOpacity(1.0));
 
         AnchorPane.setLeftAnchor(button, x);
         AnchorPane.setTopAnchor(button, y);

@@ -1,11 +1,18 @@
 package Controller;
 
+import Model.Board;
+import Model.Horse;
+import Model.Player;
 import View.Fx.EndView;
 import View.Fx.GameView;
 import View.Fx.StartView;
 import Controller.GameController;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 import java.util.Map;
 
 public class FXGameController {
@@ -13,6 +20,16 @@ public class FXGameController {
     private GameView gameView;
     private EndView endView;
 
+    private Board board;            // borad 지정
+    private List<Player> players = new ArrayList<>();   // players
+    private List<Horse> horses = new ArrayList<>();
+
+    private int horseCount;
+    private int playerCount;
+
+    private Player currentPlayer;
+
+    private GameState currentState = GameState.START_SCREEN;
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
     private GameController gameController;
 
@@ -28,7 +45,7 @@ public class FXGameController {
 
     private void initializeFXListeners() {
         startView.addStartButtonListener(e -> {
-            //System.out.println("✅ 시작 버튼 눌림!");
+            System.out.println("시작 버튼 눌림 체크용");
             startView.setState(GameState.HORSE_SELECTION);
         });
 
@@ -63,5 +80,71 @@ public class FXGameController {
                 }
             }
         });
+
+        startView.setBoardSelectionListeners(
+                e -> startView.selectBoard("square"),
+                e -> startView.selectBoard("pentagon"),
+                e -> startView.selectBoard("hexagon")
+        );
+
+        startView.addNextButtonListener(e -> {
+            startGame();
+        });
+    }
+
+    private void startGame() {
+        String selectedBoard = startView.getSelectedBoard();
+
+        board = new Board(selectedBoard);
+        playerCount = startView.getPlayerCount();
+        horseCount = startView.getHorseCount();
+        List<String> selectedColors = startView.getSelectedColors();
+
+        players.clear();
+        horses.clear();
+
+        for (int i = 0; i < playerCount; i++) {
+            String color = selectedColors.get(i);
+            Player player = new Player(i, color);
+            players.add(player);
+
+            for (int j = 0; j < horseCount; j++) {
+                Horse horse = new Horse(i * horseCount + j, color, board.nodes.get(0));
+            }
+        }
+
+        // 디버깅 로그
+        System.out.println("===== 생성된 말(Horses) =====");
+        for (Horse horse : horses) {
+            System.out.printf("Horse ID: %d, Color: %s, StartNode: (%d, %d)\n",
+                    horse.id, horse.color, horse.currentNode.x, horse.currentNode.y);
+        }
+
+        System.out.println("\n===== 생성된 플레이어 및 말 목록 =====");
+        for (Player player : players) {
+            System.out.printf("Player ID: %d, Color: %s, Horse Count: %d\n",
+                    player.id, player.color, player.horseList.size());
+        }
+
+        gameView.initHorses(selectedColors, horseCount);
+
+        startView.setVisible(false);
+        gameView.setVisible(true);
+
+        currentPlayer = players.get(0);
+        gameView.setBoardType(selectedBoard);
+        gameView.displayPlayers(playerCount);
+        gameView.displayHorses(selectedColors, playerCount, horseCount);
+
+        setState(GameState.GAME_PLAY);
+    }
+
+    private void setState(GameState newState) {
+        currentState = newState;
+        updateViewState();
+    }
+
+    private void updateViewState() {
+        startView.setState(currentState);
     }
 }
