@@ -87,7 +87,7 @@ public class GameView extends Pane {
         }
     }
 
-    private Button createButton(String imagePath, double x, double y) {
+    private Button createButton(String imagePath) {
         Image image = new Image(getClass().getResourceAsStream(imagePath));
         ImageView imageView = new ImageView(image);
 
@@ -102,8 +102,8 @@ public class GameView extends Pane {
                         "-fx-faint-focus-color: transparent;"
         );
 
-        AnchorPane.setLeftAnchor(button, x);
-        AnchorPane.setTopAnchor(button, y);
+//        AnchorPane.setLeftAnchor(button, x);
+//        AnchorPane.setTopAnchor(button, y);
 
         return button;
     }
@@ -120,12 +120,20 @@ public class GameView extends Pane {
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
 
-        throwButton = createButton("/image/윷 던지기.png", 744, 405);
-        this.getChildren().add(throwButton);
+        AnchorPane anchorRoot = new AnchorPane();
+
+        throwButton = createButton("/image/윷 던지기.png");
+        AnchorPane.setLeftAnchor(throwButton, 744.0);
+        AnchorPane.setTopAnchor(throwButton, 405.0);
+        anchorRoot.getChildren().add(throwButton);
 
         // 지정던지기 버튼
-        specialThrowButton = createButton("/image/지정던지기 버튼.png", 940, 405);
-        this.getChildren().add(specialThrowButton);
+        specialThrowButton = createButton("/image/지정던지기 버튼.png");
+        AnchorPane.setLeftAnchor(specialThrowButton, 940.0);
+        AnchorPane.setTopAnchor(specialThrowButton, 405.0);
+        anchorRoot.getChildren().add(specialThrowButton);
+
+        this.getChildren().add(anchorRoot);
     }
 
     private String getKoreanName(YutResult result) {
@@ -140,7 +148,7 @@ public class GameView extends Pane {
     }
 
     public void setBoardType(String boardType) {
-        Image board = new Image(getClass().getResourceAsStream("image/" + boardType + " board.png"));
+        Image board = new Image(getClass().getResourceAsStream("/image/" + boardType + " board.png"));
         boardView.setImage(board);
     }
 

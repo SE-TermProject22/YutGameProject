@@ -7,6 +7,7 @@ import View.Fx.EndView;
 import View.Fx.GameView;
 import View.Fx.StartView;
 import Controller.GameController;
+import javafx.scene.Scene;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,9 @@ public class FXGameController {
     private int playerCount;
 
     private Player currentPlayer;
+
+    private boolean throwState = true;
+    private List<YutResult> yutList = new ArrayList<>();
 
     private GameState currentState = GameState.START_SCREEN;
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
@@ -90,6 +94,26 @@ public class FXGameController {
         startView.addNextButtonListener(e -> {
             startGame();
         });
+
+        gameView.addThrowButtonListener(e -> {
+            if (throwState) {
+                throwState = false;
+                YutResult result = currentPlayer.throwYut();
+                System.out.println(result);
+                yutList.add(result);
+                gameView.startYutAnimation(result);
+
+                if (result == YutResult.MO || result == YutResult.YUT) {
+                    throwState = true;
+                    gameView.scheduleNotifyingImage(result);
+                } else {
+                    javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.millis(1700));
+                    delay.setOnFinished(e2 -> move());
+                    delay.play();
+                }
+
+            }
+        });
     }
 
     private void startGame() {
@@ -128,8 +152,11 @@ public class FXGameController {
 
         gameView.initHorses(selectedColors, horseCount);
 
-        startView.setVisible(false);
-        gameView.setVisible(true);
+        Scene scene = startView.getScene(); // 현재 View에서 Scene 가져오기
+        if (scene != null) {
+            scene.setRoot(gameView); // GameView로 루트 교체
+        }
+
 
         currentPlayer = players.get(0);
         gameView.setBoardType(selectedBoard);
@@ -147,4 +174,10 @@ public class FXGameController {
     private void updateViewState() {
         startView.setState(currentState);
     }
+
+    public void move() {
+
+    }
 }
+
+
