@@ -25,7 +25,7 @@ import javafx.util.Duration;
 import java.util.function.Consumer;
 import java.util.*;
 
-public class GameView extends Pane {
+public class GameView extends AnchorPane {
     private ImageView boardView, currentImageView, notifyingImageView;
     private Image board, notifyingImage, currentImage;
     private Button throwButton;
@@ -97,7 +97,7 @@ public class GameView extends Pane {
         Button button = new Button("", imageView);
         button.setStyle(
                 "-fx-background-color: transparent;" +
-                        "-fx-border-color: transparnet;" +
+                        "-fx-border-color: transparent;" +
                         "-fx-focus-color: transparent;" +
                         "-fx-faint-focus-color: transparent;"
         );
@@ -155,6 +155,8 @@ public class GameView extends Pane {
     }
 
     public void displayPlayers(int playerCount) {
+//        AnchorPane anchor = new AnchorPane();
+
         Point2D[] playerPositions = {
                 new Point2D(692, 502),
                 new Point2D(898, 502),
@@ -163,13 +165,16 @@ public class GameView extends Pane {
         };
 
         for (int i = 1; i <= playerCount; i++) {
-            Image playerImage = new Image(getClass().getResourceAsStream("image/player" + i + ".png"));
+            Image playerImage = new Image(getClass().getResourceAsStream("/image/player" + i + ".png"));
             ImageView playerView = new ImageView(playerImage);
             Point2D pos = playerPositions[i-1];
 
             AnchorPane.setLeftAnchor(playerView, pos.getX());
             AnchorPane.setTopAnchor(playerView, pos.getY());
+//            anchor.getChildren().add(playerView);
+
             this.getChildren().add(playerView);
+
         }
     }
 
@@ -198,8 +203,10 @@ public class GameView extends Pane {
                     double horseX = playerHorsePosition.getX() + (j-1) * 34;
                     double horseY = playerHorsePosition.getY();
 
-                    AnchorPane.setLeftAnchor(horseView, horseX);
-                    AnchorPane.setTopAnchor(horseView, horseY);
+//                    AnchorPane.setLeftAnchor(horseView, horseX);
+//                    AnchorPane.setTopAnchor(horseView, horseY);
+                    horseView.setLayoutX(horseX);
+                    horseView.setLayoutY(horseY);
                     this.getChildren().add(horseView);
 
                     waitingHorseLabels.put(horseId, horseView);
@@ -222,8 +229,12 @@ public class GameView extends Pane {
                     horseView.setFitWidth(40);
                     horseView.setFitHeight(40);
 
-                    AnchorPane.setLeftAnchor(horseView, 0.0);
-                    AnchorPane.setTopAnchor(horseView, 0.0);
+                    horseView.setLayoutX(0);
+                    horseView.setLayoutY(0);
+
+
+//                    AnchorPane.setLeftAnchor(horseView, 0.0);
+//                    AnchorPane.setTopAnchor(horseView, 0.0);
 
                     horseView.setVisible(false);
                     horseComponents.put(idCounter, horseView);
@@ -432,10 +443,10 @@ public class GameView extends Pane {
         for (Horse horse : horses) {
             String imagePath;
             if (horse.id < 20) {
-                imagePath = "image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
+                imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
                 System.out.println(horse.id);
             } else {
-                imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
+                imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
             }
 
             Image image = new Image(getClass().getResourceAsStream(imagePath));
@@ -487,7 +498,7 @@ public class GameView extends Pane {
         double y = 110;
 
         for (YutResult result : fixedResults) {
-            String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
+            String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
             Image image = new Image(getClass().getResourceAsStream(imagePath));
             ImageView imageView = new ImageView(image);
 
