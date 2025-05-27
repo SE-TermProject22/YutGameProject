@@ -189,6 +189,12 @@ public class GameController {
         horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
 
+        players.clear();
+        horses.clear();
+        yutList.clear();
+        turn = 0;
+        currentPlayer = null;
+
         // 모든 말 생성
         for(int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
@@ -439,6 +445,7 @@ public class GameController {
     // 게임이 끝났을 때 재시작 버튼을 띄우고, 클릭 시 게임을 초기화하고 재시작
     private void restartGame() {
         resetGame();
+        gameView.resetView();
         setState(GameState.START_SCREEN);
         startView.setVisible(true);
         gameView.setVisible(false);

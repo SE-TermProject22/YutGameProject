@@ -703,5 +703,28 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+    public void resetView() {
+
+        for (JLabel horseLabel : horseComponents.values()) {
+            remove(horseLabel);
+        }
+        horseComponents.clear();
+
+        for (JLabel waiting : waitingHorseLabels.values()) {
+            remove(waiting);
+        }
+        waitingHorseLabels.clear();
+
+        for (JLabel playerLabel : playerImages) {
+            remove(playerLabel);
+        }
+        playerImages.clear();
+
+        currentImage = null;
+        notifyingImage = null;
+        eventNotifyingImage = null;
+
+        repaint();
+    }
 
 }
