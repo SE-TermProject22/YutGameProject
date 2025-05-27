@@ -115,10 +115,12 @@ public class GameView extends Pane {
         currentImageView = new ImageView();
         currentImageView.setLayoutX(670);
         currentImageView.setLayoutY(40);
+        this.getChildren().add(currentImageView);
 
         notifyingImageView = new ImageView();
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
+        this.getChildren().add(notifyingImageView);
 
         AnchorPane anchorRoot = new AnchorPane();
 
@@ -234,7 +236,7 @@ public class GameView extends Pane {
     }
 
     public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage = new Image(getClass().getResourceAsStream("image/업힌 말/" + color + "/" + horseCount + "개" + ".png"));
+        Image horseImage = new Image(getClass().getResourceAsStream("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png"));
         ImageView horseView = new ImageView(horseImage);
 
         horseView.setFitWidth(40);
@@ -251,7 +253,7 @@ public class GameView extends Pane {
     public void setHorseToGray(int horse_id) {
         ImageView horseView = waitingHorseLabels.get(horse_id);
         if (horseView != null) {
-            Image grayImage = new Image(getClass().getResourceAsStream("image/끝난 말.png"));
+            Image grayImage = new Image(getClass().getResourceAsStream("/image/끝난 말.png"));
             horseView.setImage(grayImage);
         } else {
             System.out.println("❌ 회색으로 바꿀 horseView를 찾지 못함. horseId = " + horse_id);

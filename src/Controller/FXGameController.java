@@ -114,6 +114,17 @@ public class FXGameController {
 
             }
         });
+
+        gameView.addSpecialThrowListener(e -> {
+            gameView.showFixedYutChoiceDialog(selectedResult -> {
+                System.out.println("지정 윷 결과: " + selectedResult);
+
+                yutList.clear();
+                yutList.add(selectedResult);
+
+                move();
+            });
+        });
     }
 
     private void startGame() {
