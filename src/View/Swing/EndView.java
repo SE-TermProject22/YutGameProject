@@ -80,7 +80,7 @@ public class EndView extends JPanel {
             g.drawImage(endBackground, 0, 0, getWidth(), getHeight(), null);
         }
         if (winnerId >= 1 && winnerId <= 4) {
-            g.drawImage(winnerImages[winnerId - 1], 516, 583, null);
+            g.drawImage(winnerImages[winnerId - 1], 440, 455, null);
         }
     }
 }
