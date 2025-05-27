@@ -37,6 +37,9 @@ public class GameView  extends JPanel {
     private int rdouble = 0;
     private int gdouble = 0;
 
+    private int bnum, ynum, rnum, gnum;
+
+
 //    //스코어 저장할 리스트
 //    private List<JLabel> scoreLabels = new ArrayList<>();
 
@@ -298,19 +301,19 @@ public class GameView  extends JPanel {
             switch (color) {
                 case "blue":
                     bdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (3-(horseCount - bdouble % 2)) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png").getImage();
                     break;
                 case "yellow":
                     ydouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (3-(horseCount - ydouble % 2)) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png").getImage();
                     break;
                 case "green":
                     gdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (3-(horseCount - gdouble % 2)) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png").getImage();
                     break;
                 case "red":
                     rdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (3-(horseCount - rdouble % 2)) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png").getImage();
                     break;
                 default:
                     horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage();
@@ -587,6 +590,10 @@ public class GameView  extends JPanel {
     }
 
     public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {  // horses : selectedHorses, horseCount -> 찐 말의 개수 -> 게임 시작할 때
+        int bi = 0;
+        int ri = 0;
+        int yi = 0;
+        int gi = 0;
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
@@ -620,16 +627,20 @@ public class GameView  extends JPanel {
                 if (((DoubledHorse)horse).horseCount == 2) {
                     switch (horse.color) {
                         case "blue" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-bdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            bi++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "red" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-rdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            ri++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(rdouble+ri) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "green" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-gdouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            gi++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(gdouble+gi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "yellow" :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (3-(((DoubledHorse)horse).horseCount-ydouble%2)) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            yi++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(ydouble+yi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         default :
                             imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
