@@ -32,7 +32,10 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
-
+    private int bdouble = 0;
+    private int ydouble = 0;
+    private int rdouble = 0;
+    private int gdouble = 0;
 
 //    //스코어 저장할 리스트
 //    private List<JLabel> scoreLabels = new ArrayList<>();
@@ -290,7 +293,33 @@ public class GameView  extends JPanel {
 
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
     public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개"+ ".png").getImage();
+        Image horseImage;
+        if (horseCount ==2) {
+            switch (color) {
+                case "blue":
+                    bdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "yellow":
+                    ydouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "green":
+                    gdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "red":
+                    rdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png").getImage();
+                    break;
+                default:
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage();
+                    break;
+            }
+        } else {
+            horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage(); //fallback
+        }
+
         JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
         horseLabel.setBounds(x, y, 40, 40);
         horseLabel.setVisible(true); // 디버깅
