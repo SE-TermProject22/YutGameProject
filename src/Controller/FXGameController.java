@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -48,6 +49,10 @@ public class FXGameController {
     private GameState currentState = GameState.START_SCREEN;
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
     private GameController gameController;
+
+    private StackPane mainStackPane;
+    private Scene mainScene;
+    private Stage primaryStage;
 
     public FXGameController(StartView startView, GameView gameView, EndView endView) {
         this.startView = startView;
@@ -361,17 +366,48 @@ public class FXGameController {
         //endView.setWinner(currentPlayer.id);   // 초기값으로 설정 (1번 플레이어로 설정)
     }
 
+    //재시작 구현부분
+    // 방법 1: StackPane을 직접 초기화하는 경우
+    public void initializeMainView(Stage stage) {
+        this.primaryStage = stage;
+
+        // StackPane 생성 및 초기화
+        mainStackPane = new StackPane();
+        mainScene = new Scene(mainStackPane, 800, 600);
+
+        // 초기 뷰 추가
+        mainStackPane.getChildren().add(startView);
+
+        // Stage에 Scene 설정
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+    }
+
 
     private void restartGame() {
         resetGame();
         //gameView.resetView(); --> 이거 gameview에서 해야됨
         setState(GameState.START_SCREEN);
 
-        Scene startScene = new Scene(startView);
-        Stage primaryStage = (Stage) endView.getScene().getWindow();
-        primaryStage.setScene(startScene);
-    }
+//        Scene startScene = new Scene(startView);
+//        Stage primaryStage = (Stage) endView.getScene().getWindow();
+//        primaryStage.setScene(startScene);
 
+        // 방법 1: StackPane이 초기화된 경우
+        if (mainStackPane != null) {
+            mainStackPane.getChildren().clear();
+            mainStackPane.getChildren().add(startView);
+        } else {
+            // 방법 2: StackPane이 null인 경우 - 새 Scene 생성 (안전한 방법)
+            startView = new StartView(); // 새 인스턴스 생성
+
+            initializeFXListeners();
+
+            Scene startScene = new Scene(startView);
+            primaryStage = (Stage) endView.getScene().getWindow();
+            primaryStage.setScene(startScene);
+        }
+    }
 
 }
 
