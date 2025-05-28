@@ -1,4 +1,4 @@
-package View;
+package View.Swing;
 
 import Controller.GameState;
 
@@ -20,6 +20,8 @@ public class StartView extends JPanel{
     private String selectedBoard = null;
     private List<String> selectedColors = new ArrayList<>();
 
+    private Map<String, Point> horseButtonPositions = new HashMap<>();
+
     private GameState currentState = GameState.START_SCREEN;
 
     public StartView() { //생성자
@@ -30,14 +32,14 @@ public class StartView extends JPanel{
 
     //필요한 이미지 불러오기
     private void loadImages() {
-        startBackground = new ImageIcon("image/시작 화면.png").getImage(); //시작 배경화면
-        horseSelectionBackground = new ImageIcon("image/말 선택.png").getImage(); //말 고를 때 배경화면
-        boardSelectionBackground = new ImageIcon("image/판 선택.png").getImage();
+        startBackground = new ImageIcon(getClass().getResource("/image/시작 화면.png")).getImage(); //시작 배경화면
+        horseSelectionBackground = new ImageIcon(getClass().getResource("/image/말 선택.png")).getImage(); //말 고를 때 배경화면
+        boardSelectionBackground = new ImageIcon(getClass().getResource("/image/판 선택.png")).getImage();
     }
 
     //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y) {
-        ImageIcon icon = new ImageIcon(imagePath);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/" + imagePath));
         JButton button = new JButton(icon);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
@@ -90,6 +92,7 @@ public class StartView extends JPanel{
         btn.setActionCommand(color);
         btn.setVisible(false);
         horseButtons.put(color, btn);
+        horseButtonPositions.put(color, new Point(x, 401)); // 위치 저장
         add(btn);
     }
 
@@ -181,10 +184,21 @@ public class StartView extends JPanel{
 
     //말을 누르면 선택 한 번 더 누르면 선택 취소
     public void toggleHorseSelection(String color) {
+        JButton btn = horseButtons.get(color);
+        Point p = horseButtonPositions.get(color); // 저장한 위치 불러오기
+
         if (selectedColors.contains(color)) {
             selectedColors.remove(color);  // 선택 해제
+            ImageIcon icon = new ImageIcon(getClass().getResource("/image/" + color + " 말.png"));
+            btn.setIcon(icon);
+            btn.setBounds(p.x, p.y, icon.getIconWidth(), icon.getIconHeight());
         } else if (selectedColors.size() < getPlayerCount()) {
             selectedColors.add(color);     // 선택 추가
+            ImageIcon icon = new ImageIcon(getClass().getResource("/image/말 선택됨/" + color + " 말 선택됨.png"));
+            btn.setIcon(icon);
+
+            // 버튼 사이즈를 이미지 크기와 일치시킴
+            btn.setSize(icon.getIconWidth(), icon.getIconHeight());
         }
     }
 

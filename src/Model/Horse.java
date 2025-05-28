@@ -10,6 +10,7 @@ public class Horse {
     public String color;
     public boolean state = false;
     public boolean isDoubled = false;
+    public boolean isFinished;
     // private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
     // public boolean isFinished = false;
 

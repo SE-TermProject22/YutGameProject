@@ -5,17 +5,10 @@ import Model.DoubledHorse;
 import Model.Player;
 import Model.Horse;
 
-import View.StartView;
-import View.GameView;
+import View.Swing.StartView;
+import View.Swing.GameView;
 
-//
-import View.EndView;
-
-//
-
-
-import java.awt.*;
-import java.util.*;
+import View.Swing.EndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +40,14 @@ public class GameController {
 
     // 업기 구현을 위한 initial_id
     private int d_init = 100;
-    //
 
     private JFrame frame;
 
-
     public GameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
-
         this.frame = frame;
 
         this.startView = startView;
         this.gameView = gameView;
-
-        //
         this.endView = endView;
 
         initializeListeners();
@@ -171,6 +159,7 @@ public class GameController {
             YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
+                //yutList.clear();
                 yutList.add(selectedResult);
             });
             result = yutList.get(yutList.size() - 1);
@@ -218,6 +207,12 @@ public class GameController {
         playerCount = startView.getPlayerCount();
         horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
+
+        players.clear();
+        horses.clear();
+        yutList.clear();
+        turn = 0;
+        currentPlayer = null;
 
         // 모든 말 생성
         for(int i = 0; i < playerCount; i++) {
@@ -307,14 +302,11 @@ public class GameController {
                         // throwState = true;
                         YutResult result = chosenResult;
                         yutList.remove(result);
-
                         selectedHorse.move(result);
-
                         if(selectedHorse.state == false){
                             selectedHorse.state = true;
                             gameView.setHorseVisible(selectedHorse.id);
                         }
-
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                         ////////// finish 처리 /////////
@@ -399,7 +391,8 @@ public class GameController {
                                     gameView.setHorseInvisible(selectedHorse.id);
                                     currentPlayer.horseList.add(dh);
 
-                                    System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+                                gameView.showEventImage("/image/업었다.png");
 
                                     // TODO: DoubledHorse 처리 로직
                                     // break;
@@ -409,6 +402,7 @@ public class GameController {
                                 // 다른 말 - 잡기
                                 else if (check == 0) {
                                     System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+                                    gameView.showEventImage("/image/잡았다.png");
                                     if(other instanceof DoubledHorse) {
                                         ArrayList<Horse> doubledHorseList = new ArrayList<>();
                                         doubledHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
@@ -438,7 +432,6 @@ public class GameController {
                                     return;
                                 }
                             }
-
                         }
 
 
@@ -522,6 +515,7 @@ public class GameController {
     // 게임이 끝났을 때 재시작 버튼을 띄우고, 클릭 시 게임을 초기화하고 재시작
     private void restartGame() {
         resetGame();
+        gameView.resetView();
         setState(GameState.START_SCREEN);
         startView.setVisible(true);
         gameView.setVisible(false);

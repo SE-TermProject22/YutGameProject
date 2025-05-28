@@ -1,4 +1,4 @@
-package View;
+package View.Swing;
 
 // import Controller.GameController;
 import Controller.YutResult;
@@ -21,6 +21,9 @@ public class GameView  extends JPanel {
     private JButton specialThrowButton; //지정던지기 버튼 추가
     private List<JLabel> playerImages = new ArrayList<>();
     private Map<String, Image> horseImages;
+
+    private Map<String, Image> scoreHorseImages;
+
     private Map<String, Point> horsePositions;
 
     private Map<Integer, JLabel> horseComponents = new HashMap<>();
@@ -31,6 +34,8 @@ public class GameView  extends JPanel {
 
     private Timer animationTimer;
     private int yutIndex;
+
+    private Image eventNotifyingImage;
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
     private int bdouble = 0;
     private int ydouble = 0;
@@ -52,12 +57,15 @@ public class GameView  extends JPanel {
         horsePositions = new HashMap<>();
         horseImages = new HashMap<>();
 
+        scoreHorseImages = new HashMap<>();
+
         loadImages();
         initUI();
     }
 
     private void loadImages() {
         horseImages.clear();
+        scoreHorseImages.clear();
 
         String[] colors = {"red", "blue", "yellow", "green"};
 
@@ -65,16 +73,22 @@ public class GameView  extends JPanel {
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image img = new ImageIcon("image/" + color + "/" + color + i + ".png").getImage();
-                if (img != null) {
-                    horseImages.put(key, img);
+
+                Image horseImg = new ImageIcon(getClass().getResource("/image/말 이동/" + color + "/" + i + ".png")).getImage();
+                if (horseImg != null) {
+                    horseImages.put(key, horseImg);
+                }
+
+                Image scoreImg = new ImageIcon(getClass().getResource("/image/스코어 말/" + color + "/" + i + ".png")).getImage();
+                if (scoreImg != null) {
+                    scoreHorseImages.put(key, scoreImg);
                 }
             }
         }
         // 윷 던지는 과정 animation 과정들 사진
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
-            Image img = new ImageIcon("image/yut/yut" + i + ".png").getImage();
+            Image img = new ImageIcon(getClass().getResource("/image/yut/yut" + i + ".png")).getImage();
             if (img != null) {
                 yutImages.add(img);
             }
@@ -83,13 +97,13 @@ public class GameView  extends JPanel {
         resultImages = new ArrayList<>();
         String[] resultImageNames = {"1.png", "2.png", "3.png", "4.png", "5.png", "-1.png"};
         for (String imageName : resultImageNames) {
-            Image resultImg = new ImageIcon("image/" + imageName).getImage();
+            Image resultImg = new ImageIcon(getClass().getResource("/image/" + imageName)).getImage();
+
             if (resultImg != null) {
                 resultImages.add(resultImg);
             }
         }
     }
-
 
     // finish처리 된 말 색깔 회색으로 변경
     // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
@@ -107,7 +121,7 @@ public class GameView  extends JPanel {
 
     //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y) {
-        ImageIcon icon = new ImageIcon(imagePath);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/" + imagePath));
         JButton button = new JButton(icon);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
@@ -150,7 +164,7 @@ public class GameView  extends JPanel {
     }
 
     public void setBoardType(String boardType) {
-        board = new ImageIcon("image/" + boardType + " board.png").getImage();
+        board = new ImageIcon(getClass().getResource("/image/" + boardType + " board.png")).getImage();
         repaint();
     }
 
@@ -163,7 +177,7 @@ public class GameView  extends JPanel {
         };
 
         for (int i = 1; i <= playerCount; i++) {
-            ImageIcon playerIcon = new ImageIcon("image/player" + i + ".png");
+            ImageIcon playerIcon = new ImageIcon(getClass().getResource("/image/player" + i + ".png"));
             JLabel playerLabel = new JLabel(playerIcon);
 
             Point pos = playerPositions[i - 1];
@@ -197,6 +211,7 @@ public class GameView  extends JPanel {
                 new Point(888, 598),
         };
 
+
         int horseId = 0;
 
         for (int i = 0; i < playerCount; i++) {
@@ -205,18 +220,20 @@ public class GameView  extends JPanel {
 
             for (int j = 1; j <= horseCount; j++) {
                 String key = color + j;
-                Image horseImage = horseImages.get(key);
-                if (horseImage != null) {
-                    JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
+
+                Image scoreHorse = scoreHorseImages.get(key);
+                if (scoreHorse != null) {
+                    JLabel scoreHorseLabel = new JLabel(new ImageIcon(scoreHorse));
 
                     int horseX = playerHorsePosition.x + (j - 1) * 34;
                     int horseY = playerHorsePosition.y;
 
-                    horseLabel.setBounds(horseX, horseY, 40, 40);
-                    add(horseLabel);
 
-                    // ✅ Map에 저장 (말 ID 기준)
-                    waitingHorseLabels.put(horseId, horseLabel);
+                    scoreHorseLabel.setBounds(horseX, horseY, 40, 40);
+                    add(scoreHorseLabel);
+
+                    // Map에 저장 (말 ID 기준)
+                    waitingHorseLabels.put(horseId, scoreHorseLabel);
                     horseId++;
                 }
             }
@@ -301,26 +318,26 @@ public class GameView  extends JPanel {
             switch (color) {
                 case "blue":
                     bdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png")).getImage();
                     break;
                 case "yellow":
                     ydouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png")).getImage();
                     break;
                 case "green":
                     gdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png")).getImage();
                     break;
                 case "red":
                     rdouble++;
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png").getImage();
+                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png")).getImage();
                     break;
                 default:
-                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage();
+                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage();
                     break;
             }
         } else {
-            horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage(); //fallback
+            horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage(); //fallback
         }
 
         JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
@@ -381,10 +398,6 @@ public class GameView  extends JPanel {
         horsePositions.put(color, new Point(x, y));
         repaint();
     }
-
-
-
-
 
     // 윷 관련
     public void startYutAnimation(YutResult result) {
@@ -450,15 +463,16 @@ public class GameView  extends JPanel {
     public void scheduleNotifyingImage(YutResult result) {
         String imagePath;
         if(result == YutResult.YUT)
-            imagePath = "image/윷 한번더.png";
+            imagePath = "/image/윷 한번더.png";
         else
-            imagePath = "image/모 한번더.png";
+            imagePath = "/image/모 한번더.png";
+        //String imagePath = result == YutResult.YUT ? "/image/윷 한번더.png" : "/image/모 한번더.png";
 
         Timer notifyingTimer = new Timer();
         notifyingTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                notifyingImage = new ImageIcon(imagePath).getImage();
+                notifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
                 // repaint();
 
                 new Timer().schedule(new TimerTask() {
@@ -530,6 +544,11 @@ public class GameView  extends JPanel {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
+
+        //잡기/업기 창 이미지
+        if (eventNotifyingImage != null) {
+            g.drawImage(eventNotifyingImage, 291, 294, null);
+        }
     }
 
     private String getKoreanName(YutResult result) {
@@ -555,7 +574,7 @@ public class GameView  extends JPanel {
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image bg = new ImageIcon("image/결과 적용.png").getImage();
+                Image bg = new ImageIcon(getClass().getResource("/image/결과 적용.png")).getImage();
                 g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -568,8 +587,8 @@ public class GameView  extends JPanel {
         int y = 100;
 
         for (YutResult result : yutResults) {
-            String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
-            ImageIcon icon = new ImageIcon(imagePath);
+            String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
+            ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
             JButton btn = new JButton(icon);
             btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
             btn.setContentAreaFilled(false);
@@ -606,7 +625,7 @@ public class GameView  extends JPanel {
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image bg = new ImageIcon("image/말 적용.png").getImage();
+                Image bg = new ImageIcon(getClass().getResource("/image/말 적용.png")).getImage();
                 g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -622,7 +641,7 @@ public class GameView  extends JPanel {
             String imagePath;
             // 여기서 id가 크면은 color.count로 해서 파일 받기
             if(horse.id < 20) {
-                imagePath = "image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
+                imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount+1) + ".png";
                 System.out.println(horse.id);
             }
             else {
@@ -633,30 +652,30 @@ public class GameView  extends JPanel {
                             bi++;
                             bii+=2;
                             System.out.println("전"+ bdouble + "/" + bi);
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi+bii) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi+bii) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             System.out.println("후"+ bdouble + "/" + bi);
                             break;
                         case "red" :
                             ri++;
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(rdouble+ri) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(rdouble+ri) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "green" :
                             gi++;
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(gdouble+gi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(gdouble+gi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         case "yellow" :
                             yi++;
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(ydouble+yi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(ydouble+yi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                         default :
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
                             break;
                     }
                 } else {
-                    imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개" + ".png";
+                    imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개" + ".png";
                 }// 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
             }
-            ImageIcon icon = new ImageIcon(imagePath);
+            ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
 
             JButton btn = new JButton(icon);
             btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
@@ -693,7 +712,7 @@ public class GameView  extends JPanel {
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image bg = new ImageIcon("image/결과 적용.png").getImage();
+                Image bg = new ImageIcon(getClass().getResource("/image/결과 적용.png")).getImage();
                 g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -708,8 +727,8 @@ public class GameView  extends JPanel {
         int y = 110;
 
         for (YutResult result : fixedResults) {
-            String imagePath = "image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
-            ImageIcon icon = new ImageIcon(imagePath);
+            String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
+            ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
 
             JButton btn = new JButton(icon);
             btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
@@ -734,5 +753,43 @@ public class GameView  extends JPanel {
         return specialThrowButton;
     }
 
+    //잡기/업기 이미지 창
+    public void showEventImage(String imagePath) {
+        eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                eventNotifyingImage = null;
+                repaint();
+            }
+        }, 1500);
+
+        repaint();
+    }
+
+    public void resetView() {
+
+        for (JLabel horseLabel : horseComponents.values()) {
+            remove(horseLabel);
+        }
+        horseComponents.clear();
+
+        for (JLabel waiting : waitingHorseLabels.values()) {
+            remove(waiting);
+        }
+        waitingHorseLabels.clear();
+
+        for (JLabel playerLabel : playerImages) {
+            remove(playerLabel);
+        }
+        playerImages.clear();
+
+        currentImage = null;
+        notifyingImage = null;
+        eventNotifyingImage = null;
+
+        repaint();
+    }
 
 }
