@@ -12,14 +12,17 @@ public class Board {
         if(boardType == "square") {
             createNode_square();
             connectNode_square();
+            backDo_connect_square();
         }
         else if(boardType == "pentagon") {
             createNode_pentagon();
             connectNode_pentagon();
+            backDo_connect_pentagon();
         }
         else if(boardType == "hexagon") {
             createNode_Hexagon();
             connectNode_Hexagon();
+            backDo_connect_hexagon();
         }
     }
 
@@ -41,6 +44,7 @@ public class Board {
         nodes.add(new Node(13, 93, 376));
         nodes.add(new Node(14, 93, 463));
         nodes.add(new Node(15, 93, 562));
+        nodes.get(15).backDoPrev = true;
         nodes.add(new Node(16, 192, 565));
         nodes.add(new Node(17, 281, 565));
         nodes.add(new Node(18, 369, 565));
@@ -48,26 +52,29 @@ public class Board {
         nodes.add(new Node(20, 470, 183));
         nodes.add(new Node(21, 402, 253));
         nodes.add(new DaegakNode(22, 326, 330));
+        nodes.get(22).isCenterNode = true;
         nodes.add(new Node(23, 247, 407));
         nodes.add(new Node(24, 176, 480));
         nodes.add(new Node(25, 177, 181));
         nodes.add(new Node(26, 248, 252));
         nodes.add(new Node(27, 326, 330));
+        nodes.get(27).isCenterNode = true;
         nodes.add(new Node(28, 401, 409));
         nodes.add(new Node(29, 474, 480));
+        nodes.add(new Node(30, 555, 560));
+        nodes.get(30).isLastNode = true;
+        nodes.get(30).backDoPrev = true;
 
         // EndNode
-        nodes.add(new EndNode(30, 555, 560));
         nodes.add(new EndNode(31, 555, 560));
         nodes.add(new EndNode(32, 555, 560));
         nodes.add(new EndNode(33, 555, 560));
         nodes.add(new EndNode(34, 555, 560));
-        nodes.add(new EndNode(35, 555, 560));
 
     }
 
     public void connectNode_square(){
-        for(int i = 0; i < 35; i++){
+        for(int i = 0; i < 34; i++){
             nodes.get(i).nextNode = nodes.get(i+1);
         }
         ((DaegakNode)nodes.get(5)).DNode = nodes.get(20);
@@ -76,6 +83,14 @@ public class Board {
 
         nodes.get(24).nextNode = nodes.get(15);
         nodes.get(19).nextNode = nodes.get(30);
+    }
+    public void backDo_connect_square(){
+        for(int i = 30; i > 0; i--){
+            nodes.get(i).backDoNode = nodes.get(i-1);
+        }
+        nodes.get(0).backDoNode = nodes.get(19);
+        nodes.get(20).backDoNode = nodes.get(5);
+        nodes.get(25).backDoNode = nodes.get(10);
 
     }
 
@@ -103,13 +118,16 @@ public class Board {
         nodes.add(new Node(18, 429, 143));
         nodes.add(new Node(19, 382, 107));
         nodes.add(new Node(20, 328, 76));
+        nodes.get(20).backDoPrev = true;
         nodes.add(new Node(21, 272, 106));
         nodes.add(new Node(22, 224, 142));
         nodes.add(new Node(23, 170, 178));
         nodes.add(new Node(24, 119, 220));
+        nodes.add(new Node(25, 67, 257));
+        nodes.get(25).backDoPrev = true;
+        nodes.get(25).isLastNode = true;
 
         //EndNode
-        nodes.add(new EndNode(25, 67, 257));
         nodes.add(new EndNode(26, 67, 257));
         nodes.add(new EndNode(27, 67, 257));
         nodes.add(new EndNode(28, 67, 257));
@@ -120,33 +138,52 @@ public class Board {
         nodes.add(new Node(31, 216, 494));
         nodes.add(new Node(32, 268, 419));
         nodes.add(new DaegakNode(33, 328, 341));
+        nodes.get(33).backDoPrev = true;
+        nodes.get(33).isCenterNode = true;
         nodes.add(new Node(34, 328, 253));
         nodes.add(new Node(35, 328, 163));
         nodes.add(new Node(36, 436, 493));
         nodes.add(new Node(37, 382, 419));
         nodes.add(new DaegakNode(38, 500, 287));
         nodes.add(new Node(39, 414, 314));
-        nodes.add(new Node(40, 238, 316));
-        nodes.add(new Node(41, 150, 286));
-
+        nodes.add(new Node(40, 328, 341));
+        nodes.get(40).isCenterNode = true;
+        nodes.add(new Node(41, 238, 316));
+        nodes.add(new Node(42,150,286));
     }
     public void connectNode_pentagon(){
-        for(int i = 0; i < 41; i++){
+        for(int i = 0; i < 42; i++){
             nodes.get(i).nextNode = nodes.get(i+1); // 일단 다 nextNode만들어두기
         }
         ((DaegakNode)nodes.get(5)).DNode = nodes.get(31);
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(36);
         ((DaegakNode)nodes.get(15)).DNode = nodes.get(38);
-        ((DaegakNode)nodes.get(33)).DNode = nodes.get(40);
+        ((DaegakNode)nodes.get(33)).DNode = nodes.get(41);
 
-        nodes.get(39).nextNode = nodes.get(33);
         nodes.get(37).nextNode = nodes.get(33);
         nodes.get(35).nextNode = nodes.get(20);
-        nodes.get(41).nextNode = nodes.get(25);
+        nodes.get(42).nextNode = nodes.get(25);
 
         nodes.get(30).nextNode = null; //마지막 EndNode는 null
 
     }
+    public void backDo_connect_pentagon(){
+        for(int i = 25; i > 0; i--){
+            nodes.get(i).backDoNode = nodes.get(i-1);
+        }
+        for(int i = 35; i>30; i--){
+            nodes.get(i).backDoNode = nodes.get(i-1);
+        }
+        for(int i = 42; i>37; i--){
+            nodes.get(i).backDoNode = nodes.get(i-1);
+        }
+        nodes.get(31).backDoNode = nodes.get(5); // 예외처리
+        nodes.get(38).backDoNode = nodes.get(15);
+        nodes.get(37).backDoNode = nodes.get(36);
+        nodes.get(36).backDoNode = nodes.get(10);
+    }
+
+    // 육각형 보드 수정해야함
 
     public void createNode_Hexagon(){
         nodes.add(new Node(0, 52, 323));
@@ -183,9 +220,9 @@ public class Board {
         nodes.add(new Node(27, 134, 185));
         nodes.add(new Node(28, 109, 228));
         nodes.add(new Node(29, 82, 274));
+        nodes.add(new Node(30, 52, 323));
 
         //EndNode
-        nodes.add(new EndNode(30, 52, 323));
         nodes.add(new EndNode(31, 52, 323));
         nodes.add(new EndNode(32, 52, 323));
         nodes.add(new EndNode(33, 52, 323));
@@ -229,6 +266,10 @@ public class Board {
         nodes.get(48).nextNode = nodes.get(30);
 
         nodes.get(35).nextNode = null; //마지막 EndNode는 null
+    }
+
+    public void backDo_connect_hexagon(){
+
     }
 }
 
