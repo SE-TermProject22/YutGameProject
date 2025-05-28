@@ -32,10 +32,10 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
-    private int bdouble = 0;
-    private int ydouble = 0;
-    private int rdouble = 0;
-    private int gdouble = 0;
+    public int bdouble = 0;
+    public int ydouble = 0;
+    public int rdouble = 0;
+    public int gdouble = 0;
 
     private int bnum, ynum, rnum, gnum;
 
@@ -631,10 +631,9 @@ public class GameView  extends JPanel {
                     switch (horse.color) {
                         case "blue" :
                             bi++;
-                            bii+=2;
-                            System.out.println("전"+ bdouble + "/" + bi);
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi+bii) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-                            System.out.println("후"+ bdouble + "/" + bi);
+                            //System.out.println("전"+ bdouble + "/" + bi);
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse) horse).horseCount - (bdouble + bi) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            // System.out.println("후"+ bdouble + "/" + bi);
                             break;
                         case "red" :
                             ri++;
