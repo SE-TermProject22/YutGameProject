@@ -590,10 +590,13 @@ public class GameView  extends JPanel {
     }
 
     public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {  // horses : selectedHorses, horseCount -> 찐 말의 개수 -> 게임 시작할 때
-        int bi = 0;
+        int bi = -1;
+        int bii = 0;
+
         int ri = 0;
         int yi = 0;
         int gi = 0;
+
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
@@ -628,7 +631,10 @@ public class GameView  extends JPanel {
                     switch (horse.color) {
                         case "blue" :
                             bi++;
-                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            bii+=2;
+                            System.out.println("전"+ bdouble + "/" + bi);
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi+bii) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            System.out.println("후"+ bdouble + "/" + bi);
                             break;
                         case "red" :
                             ri++;
