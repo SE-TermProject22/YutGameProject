@@ -347,7 +347,7 @@ public class GameView extends AnchorPane {
             imagePath = "/image/모 한번더.png";
         }
 
-        PauseTransition delayBeforeShow = new PauseTransition(Duration.seconds(1));
+        PauseTransition delayBeforeShow = new PauseTransition(Duration.seconds(2.3));
         delayBeforeShow.setOnFinished(event -> {
             notifyingImage = new Image(getClass().getResourceAsStream(imagePath));
             notifyingImageView.setImage(notifyingImage);
