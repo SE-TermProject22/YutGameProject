@@ -73,9 +73,9 @@ public class GameView extends AnchorPane {
                 if (scoreImg != null && !scoreImg.isError()) {
                     scoreHorseImages.put(key, scoreImg);
                 }
-
             }
         }
+
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             Image image = new Image(getClass().getResourceAsStream("/image/yut/yut" + i + ".png"));
@@ -213,8 +213,6 @@ public class GameView extends AnchorPane {
                 Image scoreHorse = scoreHorseImages.get(key);
                 if (scoreHorse != null) {
                     ImageView scorehorseView = new ImageView(scoreHorse);
-                    scorehorseView.setFitWidth(40);
-                    scorehorseView.setFitHeight(40);
 
                     double horseX = playerHorsePosition.getX() + (j-1) * 34;
                     double horseY = playerHorsePosition.getY();

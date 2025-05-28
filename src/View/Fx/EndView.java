@@ -128,8 +128,8 @@ public class EndView extends AnchorPane {
         if (winnerId >= 1 && winnerId <= winnerImages.length) {
             winnerView.setImage(winnerImages[winnerId-1]);
             winnerView.setVisible(true);
-            AnchorPane.setLeftAnchor(winnerView, 516.0);
-            AnchorPane.setTopAnchor(winnerView, 583.0);
+            AnchorPane.setLeftAnchor(winnerView, 440.0);
+            AnchorPane.setTopAnchor(winnerView, 455.0);
         } else {
             winnerView.setVisible(false);
         }
