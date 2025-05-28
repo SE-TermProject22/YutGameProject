@@ -359,10 +359,7 @@ public class FXGameController {
         turn = 0;
 
         // 뷰 초기화
-        endView.clearBoard();
-        endView.clearHorses();
-        endView.clearBoard();   // EndView의 보드 초기화
-        endView.clearHorses();  // EndView의 말 초기화
+        gameView.clearHorses();  // EndView의 말 초기화
         //endView.setWinner(currentPlayer.id);   // 초기값으로 설정 (1번 플레이어로 설정)
     }
 
@@ -371,44 +368,38 @@ public class FXGameController {
     public void initializeMainView(Stage stage) {
         this.primaryStage = stage;
 
-        // StackPane 생성 및 초기화
-        mainStackPane = new StackPane();
-        mainScene = new Scene(mainStackPane, 800, 600);
+        startView = new StartView();
+        gameView = new GameView();
+        endView = new EndView();
 
-        // 초기 뷰 추가
-        mainStackPane.getChildren().add(startView);
-
-        // Stage에 Scene 설정
-        primaryStage.setScene(mainScene);
-        primaryStage.show();
+        showStartView();
     }
 
-
-    private void restartGame() {
-        resetGame();
-        //gameView.resetView(); --> 이거 gameview에서 해야됨
-        setState(GameState.START_SCREEN);
-
-//        Scene startScene = new Scene(startView);
-//        Stage primaryStage = (Stage) endView.getScene().getWindow();
-//        primaryStage.setScene(startScene);
-
-        // 방법 1: StackPane이 초기화된 경우
+    public void showStartView() {
         if (mainStackPane != null) {
             mainStackPane.getChildren().clear();
             mainStackPane.getChildren().add(startView);
         } else {
-            // 방법 2: StackPane이 null인 경우 - 새 Scene 생성 (안전한 방법)
-            startView = new StartView(); // 새 인스턴스 생성
-
-            initializeFXListeners();
-
             Scene startScene = new Scene(startView);
-            primaryStage = (Stage) endView.getScene().getWindow();
             primaryStage.setScene(startScene);
         }
     }
 
+    private void restartGame() {
+        //1. 게임 데이터 초기화
+        resetGame();
+
+        //2. 뷰 요소 초기화
+        if (startView == null) {
+            startView = new StartView();
+            initializeFXListeners();
+        }
+
+        startView.resetSelection();
+        gameView.clearHorses();
+
+        setState(GameState.START_SCREEN);
+
+        showStartView();
+    }
 }
-
-

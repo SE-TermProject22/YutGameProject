@@ -33,14 +33,12 @@ public class EndView extends AnchorPane {
         loadImages();
 
         anchorRoot = new AnchorPane();
-        boardPane = new AnchorPane();
-        horsePane = new AnchorPane();
 
         background = new ImageView();
         winnerView = new ImageView();
         winnerView.setVisible(false);
 
-        anchorRoot.getChildren().addAll(background, winnerView, boardPane, horsePane);
+        anchorRoot.getChildren().addAll(background, winnerView);
 
         initUI();
     }
@@ -112,14 +110,6 @@ public class EndView extends AnchorPane {
     public void setWinner(int playerId) {
         this.winnerId = playerId;
         updateEndView(endBackground, winnerImages, winnerId);
-    }
-
-    public void clearBoard() {
-        boardPane.getChildren().clear();
-    }
-
-    public void clearHorses() {
-        horsePane.getChildren().clear();
     }
 
     public void updateEndView(Image endBackground, Image[] winnerImages, int winnerId) {

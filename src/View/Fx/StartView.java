@@ -234,7 +234,7 @@ public class StartView extends StackPane {
         return horseButtons;
     }
 
-    public void resetSelectionState() {
+    public void resetSelection() {
         selectedColors.clear();
         selectedBoard = null;
 
@@ -244,6 +244,7 @@ public class StartView extends StackPane {
         for (Button btn : horseButtons.values()) {
             btn.setDisable(false);
             btn.setVisible(false);
+            btn.setStyle("");
         }
 
         squareBtn.setVisible(false);

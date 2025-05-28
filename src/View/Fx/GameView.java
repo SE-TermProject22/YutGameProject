@@ -48,8 +48,10 @@ public class GameView extends AnchorPane {
 
     private ImageView eventNotifyingImageView;
 
+
+
     public GameView() {
-        setPrefSize(1200, 700);  // 패널 크기
+        //setPrefSize(1200, 700);  // 패널 크기
         loadImages();
         initUI();
     }
@@ -557,6 +559,18 @@ public class GameView extends AnchorPane {
             eventNotifyingImageView.setVisible(false);
         });
         delay.play();
+    }
+
+    public void clearHorses() {
+        for (ImageView horseView : horseComponents.values()) {
+            this.getChildren().remove(horseView);
+        }
+        horseComponents.clear();
+
+        for (ImageView waitingHorseView : waitingHorseLabels.values()) {
+            this.getChildren().remove(waitingHorseView);
+        }
+        waitingHorseLabels.clear();
     }
 
     // 테스트 버튼
