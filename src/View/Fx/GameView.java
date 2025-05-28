@@ -22,6 +22,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import javax.swing.*;
 import java.util.function.Consumer;
 import java.util.*;
 
@@ -33,6 +35,8 @@ public class GameView extends AnchorPane {
     private Map<String, Image> horseImages = new HashMap<>();
     private Map<String, Point2D> horsePositions = new HashMap<>();
 
+    private Map<String, Image> scoreHorseImages = new HashMap<>();
+
     private Map<Integer, ImageView> horseComponents = new HashMap<>();
     private List<Image> yutImages = new ArrayList<>();
     private List<Image> resultImages = new ArrayList<>();
@@ -42,6 +46,8 @@ public class GameView extends AnchorPane {
 
     private Map<Integer, ImageView> waitingHorseLabels = new HashMap<>();
 
+    private ImageView eventNotifyingImageView;
+
     public GameView() {
         setPrefSize(1200, 700);  // 패널 크기
         loadImages();
@@ -50,21 +56,26 @@ public class GameView extends AnchorPane {
 
     private void loadImages() {
         horseImages.clear();
+        scoreHorseImages.clear();
 
         String[] colors = {"red", "blue", "yellow", "green"};
 
         for (String color : colors) {
             for (int i = 1; i <= 5; i++) {
                 String key = color + i;
-                Image image = new Image(getClass().getResourceAsStream("/image/말 이동/" + color + "/" + i + ".png"));
-                if (image != null && !image.isError()) {
-                    horseImages.put(key, image);
-                } else {
-                    System.out.println("Failed to load iamge: horse" + colors + ".png");
+
+                Image horseImg = new Image(getClass().getResourceAsStream("/image/말 이동/" + color + "/" + i + ".png"));
+                if (horseImg != null && !horseImg.isError()) {
+                    horseImages.put(key, horseImg);
                 }
+
+                Image scoreImg = new Image(getClass().getResourceAsStream("/image/스코어 말/" + color + "/" + i + ".png"));
+                if (scoreImg != null && !scoreImg.isError()) {
+                    scoreHorseImages.put(key, scoreImg);
+                }
+
             }
         }
-
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             Image image = new Image(getClass().getResourceAsStream("/image/yut/yut" + i + ".png"));
@@ -121,6 +132,11 @@ public class GameView extends AnchorPane {
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
         this.getChildren().add(notifyingImageView);
+
+        eventNotifyingImageView = new ImageView();
+        eventNotifyingImageView.setLayoutX(420);
+        eventNotifyingImageView.setLayoutY(300);
+        this.getChildren().add(eventNotifyingImageView);
 
         AnchorPane anchorRoot = new AnchorPane();
 
@@ -194,22 +210,23 @@ public class GameView extends AnchorPane {
 
             for (int j = 1; j <= horseCount; j++) {
                 String key = color + j;
-                Image horseImage = horseImages.get(key);
-                if (horseImage != null) {
-                    ImageView horseView = new ImageView(horseImage);
-                    horseView.setFitWidth(40);
-                    horseView.setFitHeight(40);
+                Image scoreHorse = scoreHorseImages.get(key);
+                if (scoreHorse != null) {
+                    ImageView scorehorseView = new ImageView(scoreHorse);
+                    scorehorseView.setFitWidth(40);
+                    scorehorseView.setFitHeight(40);
 
                     double horseX = playerHorsePosition.getX() + (j-1) * 34;
                     double horseY = playerHorsePosition.getY();
 
 //                    AnchorPane.setLeftAnchor(horseView, horseX);
 //                    AnchorPane.setTopAnchor(horseView, horseY);
-                    horseView.setLayoutX(horseX);
-                    horseView.setLayoutY(horseY);
-                    this.getChildren().add(horseView);
+                    scorehorseView.setLayoutX(horseX);
+                    scorehorseView.setLayoutY(horseY);
 
-                    waitingHorseLabels.put(horseId, horseView);
+                    this.getChildren().add(scorehorseView);
+
+                    waitingHorseLabels.put(horseId, scorehorseView);
                     horseId++;
                 }
             }
@@ -327,9 +344,9 @@ public class GameView extends AnchorPane {
     public void scheduleNotifyingImage(YutResult result) {
         String imagePath;
         if (result == YutResult.YUT) {
-            imagePath = "image/윷 한번더.png";
+            imagePath = "/image/윷 한번더.png";
         } else {
-            imagePath = "image/모 한번더.png";
+            imagePath = "/image/모 한번더.png";
         }
 
         PauseTransition delayBeforeShow = new PauseTransition(Duration.seconds(1));
@@ -527,5 +544,20 @@ public class GameView extends AnchorPane {
 
     public Button getSpecialThrowButton() {
         return specialThrowButton;
+    }
+
+    public void showEventImage(String s) {
+        // 이미지 표시
+        Image image = new Image(getClass().getResourceAsStream(s));
+        eventNotifyingImageView.setImage(image);
+        eventNotifyingImageView.setVisible(true);
+
+        // 1.5초 후 이미지 제거
+        PauseTransition delay = new PauseTransition(Duration.millis(1500));
+        delay.setOnFinished(e -> {
+            eventNotifyingImageView.setImage(null);
+            eventNotifyingImageView.setVisible(false);
+        });
+        delay.play();
     }
 }

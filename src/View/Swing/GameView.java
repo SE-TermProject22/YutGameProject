@@ -58,7 +58,6 @@ public class GameView  extends JPanel {
 
     private void loadImages() {
         horseImages.clear();
-
         scoreHorseImages.clear();
 
         String[] colors = {"red", "blue", "yellow", "green"};
