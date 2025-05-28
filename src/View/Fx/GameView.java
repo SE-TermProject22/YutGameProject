@@ -354,6 +354,9 @@ public class GameView extends AnchorPane {
             notifyingImage = new Image(getClass().getResourceAsStream(imagePath));
             notifyingImageView.setImage(notifyingImage);
 
+            this.getChildren().remove(notifyingImageView);
+            this.getChildren().add(notifyingImageView);
+
             PauseTransition delayBeforeClear = new PauseTransition(Duration.seconds(1.1));
             delayBeforeClear.setOnFinished(e -> {
                 notifyingImage = null;
@@ -552,11 +555,15 @@ public class GameView extends AnchorPane {
         eventNotifyingImageView.setImage(image);
         eventNotifyingImageView.setVisible(true);
 
+        this.getChildren().remove(eventNotifyingImageView);
+        this.getChildren().add(eventNotifyingImageView);
+
         // 1.5초 후 이미지 제거
         PauseTransition delay = new PauseTransition(Duration.millis(1500));
         delay.setOnFinished(e -> {
             eventNotifyingImageView.setImage(null);
             eventNotifyingImageView.setVisible(false);
+
         });
         delay.play();
     }
