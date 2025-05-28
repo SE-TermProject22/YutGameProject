@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.util.Objects;
+
 public class EndView extends AnchorPane {
     private AnchorPane anchorRoot;
     private AnchorPane boardPane;
@@ -44,13 +46,25 @@ public class EndView extends AnchorPane {
     }
 
     private void loadImages() {
-        endBackground = new Image(getClass().getResourceAsStream("/image/종료 화면.png"));
-        for (int i = 0; i < 4; i++) {
-            winnerImages[i] = new Image(getClass().getResourceAsStream("/image/Winner" + (i + 1) + ".png"));
+        try {
+            endBackground = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/종료 화면.png")));
+            for (int i = 0; i < 4; i++) {
+                winnerImages[i] = new Image(getClass().getResourceAsStream("/image/Winner" + (i + 1) + ".png"));
+            }
+        } catch (Exception e) {
+            System.err.println("이미지 로드 실패: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private Button createButton(String imagePath, double x, double y) {
+//    private void loadImages() {
+//        endBackground = new Image(getClass().getResourceAsStream("/image/종료 화면.png"));
+//        for (int i = 0; i < 4; i++) {
+//            winnerImages[i] = new Image(getClass().getResourceAsStream("/image/Winner" + (i + 1) + ".png"));
+//        }
+//    }
+
+    private Button createButton(String imagePath) {
         Image image = new Image(getClass().getResourceAsStream(imagePath));
         ImageView imageView = new ImageView(image);
 
@@ -60,23 +74,31 @@ public class EndView extends AnchorPane {
         Button button = new Button("", imageView);
         button.setStyle(
                 "-fx-background-color: transparent;" +
-                        "-fx-border-color: transparnet;" +
+                        "-fx-border-color: transparent;" +
                         "-fx-focus-color: transparent;" +
                         "-fx-faint-focus-color: transparent;"
         );
 
-        AnchorPane.setLeftAnchor(button, x);
-        AnchorPane.setTopAnchor(button, y);
+//        AnchorPane.setLeftAnchor(button, x);
+//        AnchorPane.setTopAnchor(button, y);
 
         return button;
     }
 
     private void initUI() {
         // 버튼 생성 및 이미지 설정
-        restartButton = createButton("/image/재시작버튼.png", 573, 84);
-        exitButton = createButton("/image/종료버튼.png", 353, 84);
+        restartButton = createButton("/image/재시작버튼.png");
+        AnchorPane.setLeftAnchor(restartButton, 573.0);
+        AnchorPane.setTopAnchor(restartButton, 84.0);
+        anchorRoot.getChildren().add(restartButton);
 
-        anchorRoot.getChildren().addAll(restartButton, exitButton);
+        exitButton = createButton("/image/종료버튼.png");
+        AnchorPane.setLeftAnchor(exitButton, 353.0);
+        AnchorPane.setTopAnchor(exitButton, 84.0);
+        anchorRoot.getChildren().add(exitButton);
+
+        this.getChildren().add(anchorRoot);
+        //anchorRoot.getChildren().addAll(restartButton, exitButton);
     }
 
     public void addRestartButtonListener(EventHandler<ActionEvent> handler) {

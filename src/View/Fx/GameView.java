@@ -560,4 +560,18 @@ public class GameView extends AnchorPane {
         });
         delay.play();
     }
+
+    // 테스트 버튼
+    private Button testEndButton = new Button("테스트 종료");
+
+    public void addTestEndButton() {
+        testEndButton.setLayoutX(850);  // 원하는 위치
+        testEndButton.setLayoutY(50);
+        this.getChildren().add(testEndButton);
+    }
+
+    public void setTestEndButtonListener(EventHandler<ActionEvent> handler) {
+        testEndButton.setOnAction(handler);
+    }
+
 }

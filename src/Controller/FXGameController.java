@@ -138,6 +138,18 @@ public class FXGameController {
                 move();
             });
         });
+
+        // EndView를 만든 쪽 (예: MainFX 또는 Controller)에서
+        endView.addRestartButtonListener(e -> {
+            System.out.println("🔁 재시작 버튼 눌림");
+            restartGame();
+        });
+
+        endView.addExitButtonListener(e -> {
+            System.out.println("❌ 종료 버튼 눌림");
+            Platform.exit(); // 또는 System.exit(0);
+        });
+
     }
 
     private void startGame() {
@@ -190,6 +202,17 @@ public class FXGameController {
         gameView.displayHorses(selectedColors, playerCount, horseCount);
 
         setState(GameState.GAME_PLAY);
+
+        // startGame() 내부 또는 move() 이후
+        gameView.addTestEndButton();  // 버튼 생성
+        gameView.setTestEndButtonListener(e -> {
+            System.out.println("💡 테스트 종료 버튼 클릭됨");
+            endView.setWinner(currentPlayer.id + 1);  // 예시로 현재 플레이어를 승자로 설정
+            Scene endscene = gameView.getScene();
+            if (endscene != null) {
+                endscene.setRoot(endView);
+            }
+        });
     }
 
     private void setState(GameState newState) {
@@ -233,23 +256,45 @@ public class FXGameController {
                     gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
                     // 4. 도착 처리
+//
                     if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished) {
-                        selectedHorse.state = false;
-                        selectedHorse.isFinished = true;
+                        System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
+
                         gameView.setHorseToGray(selectedHorse.id);
+                        selectedHorse.state = false;
                         gameView.setHorseInvisible(selectedHorse.id);
 
-                        currentPlayer.score++;
+                        int gainedScore = 1;
+
+                        // 업힌 말까지 점수 계산
+                        if (selectedHorse instanceof DoubledHorse dh) {
+                            gainedScore = dh.getCarriedHorses().size() + 1;
+                            for (Horse h : dh.getCarriedHorses()) {
+                                h.state = false;
+                                gameView.setHorseInvisible(h.id);
+                            }
+                        }
+
+                        currentPlayer.horseList.remove(selectedHorse);
+                        currentPlayer.score += gainedScore;
 
                         if (currentPlayer.score >= horseCount) {
-                            System.out.println("🎉 플레이어 " + (currentPlayer.id + 1) + " 승리!");
+                            System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
                             endView.setWinner(currentPlayer.id + 1);
+
                             setState(GameState.GAME_OVER);
                             gameView.setVisible(false);
-                            endView.setVisible(true);
+//                            endView.setVisible(true);
+
+                            Scene scene = gameView.getScene();  // GameView로부터 Scene을 받아와야 함
+                            if (scene != null) {
+                                scene.setRoot(endView);  // setVisible이 아니라 setRoot로 교체
+                            }
+
                             return;
                         }
                     }
+
 
                     // 5. 잡기 / 업기 처리
                     for (Horse other : horses) {
@@ -295,6 +340,10 @@ public class FXGameController {
             });
         });
     }
+
+    private void restartGame() {
+    }
+
 
 }
 
