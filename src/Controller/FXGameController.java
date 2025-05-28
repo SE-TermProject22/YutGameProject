@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.event.ActionEvent;
@@ -341,7 +342,34 @@ public class FXGameController {
         });
     }
 
+    // 게임 데이터를 초기화하는 메서드
+    private void resetGame() {
+        currentPlayer = null;
+        players.clear();
+        horses.clear();
+        horseCount = 0;
+        playerCount = 0;
+        throwState = true;
+        yutList.clear();
+        turn = 0;
+
+        // 뷰 초기화
+        endView.clearBoard();
+        endView.clearHorses();
+        endView.clearBoard();   // EndView의 보드 초기화
+        endView.clearHorses();  // EndView의 말 초기화
+        //endView.setWinner(currentPlayer.id);   // 초기값으로 설정 (1번 플레이어로 설정)
+    }
+
+
     private void restartGame() {
+        resetGame();
+        //gameView.resetView(); --> 이거 gameview에서 해야됨
+        setState(GameState.START_SCREEN);
+
+        Scene startScene = new Scene(startView);
+        Stage primaryStage = (Stage) endView.getScene().getWindow();
+        primaryStage.setScene(startScene);
     }
 
 
