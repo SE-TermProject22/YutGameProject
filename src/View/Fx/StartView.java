@@ -1,7 +1,5 @@
 package View.Fx;
 
-
-
 import Controller.GameState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -89,6 +87,9 @@ public class StartView extends StackPane {
                         "-fx-padding: 0;" +
                         "-fx-opacity: 1;"
         );
+
+        button.setLayoutX(x);
+        button.setLayoutY(y);
 
         // 버튼 눌리는 효과 적용
         button.setOnMousePressed(e -> imageView.setOpacity(0.7));
@@ -247,7 +248,7 @@ public class StartView extends StackPane {
             btn.setStyle("");
         }
 
-        // 말 선택 버튼들의 선택 상태만 해제 (배경 스타일은 유지)
+//         말 선택 버튼들의 선택 상태만 해제 (배경 스타일은 유지)
         for (Map.Entry<String, Button> entry : horseButtons.entrySet()) {
             Button button = entry.getValue();
 
@@ -267,5 +268,4 @@ public class StartView extends StackPane {
 
         setState(GameState.START_SCREEN);
     }
-
 }

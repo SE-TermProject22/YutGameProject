@@ -48,10 +48,7 @@ public class GameView extends AnchorPane {
 
     private ImageView eventNotifyingImageView;
 
-
-
     public GameView() {
-        //setPrefSize(1200, 700);  // 패널 크기
         loadImages();
         initUI();
     }
@@ -114,10 +111,6 @@ public class GameView extends AnchorPane {
                         "-fx-focus-color: transparent;" +
                         "-fx-faint-focus-color: transparent;"
         );
-
-//        AnchorPane.setLeftAnchor(button, x);
-//        AnchorPane.setTopAnchor(button, y);
-
         return button;
     }
 
@@ -173,8 +166,6 @@ public class GameView extends AnchorPane {
     }
 
     public void displayPlayers(int playerCount) {
-//        AnchorPane anchor = new AnchorPane();
-
         Point2D[] playerPositions = {
                 new Point2D(692, 502),
                 new Point2D(898, 502),
@@ -189,7 +180,6 @@ public class GameView extends AnchorPane {
 
             AnchorPane.setLeftAnchor(playerView, pos.getX());
             AnchorPane.setTopAnchor(playerView, pos.getY());
-//            anchor.getChildren().add(playerView);
 
             this.getChildren().add(playerView);
 
@@ -219,8 +209,6 @@ public class GameView extends AnchorPane {
                     double horseX = playerHorsePosition.getX() + (j-1) * 34;
                     double horseY = playerHorsePosition.getY();
 
-//                    AnchorPane.setLeftAnchor(horseView, horseX);
-//                    AnchorPane.setTopAnchor(horseView, horseY);
                     scorehorseView.setLayoutX(horseX);
                     scorehorseView.setLayoutY(horseY);
 
@@ -248,10 +236,6 @@ public class GameView extends AnchorPane {
 
                     horseView.setLayoutX(0);
                     horseView.setLayoutY(0);
-
-
-//                    AnchorPane.setLeftAnchor(horseView, 0.0);
-//                    AnchorPane.setTopAnchor(horseView, 0.0);
 
                     horseView.setVisible(false);
                     horseComponents.put(idCounter, horseView);
@@ -487,7 +471,6 @@ public class GameView extends AnchorPane {
             x += image.getWidth() + 20;  // 버튼 간 간격 조정
         }
 
-
         Scene scene = new Scene(root, 665, 298);
         scene.setFill(null);
 
@@ -536,7 +519,6 @@ public class GameView extends AnchorPane {
             root.getChildren().add(btn);
             x += image.getWidth() + 20;  // 버튼 간 간격 조정
         }
-
 
         Scene scene = new Scene(root, 665, 298);
         scene.setFill(null);

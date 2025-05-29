@@ -85,6 +85,7 @@ public class GameView  extends JPanel {
                 }
             }
         }
+
         // 윷 던지는 과정 animation 과정들 사진
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
