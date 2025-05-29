@@ -238,8 +238,8 @@ public class StartView extends StackPane {
         selectedColors.clear();
         selectedBoard = null;
 
-        playerCountBox.getSelectionModel().select(0);
-        horseCountBox.getSelectionModel().select(0);
+        playerCountBox.getSelectionModel().clearSelection();
+        horseCountBox.getSelectionModel().clearSelection();
 
         for (Button btn : horseButtons.values()) {
             btn.setDisable(false);
