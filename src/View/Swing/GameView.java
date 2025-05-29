@@ -30,12 +30,13 @@ public class GameView  extends JPanel {
 
     private List<Image> yutImages;
     private List<Image> resultImages;
-    private Image notifyingImage;
 
     private Timer animationTimer;
     private int yutIndex;
 
-    private Image eventNotifyingImage;
+    private JLabel notifyingImage;
+    private JLabel eventNotifyingImage;
+
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
     private int bdouble = 0;
     private int ydouble = 0;
@@ -211,7 +212,6 @@ public class GameView  extends JPanel {
                 new Point(682, 598),
                 new Point(888, 598),
         };
-
 
         int horseId = 0;
 
@@ -467,20 +467,38 @@ public class GameView  extends JPanel {
             imagePath = "/image/윷 한번더.png";
         else
             imagePath = "/image/모 한번더.png";
-        //String imagePath = result == YutResult.YUT ? "/image/윷 한번더.png" : "/image/모 한번더.png";
 
-        Timer notifyingTimer = new Timer();
-        notifyingTimer.schedule(new TimerTask() {
+        if (notifyingImage != null) {
+            remove(notifyingImage);
+            notifyingImage = null;
+            revalidate();
+            repaint();
+        }
+
+        new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                notifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
-                repaint();
+                SwingUtilities.invokeLater(() -> {
+                    notifyingImage = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
+                    notifyingImage.setBounds(291, 294, 519, 113);
+                    add(notifyingImage);
+                    setComponentZOrder(notifyingImage, 0);
+
+                    revalidate();
+                    repaint();
+                });
 
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        notifyingImage = null;
-                        repaint();
+                        SwingUtilities.invokeLater(() -> {
+                            if (notifyingImage != null) {
+                                remove(notifyingImage);
+                                notifyingImage = null;
+                                revalidate();
+                                repaint();
+                            }
+                        });
                     }
                 }, 1100); //1.1초 뒤에 사라지기
             }
@@ -540,15 +558,6 @@ public class GameView  extends JPanel {
             if (horseImage != null && position != null) {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
-        }
-
-        if (notifyingImage != null) {
-            g.drawImage(notifyingImage, 291, 294, null);
-        }
-
-        //잡기/업기 창 이미지
-        if (eventNotifyingImage != null) {
-            g.drawImage(eventNotifyingImage, 291, 294, null);
         }
     }
 
@@ -754,35 +763,50 @@ public class GameView  extends JPanel {
 
     //잡기/업기 이미지 창
     public void showEventImage(String imagePath) {
-        // 1. 이미지를 즉시 로드하고 보여줌
-        eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
-        repaint(); // 화면 갱신
+        if (eventNotifyingImage != null) {
+            remove(eventNotifyingImage);
+            eventNotifyingImage = null;
+            revalidate();
+            repaint();
+        }
+
+        eventNotifyingImage = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
+        eventNotifyingImage.setBounds(291, 294, 519, 113);
+        add(eventNotifyingImage);
+        setComponentZOrder(eventNotifyingImage, 0);
+
+        revalidate();
+        repaint();
 
         // 2. 1.5초 후에 이미지를 없앰
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                eventNotifyingImage = null;
-                repaint(); // 이미지 제거 후 화면 갱신
+                if (eventNotifyingImage != null) {
+                    remove(eventNotifyingImage);
+                    eventNotifyingImage = null;
+                    revalidate();
+                    repaint();
+                }
             }
         }, 1500); // ← 이게 유일한 타이머 (제거 타이머)
     }
 
 //    public void showEventImage(String imagePath) {
+//        // 1. 이미지를 즉시 로드하고 보여줌
 //        eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
+//        repaint(); // 화면 갱신
 //
-//        //repaint();
-//
+//        // 2. 1.5초 후에 이미지를 없앰
 //        new Timer().schedule(new TimerTask() {
 //            @Override
 //            public void run() {
 //                eventNotifyingImage = null;
-//                //repaint();
+//                repaint(); // 이미지 제거 후 화면 갱신
 //            }
-//        }, 1500);
-//
-//        repaint();
+//        }, 1500); // ← 이게 유일한 타이머 (제거 타이머)
 //    }
+
 
 //    public void showEventImage(String imagePath) {
 //        JLabel eventLabel = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
