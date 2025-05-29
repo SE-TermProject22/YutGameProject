@@ -45,14 +45,6 @@ public class GameView  extends JPanel {
 
     private int bnum, ynum, rnum, gnum;
 
-
-//    //스코어 저장할 리스트
-//    private List<JLabel> scoreLabels = new ArrayList<>();
-
-
-
-    // private Player currentPlayer;
-
     public GameView() {
         setLayout(null);
         horsePositions = new HashMap<>();
@@ -105,20 +97,6 @@ public class GameView  extends JPanel {
                 resultImages.add(resultImg);
             }
         }
-    }
-
-    // finish처리 된 말 색깔 회색으로 변경
-    // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
-    public void setHorseToGray(int horse_id){
-        JLabel horseLabel = waitingHorseLabels.get(horse_id);
-        if (horseLabel != null) {
-            Image grayImage = new ImageIcon("image/끝난 말.png").getImage();
-            horseLabel.setIcon(new ImageIcon(grayImage));
-            repaint();
-        } else {
-            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
-        }
-        repaint();
     }
 
     //버튼 생성 메서드
@@ -186,24 +164,9 @@ public class GameView  extends JPanel {
             playerLabel.setBounds(pos.x, pos.y, playerIcon.getIconWidth(), playerIcon.getIconHeight());
 
             add(playerLabel);
-
-//            // 점수 Label 생성 및 오른쪽에 배치
-//            JLabel scoreLabel = new JLabel("점수: 0");
-//            scoreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-//            scoreLabel.setForeground(Color.WHITE); // 필요 시 색상 조절
-//            scoreLabel.setBounds(pos.x + playerIcon.getIconWidth() + 10, pos.y + 10, 80, 20);
-//            add(scoreLabel);
-//            scoreLabels.add(scoreLabel);
         }
         repaint();
     }
-
-//    // index: 플레이어 ID, score: 새 점수
-//    public void updatePlayerScore(int index, int score) {
-//        if (index >= 0 && index < scoreLabels.size()) {
-//            scoreLabels.get(index).setText("점수: " + score);
-//        }
-//    }
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
@@ -242,36 +205,21 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
-
-
-
-    /*
-    //말 위치 초기화 메서드
-    public void placeHorses(List<String> colors) {
-        for (String color : colors) {
-            //setHorsePosition(color, , );
+    // finish처리 된 말 색깔 회색으로 변경
+    // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
+    public void setHorseToGray(int horse_id){
+        JLabel horseLabel = waitingHorseLabels.get(horse_id);
+        if (horseLabel != null) {
+            Image grayImage = new ImageIcon("image/끝난 말.png").getImage();
+            horseLabel.setIcon(new ImageIcon(grayImage));
+            repaint();
+        } else {
+            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
         }
         repaint();
     }
-    */
-    /*
-    // 처음에 horses들 다 만들기
-    public void initHorses(List<String> colors){
-        String key = color + j;
-        Image horseImage = horseImages.get(key);
-        if (horseImage != null) {
-            JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
 
-            int horseX = playerHorsePosition.x + (j - 1) * 34;
-            int horseY = playerHorsePosition.y;
-
-            horseLabel.setBounds(horseX, horseY, 40, 40);
-            add(horseLabel);
-        }
-    }
-    */
-
+    // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
 
     // 처음 말들을 다 만들기
     public void initHorses(List<String> colors, int horseCount) {
@@ -283,19 +231,6 @@ public class GameView  extends JPanel {
                 Image horseImage = horseImages.get(key);
                 if (horseImage != null) {
                     JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
-
-                    // 예시 초기 위치: 플레이어 말 대기 구역
-                    // 초기 위치 관계 없음 - 디버깅
-                    /*
-                    int horseX = 50 + j * 34;  // X좌표는 적당히 간격 조정
-                    int horseY = color.equals("RED") ? 400 : 450; // 플레이어 색상별 초기 Y좌표
-                    switch(color){
-                        case "red": horseY = 400; break;
-                        case "blue": horseY = 450; break;
-                        case "green": horseY = 550; break;
-                        case "yellow": horseY = 600; break;
-                    }
-                    */
 
                     // horseLabel.setBounds(horseX, horseY, 40, 40); // 디버깅
                     horseLabel.setBounds(0, 0, 40, 40);
@@ -310,7 +245,6 @@ public class GameView  extends JPanel {
         }
         repaint();
     }
-
 
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
     public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
@@ -348,8 +282,6 @@ public class GameView  extends JPanel {
         add(horseLabel);
         repaint();
     }
-
-
 
     // horse를 remove하는 함수 - 필요할까? 일단은
 
@@ -400,6 +332,11 @@ public class GameView  extends JPanel {
         repaint();
     }
 
+    public void setCurrentImage(Image image) {
+        currentImage = image;
+        repaint();
+    }
+
     // 윷 관련
     public void startYutAnimation(YutResult result) {
         yutIndex = 0;
@@ -424,39 +361,33 @@ public class GameView  extends JPanel {
         }, 0, 300);
     }
 
+    // Yut 값에 맞는 이미지 경로를 반환하는 메서드
+    private Image getResultImagePathForYutValue(YutResult result) {
+        switch (result) {
+            case YutResult.DO:
+                return resultImages.get(0);
+            case YutResult.GAE:
+                return resultImages.get(1);
+            case YutResult.GEOL:
+                return resultImages.get(2);
+            case YutResult.YUT:
+                return resultImages.get(3);
+            case YutResult.MO:
+                return resultImages.get(4);
+            case YutResult.BackDo:
+                return resultImages.get(5);
+            default:
+                return null;
+        }
+    }
+
     private void showResultImage(YutResult result) {
-//        Random random = new Random();
-//        int index = random.nextInt(resultImages.size());
-//        setCurrentImage(resultImages.get(index));
-
-        // int yutResult = currentPlayer.throwYut();
-
-
-        // yutResult에 맞는 이미지 경로를 얻고, 그 경로로 Image 객체를 만듬
-//        String resultImagePath = getResultImagePathForYutValue(yutResult);
-//
-//        // resultImagePath를 ImageIcon으로 변환하고 Image를 얻음
-//        ImageIcon imageIcon = new ImageIcon(resultImagePath);
-//        Image resultImage = imageIcon.getImage();
-//
-//        // 화면에 현재 이미지 표시
-//        setCurrentImage(resultImage);
+       // 화면에 현재 이미지 표시
         Image resultImage = getResultImagePathForYutValue(result);
 
         if (resultImage != null) {
             setCurrentImage(resultImage);
         }
-        /*
-        if (result == YutResult.YUT) {
-            scheduleNotifyingImage("image/윷 한번더.png");
-        } else if (result == YutResult.MO) {
-            scheduleNotifyingImage("image/모 한번더.png");
-        } else {
-            notifyingImage = null;
-            repaint();
-        }
-
-        */
     }
 
     //notifyingImage 출력 시간 제어
@@ -500,76 +431,48 @@ public class GameView  extends JPanel {
                             }
                         });
                     }
-                }, 1100); //1.1초 뒤에 사라지기
+                }, 1700); //1.1초 뒤에 사라지기
             }
-        }, 1000); //윷 결과 출력되고 1초 뒤에 출력
+        }, 1600); //윷 결과 출력되고 1초 뒤에 출력
     }
 
-    // Yut 값에 맞는 이미지 경로를 반환하는 메서드
-    private Image getResultImagePathForYutValue(YutResult result) {
-        switch (result) {
-            case YutResult.DO:
-                return resultImages.get(0);
-            case YutResult.GAE:
-                return resultImages.get(1);
-            case YutResult.GEOL:
-                return resultImages.get(2);
-            case YutResult.YUT:
-                return resultImages.get(3);
-            case YutResult.MO:
-                return resultImages.get(4);
-            case YutResult.BackDo:
-                return resultImages.get(5);
-            default:
-                return null;
-        }
-    }
-
-    public void addThrowButtonListener(ActionListener listener) {
-        throwButton.addActionListener(listener);
-    }
-
-    public void setCurrentImage(Image image) {
-        currentImage = image;
-        repaint();
-    }
-
-    /*
-    public void setPlayer(Player player) {
-        this.currentPlayer = player;
-    }
-    */
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        if (board != null) {
-            g.drawImage(board, 0, 0, getWidth(), getHeight(), null);
+    //잡기/업기 이미지 창
+    public void showEventImage(String imagePath) {
+        if (eventNotifyingImage != null) {
+            remove(eventNotifyingImage);
+            eventNotifyingImage = null;
+            revalidate();
+            repaint();
         }
 
-        if (currentImage != null) {
-            g.drawImage(currentImage, 670, 40, null);
-        }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(() -> {
+                    eventNotifyingImage = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
+                    eventNotifyingImage.setBounds(291, 294, 519, 113);
+                    add(eventNotifyingImage);
+                    setComponentZOrder(eventNotifyingImage, 0);
 
-        for (String color : horsePositions.keySet()) {
-            Image horseImage = horseImages.get(color);
-            Point position = horsePositions.get(color);
+                    revalidate();
+                    repaint();
+                });
 
-            if (horseImage != null && position != null) {
-                g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        SwingUtilities.invokeLater(() -> {
+                            if (eventNotifyingImage != null) {
+                                remove(eventNotifyingImage);
+                                eventNotifyingImage = null;
+                                revalidate();
+                                repaint();
+                            }
+                        });
+                    }
+                }, 800);
             }
-        }
-    }
-
-    private String getKoreanName(YutResult result) {
-        return switch (result) {
-            case DO -> "도";
-            case GAE -> "개";
-            case GEOL -> "걸";
-            case YUT -> "윷";
-            case MO -> "모";
-            case BackDo -> "백도";
-        };
+        }, 400);
     }
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
@@ -704,11 +607,6 @@ public class GameView  extends JPanel {
         dialog.setVisible(true);
     }
 
-    public void addSpecialThrowListener(ActionListener listener) {
-        specialThrowButton.addActionListener(listener);
-    }
-
-
     //지정윷던지기 창 구현
     public void showFixedYutChoiceDialog(Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "윷 선택", true);
@@ -757,79 +655,49 @@ public class GameView  extends JPanel {
         dialog.setVisible(true);
     }
 
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (board != null) {
+            g.drawImage(board, 0, 0, getWidth(), getHeight(), null);
+        }
+
+        if (currentImage != null) {
+            g.drawImage(currentImage, 670, 40, null);
+        }
+
+        for (String color : horsePositions.keySet()) {
+            Image horseImage = horseImages.get(color);
+            Point position = horsePositions.get(color);
+
+            if (horseImage != null && position != null) {
+                g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
+            }
+        }
+    }
+
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
+    }
+
+    public void addThrowButtonListener(ActionListener listener) {
+        throwButton.addActionListener(listener);
+    }
+
+    public void addSpecialThrowListener(ActionListener listener) {
+        specialThrowButton.addActionListener(listener);
+    }
+
     public JButton getSpecialThrowButton() {
         return specialThrowButton;
     }
-
-    //잡기/업기 이미지 창
-    public void showEventImage(String imagePath) {
-        if (eventNotifyingImage != null) {
-            remove(eventNotifyingImage);
-            eventNotifyingImage = null;
-            revalidate();
-            repaint();
-        }
-
-        eventNotifyingImage = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
-        eventNotifyingImage.setBounds(291, 294, 519, 113);
-        add(eventNotifyingImage);
-        setComponentZOrder(eventNotifyingImage, 0);
-
-        revalidate();
-        repaint();
-
-        // 2. 1.5초 후에 이미지를 없앰
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (eventNotifyingImage != null) {
-                    remove(eventNotifyingImage);
-                    eventNotifyingImage = null;
-                    revalidate();
-                    repaint();
-                }
-            }
-        }, 1500); // ← 이게 유일한 타이머 (제거 타이머)
-    }
-
-//    public void showEventImage(String imagePath) {
-//        // 1. 이미지를 즉시 로드하고 보여줌
-//        eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
-//        repaint(); // 화면 갱신
-//
-//        // 2. 1.5초 후에 이미지를 없앰
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                eventNotifyingImage = null;
-//                repaint(); // 이미지 제거 후 화면 갱신
-//            }
-//        }, 1500); // ← 이게 유일한 타이머 (제거 타이머)
-//    }
-
-
-//    public void showEventImage(String imagePath) {
-//        JLabel eventLabel = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
-//        eventLabel.setBounds(291, 294, 200, 100); // 이미지 위치와 크기 조정 (원래 위치에 맞게)
-//
-//        this.setLayout(null); // 절대 위치 배치
-//        this.add(eventLabel);
-//        this.setComponentZOrder(eventLabel, 0); // 맨 위로
-//
-//        this.repaint();
-//
-//        // 1.5초 뒤 제거
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                SwingUtilities.invokeLater(() -> {
-//                    remove(eventLabel);
-//                    repaint();
-//                });
-//            }
-//        }, 1500);
-//    }
-
 
     public void resetView() {
 
@@ -854,5 +722,4 @@ public class GameView  extends JPanel {
 
         repaint();
     }
-
 }
