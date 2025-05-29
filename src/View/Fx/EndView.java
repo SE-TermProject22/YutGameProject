@@ -33,14 +33,12 @@ public class EndView extends AnchorPane {
         loadImages();
 
         anchorRoot = new AnchorPane();
-        boardPane = new AnchorPane();
-        horsePane = new AnchorPane();
 
         background = new ImageView();
         winnerView = new ImageView();
         winnerView.setVisible(false);
 
-        anchorRoot.getChildren().addAll(background, winnerView, boardPane, horsePane);
+        anchorRoot.getChildren().addAll(background, winnerView);
 
         initUI();
     }
@@ -114,22 +112,14 @@ public class EndView extends AnchorPane {
         updateEndView(endBackground, winnerImages, winnerId);
     }
 
-    public void clearBoard() {
-        boardPane.getChildren().clear();
-    }
-
-    public void clearHorses() {
-        horsePane.getChildren().clear();
-    }
-
     public void updateEndView(Image endBackground, Image[] winnerImages, int winnerId) {
         background.setImage(endBackground);
 
         if (winnerId >= 1 && winnerId <= winnerImages.length) {
             winnerView.setImage(winnerImages[winnerId-1]);
             winnerView.setVisible(true);
-            AnchorPane.setLeftAnchor(winnerView, 516.0);
-            AnchorPane.setTopAnchor(winnerView, 583.0);
+            AnchorPane.setLeftAnchor(winnerView, 440.0);
+            AnchorPane.setTopAnchor(winnerView, 455.0);
         } else {
             winnerView.setVisible(false);
         }

@@ -48,8 +48,10 @@ public class GameView extends AnchorPane {
 
     private ImageView eventNotifyingImageView;
 
+
+
     public GameView() {
-        setPrefSize(1200, 700);  // 패널 크기
+        //setPrefSize(1200, 700);  // 패널 크기
         loadImages();
         initUI();
     }
@@ -73,9 +75,9 @@ public class GameView extends AnchorPane {
                 if (scoreImg != null && !scoreImg.isError()) {
                     scoreHorseImages.put(key, scoreImg);
                 }
-
             }
         }
+
         yutImages = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             Image image = new Image(getClass().getResourceAsStream("/image/yut/yut" + i + ".png"));
@@ -213,8 +215,6 @@ public class GameView extends AnchorPane {
                 Image scoreHorse = scoreHorseImages.get(key);
                 if (scoreHorse != null) {
                     ImageView scorehorseView = new ImageView(scoreHorse);
-                    scorehorseView.setFitWidth(40);
-                    scorehorseView.setFitHeight(40);
 
                     double horseX = playerHorsePosition.getX() + (j-1) * 34;
                     double horseY = playerHorsePosition.getY();
@@ -349,10 +349,13 @@ public class GameView extends AnchorPane {
             imagePath = "/image/모 한번더.png";
         }
 
-        PauseTransition delayBeforeShow = new PauseTransition(Duration.seconds(1));
+        PauseTransition delayBeforeShow = new PauseTransition(Duration.seconds(2.3));
         delayBeforeShow.setOnFinished(event -> {
             notifyingImage = new Image(getClass().getResourceAsStream(imagePath));
             notifyingImageView.setImage(notifyingImage);
+
+            this.getChildren().remove(notifyingImageView);
+            this.getChildren().add(notifyingImageView);
 
             PauseTransition delayBeforeClear = new PauseTransition(Duration.seconds(1.1));
             delayBeforeClear.setOnFinished(e -> {
@@ -552,13 +555,29 @@ public class GameView extends AnchorPane {
         eventNotifyingImageView.setImage(image);
         eventNotifyingImageView.setVisible(true);
 
+        this.getChildren().remove(eventNotifyingImageView);
+        this.getChildren().add(eventNotifyingImageView);
+
         // 1.5초 후 이미지 제거
         PauseTransition delay = new PauseTransition(Duration.millis(1500));
         delay.setOnFinished(e -> {
             eventNotifyingImageView.setImage(null);
             eventNotifyingImageView.setVisible(false);
+
         });
         delay.play();
+    }
+
+    public void clearHorses() {
+        for (ImageView horseView : horseComponents.values()) {
+            this.getChildren().remove(horseView);
+        }
+        horseComponents.clear();
+
+        for (ImageView waitingHorseView : waitingHorseLabels.values()) {
+            this.getChildren().remove(waitingHorseView);
+        }
+        waitingHorseLabels.clear();
     }
 
     // 테스트 버튼
