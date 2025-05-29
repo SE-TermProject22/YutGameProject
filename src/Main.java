@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String uiMode = "swing";
+        String uiMode = "fx";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();
@@ -44,7 +44,6 @@ public class Main {
             startView.setBounds(0, 0, 1100, 700);
             gameView.setBounds(0, 0, 1100, 700);
             endView.setBounds(0, 0, 1100, 700);
-
 
             frame.add(startView);
             frame.add(gameView);

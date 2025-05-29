@@ -149,17 +149,6 @@ public class GameView extends AnchorPane {
         this.getChildren().add(anchorRoot);
     }
 
-    private String getKoreanName(YutResult result) {
-        return switch (result) {
-            case DO -> "도";
-            case GAE -> "개";
-            case GEOL -> "걸";
-            case YUT -> "윷";
-            case MO -> "모";
-            case BackDo -> "백도";
-        };
-    }
-
     public void setBoardType(String boardType) {
         Image board = new Image(getClass().getResourceAsStream("/image/" + boardType + " board.png"));
         boardView.setImage(board);
@@ -318,6 +307,25 @@ public class GameView extends AnchorPane {
         animationTimeline.play();
     }
 
+    private Image getResultImagePathForYutValue(YutResult result) {
+        switch (result) {
+            case DO:
+                return resultImages.get(0);
+            case GAE:
+                return resultImages.get(1);
+            case GEOL:
+                return resultImages.get(2);
+            case YUT:
+                return resultImages.get(3);
+            case MO:
+                return resultImages.get(4);
+            case BackDo:
+                return resultImages.get(5);
+            default:
+                return null;
+        }
+    }
+
     private void showResultImage(YutResult result) {
         Image resultImage = getResultImagePathForYutValue(result);
         if (resultImage != null) {
@@ -351,35 +359,24 @@ public class GameView extends AnchorPane {
         delayBeforeShow.play();
     }
 
-    private Image getResultImagePathForYutValue(YutResult result) {
-        switch (result) {
-            case DO:
-                return resultImages.get(0);
-            case GAE:
-                return resultImages.get(1);
-            case GEOL:
-                return resultImages.get(2);
-            case YUT:
-                return resultImages.get(3);
-            case MO:
-                return resultImages.get(4);
-            case BackDo:
-                return resultImages.get(5);
-            default:
-                return null;
-        }
-    }
+    public void showEventImage(String s) {
+        PauseTransition delayBeforeShow = new PauseTransition(Duration.millis(500));
+        delayBeforeShow.setOnFinished(e -> {
+            Image image = new Image(getClass().getResourceAsStream(s));
+            eventNotifyingImageView.setImage(image);
+            eventNotifyingImageView.setVisible(true);
 
-    public void addThrowButtonListener(EventHandler<ActionEvent> handler) {
-        throwButton.setOnAction(handler);
-    }
+            this.getChildren().remove(eventNotifyingImageView);
+            this.getChildren().add(eventNotifyingImageView);
 
-    public void addSpecialThrowListener(EventHandler<ActionEvent> handler) {
-        specialThrowButton.setOnAction(handler);
-    }
-
-    public void setCurrentImage(Image image) {
-        currentImageView.setImage(image);
+            PauseTransition delayBeforeClear = new PauseTransition(Duration.millis(1100));
+            delayBeforeClear.setOnFinished(event -> {
+                eventNotifyingImageView.setImage(null);
+                eventNotifyingImageView.setVisible(false);
+            });
+            delayBeforeClear.play();
+        });
+        delayBeforeShow.play();
     }
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
@@ -527,27 +524,15 @@ public class GameView extends AnchorPane {
         dialog.showAndWait();
     }
 
-    public Button getSpecialThrowButton() {
-        return specialThrowButton;
-    }
-
-    public void showEventImage(String s) {
-        // 이미지 표시
-        Image image = new Image(getClass().getResourceAsStream(s));
-        eventNotifyingImageView.setImage(image);
-        eventNotifyingImageView.setVisible(true);
-
-        this.getChildren().remove(eventNotifyingImageView);
-        this.getChildren().add(eventNotifyingImageView);
-
-        // 1.5초 후 이미지 제거
-        PauseTransition delay = new PauseTransition(Duration.millis(1500));
-        delay.setOnFinished(e -> {
-            eventNotifyingImageView.setImage(null);
-            eventNotifyingImageView.setVisible(false);
-
-        });
-        delay.play();
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
     }
 
     public void clearHorses() {
@@ -562,6 +547,22 @@ public class GameView extends AnchorPane {
         waitingHorseLabels.clear();
     }
 
+    public void addThrowButtonListener(EventHandler<ActionEvent> handler) {
+        throwButton.setOnAction(handler);
+    }
+
+    public void addSpecialThrowListener(EventHandler<ActionEvent> handler) {
+        specialThrowButton.setOnAction(handler);
+    }
+
+    public void setCurrentImage(Image image) {
+        currentImageView.setImage(image);
+    }
+
+    public Button getSpecialThrowButton() {
+        return specialThrowButton;
+    }
+
     // 테스트 버튼
     private Button testEndButton = new Button("테스트 종료");
 
@@ -574,5 +575,4 @@ public class GameView extends AnchorPane {
     public void setTestEndButtonListener(EventHandler<ActionEvent> handler) {
         testEndButton.setOnAction(handler);
     }
-
 }
