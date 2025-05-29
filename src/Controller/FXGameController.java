@@ -41,6 +41,7 @@ public class FXGameController {
 
     // 업기 구현을 위한 initial_id
     private int d_init = 100;
+    private int doubleHorseOrderCounter = 0;
 
     private GameState currentState = GameState.START_SCREEN;
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
@@ -306,7 +307,7 @@ public class FXGameController {
                         int check = selectedHorse.checkSameNodeAndTeam(other);
 
                         if (check == 1) { // 업기
-                            DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
+                            DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other, doubleHorseOrderCounter++);
                             selectedHorse.isDoubled = true;
                             other.isDoubled = true;
                             currentPlayer.horseList.add(dh);

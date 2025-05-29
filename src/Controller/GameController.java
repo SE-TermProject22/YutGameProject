@@ -40,6 +40,7 @@ public class GameController {
 
     // 업기 구현을 위한 initial_id
     private int d_init = 100;
+    private int doubleHorseOrderCounter = 0;
 
     private JFrame frame;
 
@@ -254,8 +255,6 @@ public class GameController {
             return;
         }
 
-
-
         currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
         // gameView.setPlayer(currentPlayer);
 
@@ -380,7 +379,7 @@ public class GameController {
 
                                 // 같은 말 - 업기
                                 if (check == 1) {
-                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
+                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other, doubleHorseOrderCounter++);
 
                                     selectedHorse.isDoubled = true;
                                     other.isDoubled = true;
@@ -391,14 +390,14 @@ public class GameController {
                                     gameView.setHorseInvisible(selectedHorse.id);
                                     currentPlayer.horseList.add(dh);
 
-                                System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
-                                gameView.showEventImage("/image/업었다.png");
+                                    System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
+                                    gameView.showEventImage("/image/업었다.png");
 
                                     // TODO: DoubledHorse 처리 로직
                                     // break;
                                     return;
-
                                 }
+
                                 // 다른 말 - 잡기
                                 else if (check == 0) {
                                     System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
@@ -433,12 +432,8 @@ public class GameController {
                                 }
                             }
                         }
-
-
                     });
-
                 });
-
 
             // 윷 선택
             // YutResult result = gameView.selectYutResult(yutList);
@@ -490,7 +485,6 @@ public class GameController {
         throwState = true;
         turn++;
         currentPlayer = players.get(turn%playerCount);
-
     }
 /*
     // 게임 데이터를 초기화하는 메서드
@@ -539,7 +533,6 @@ public class GameController {
 
         frame.setVisible(false);
 
-
         // JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startView);
         frame.getContentPane().removeAll(); // 모든 컴포넌트 제거
         System.out.println("컴포넌트 수: " + frame.getContentPane().getComponentCount());
@@ -551,7 +544,6 @@ public class GameController {
         // StartView oldStartView = startView;
         // GameView oldGameView = gameView;
         // EndView oldEndView = endView;
-
 
         startView = new StartView();
         startView.setVisible(true);
@@ -585,7 +577,6 @@ public class GameController {
 
         initializeListeners();
         updateViewState();
-
     }
 }
 
