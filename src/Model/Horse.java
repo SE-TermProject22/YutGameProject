@@ -11,6 +11,8 @@ public class Horse {
     public boolean state = false;
     public boolean isDoubled = false;
     private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
+    // private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
+    // public boolean isFinished = false;
 
     // 생성자
     public Horse(int id, String color, Node currentNode) {
@@ -57,6 +59,7 @@ public class Horse {
 //                    HorseBackDoState = true; // 다음에 도~모가 나오면 Finish 처리
 //                }
             }
+
             return;
         }
 
@@ -85,5 +88,7 @@ public class Horse {
 //        }
 
     }
+
+
 
 }

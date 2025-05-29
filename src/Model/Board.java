@@ -28,7 +28,7 @@ public class Board {
 
     public void createNode_square(){
         nodes.add(new Node(0, 555, 560));
-        nodes.get(0).isFirstNode = true;
+        //nodes.get(0).isFirstNode = true;
         nodes.add(new Node(1, 555, 462));
         nodes.add(new Node(2, 555, 376));
         nodes.add(new Node(3, 555, 288));
@@ -59,6 +59,8 @@ public class Board {
         nodes.add(new Node(28, 401, 409));
         nodes.add(new Node(29, 474, 480));
         nodes.add(new Node(30, 555, 560));
+
+        // nodes.get(30).isLastNode = true;
 
         // EndNode
         nodes.add(new EndNode(31, 555, 560));
@@ -101,7 +103,7 @@ public class Board {
     // x,y 지시
     public void createNode_pentagon(){
         nodes.add(new Node(0, 67, 257));
-        nodes.get(0).isFirstNode = true;
+        // nodes.get(0).isFirstNode = true;
         nodes.add(new Node(1, 85, 314));
         nodes.add(new Node(2, 109, 380));
         nodes.add(new Node(3, 127, 439));
@@ -199,7 +201,7 @@ public class Board {
 
     public void createNode_Hexagon(){
         nodes.add(new Node(0, 52, 323));
-        nodes.get(0).isFirstNode = true;
+        // nodes.get(0).isFirstNode = true;
         nodes.add(new Node(1, 76, 376));
         nodes.add(new Node(2, 103, 423));
         nodes.add(new Node(3, 129, 466));

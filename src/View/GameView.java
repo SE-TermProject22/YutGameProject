@@ -59,6 +59,12 @@ public class GameView  extends JPanel {
     private Timer animationTimer;
     private int yutIndex;
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
+    public int bdouble = 0;
+    public int ydouble = 0;
+    public int rdouble = 0;
+    public int gdouble = 0;
+
+    private int bnum, ynum, rnum, gnum;
 
 
 //    //스코어 저장할 리스트
@@ -259,7 +265,33 @@ public class GameView  extends JPanel {
 
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
     public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개"+ ".png").getImage();
+        Image horseImage;
+        if (horseCount == 2) {
+            switch (color) {
+                case "blue":
+                    bdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "yellow":
+                    ydouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "green":
+                    gdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png").getImage();
+                    break;
+                case "red":
+                    rdouble++;
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png").getImage();
+                    break;
+                default:
+                    horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage();
+                    break;
+            }
+        } else {
+            horseImage = new ImageIcon("image/업힌 말/" + color + "/" + horseCount + "개" + ".png").getImage(); //fallback
+        }
+
         JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
         horseLabel.setBounds(x, y, 40, 40);
         horseLabel.setVisible(true); // 디버깅
@@ -494,7 +526,14 @@ public class GameView  extends JPanel {
         dialog.setVisible(true);
     }
 
-    public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {
+    public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {  // horses : selectedHorses, horseCount -> 찐 말의 개수 -> 게임 시작할 때
+        int bi = -1;
+        int bii = 0;
+
+        int ri = 0;
+        int yi = 0;
+        int gi = 0;
+
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
         addDialog(dialog);  // ✅ GameView에 등록 // 후에 팝업창 다 없애기위해
         dialog.setSize(665, 298);
@@ -524,9 +563,35 @@ public class GameView  extends JPanel {
                 imagePath = "image/선택 " + horse.color + (horse.id % horseCount+1) + ".png";
                 System.out.println(horse.id);
             }
-            else{
+            else {
                 // 업은 말 선택
-                imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";
+                if (((DoubledHorse)horse).horseCount == 2) {
+                    switch (horse.color) {
+                        case "blue" :
+                            bi++;
+                            //System.out.println("전"+ bdouble + "/" + bi);
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse) horse).horseCount - (bdouble + bi) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            // System.out.println("후"+ bdouble + "/" + bi);
+                            break;
+                        case "red" :
+                            ri++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(rdouble+ri) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            break;
+                        case "green" :
+                            gi++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(gdouble+gi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            break;
+                        case "yellow" :
+                            yi++;
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(ydouble+yi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            break;
+                        default :
+                            imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
+                            break;
+                    }
+                } else {
+                    imagePath = "image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개" + ".png";
+                }// 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
             }
             ImageIcon icon = new ImageIcon(imagePath);
 
