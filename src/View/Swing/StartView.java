@@ -184,21 +184,10 @@ public class StartView extends JPanel{
 
     //말을 누르면 선택 한 번 더 누르면 선택 취소
     public void toggleHorseSelection(String color) {
-        JButton btn = horseButtons.get(color);
-        Point p = horseButtonPositions.get(color); // 저장한 위치 불러오기
-
         if (selectedColors.contains(color)) {
             selectedColors.remove(color);  // 선택 해제
-            ImageIcon icon = new ImageIcon(getClass().getResource("/image/" + color + " 말.png"));
-            btn.setIcon(icon);
-            btn.setBounds(p.x, p.y, icon.getIconWidth(), icon.getIconHeight());
         } else if (selectedColors.size() < getPlayerCount()) {
             selectedColors.add(color);     // 선택 추가
-            ImageIcon icon = new ImageIcon(getClass().getResource("/image/말 선택됨/" + color + " 말 선택됨.png"));
-            btn.setIcon(icon);
-
-            // 버튼 사이즈를 이미지 크기와 일치시킴
-            btn.setSize(icon.getIconWidth(), icon.getIconHeight());
         }
     }
 
