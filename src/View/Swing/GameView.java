@@ -440,13 +440,13 @@ public class GameView  extends JPanel {
             @Override
             public void run() {
                 notifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
-                // repaint();
+                repaint();
 
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         notifyingImage = null;
-                        // repaint();
+                        repaint();
                     }
                 }, 1100); //1.1초 뒤에 사라지기
             }
@@ -499,10 +499,6 @@ public class GameView  extends JPanel {
             g.drawImage(currentImage, 670, 40, null);
         }
 
-        if (notifyingImage != null) {
-            g.drawImage(notifyingImage, 291, 294, null);
-        }
-
         for (String color : horsePositions.keySet()) {
             Image horseImage = horseImages.get(color);
             Point position = horsePositions.get(color);
@@ -510,6 +506,10 @@ public class GameView  extends JPanel {
             if (horseImage != null && position != null) {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
+        }
+
+        if (notifyingImage != null) {
+            g.drawImage(notifyingImage, 291, 294, null);
         }
 
         //잡기/업기 창 이미지
@@ -528,8 +528,6 @@ public class GameView  extends JPanel {
             case BackDo -> "백도";
         };
     }
-
-
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         JDialog dialog = new JDialog((JFrame) null, "결과 적용 선택", true);  // 모달창
@@ -689,18 +687,58 @@ public class GameView  extends JPanel {
 
     //잡기/업기 이미지 창
     public void showEventImage(String imagePath) {
+        // 1. 이미지를 즉시 로드하고 보여줌
         eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
+        repaint(); // 화면 갱신
 
+        // 2. 1.5초 후에 이미지를 없앰
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 eventNotifyingImage = null;
-                repaint();
+                repaint(); // 이미지 제거 후 화면 갱신
             }
-        }, 1500);
-
-        repaint();
+        }, 1500); // ← 이게 유일한 타이머 (제거 타이머)
     }
+
+//    public void showEventImage(String imagePath) {
+//        eventNotifyingImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
+//
+//        //repaint();
+//
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                eventNotifyingImage = null;
+//                //repaint();
+//            }
+//        }, 1500);
+//
+//        repaint();
+//    }
+
+//    public void showEventImage(String imagePath) {
+//        JLabel eventLabel = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
+//        eventLabel.setBounds(291, 294, 200, 100); // 이미지 위치와 크기 조정 (원래 위치에 맞게)
+//
+//        this.setLayout(null); // 절대 위치 배치
+//        this.add(eventLabel);
+//        this.setComponentZOrder(eventLabel, 0); // 맨 위로
+//
+//        this.repaint();
+//
+//        // 1.5초 뒤 제거
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                SwingUtilities.invokeLater(() -> {
+//                    remove(eventLabel);
+//                    repaint();
+//                });
+//            }
+//        }, 1500);
+//    }
+
 
     public void resetView() {
 
