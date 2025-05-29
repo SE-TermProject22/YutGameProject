@@ -7,7 +7,6 @@ import Model.Player;
 import View.Fx.EndView;
 import View.Fx.GameView;
 import View.Fx.StartView;
-import Controller.GameController;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -17,10 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +50,8 @@ public class FXGameController {
     private Scene mainScene;
     private Stage primaryStage;
 
-    public FXGameController(StartView startView, GameView gameView, EndView endView) {
+    public FXGameController(Stage primaryStage, StartView startView, GameView gameView, EndView endView) {
+        this.primaryStage = primaryStage;
         this.startView = startView;
         this.gameView = gameView;
         this.endView = endView;

@@ -247,6 +247,19 @@ public class StartView extends StackPane {
             btn.setStyle("");
         }
 
+        // 말 선택 버튼들의 선택 상태만 해제 (배경 스타일은 유지)
+        for (Map.Entry<String, Button> entry : horseButtons.entrySet()) {
+            Button button = entry.getValue();
+
+            // 선택 효과만 제거하고 기존 배경 스타일은 유지
+            button.getStyleClass().remove("selected"); // 선택 클래스만 제거
+
+            // 원래 배경 제거 스타일 다시 적용
+            if (!button.getStyle().contains("-fx-background-color: transparent")) {
+                button.setStyle(button.getStyle() + "; -fx-background-color: transparent;");
+            }
+        }
+
         squareBtn.setVisible(false);
         pentagonBtn.setVisible(false);
         hexagonBtn.setVisible(false);

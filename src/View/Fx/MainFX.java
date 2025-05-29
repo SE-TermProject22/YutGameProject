@@ -14,11 +14,15 @@ public class MainFX extends Application {
 
         Scene scene = new Scene(startView, 1100, 700);
 
-        new FXGameController(startView, gameView, endView);
+        new FXGameController(primaryStage, startView, gameView, endView);
 
         primaryStage.setTitle("Horse Game(JavaFX)");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+//        // Stage 설정
+//        primaryStage.setTitle("윷놀이 게임");
+        primaryStage.setResizable(false);
     }
 
     public static void launchApp() {
