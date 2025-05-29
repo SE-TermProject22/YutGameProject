@@ -59,6 +59,7 @@ public class Board {
         nodes.add(new Node(28, 401, 409));
         nodes.add(new Node(29, 474, 480));
         nodes.add(new Node(30, 555, 560));
+
         // nodes.get(30).isLastNode = true;
 
         // EndNode

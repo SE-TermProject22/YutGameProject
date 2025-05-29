@@ -10,6 +10,7 @@ public class Horse {
     public String color;
     public boolean state = false;
     public boolean isDoubled = false;
+    private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
     // private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
     // public boolean isFinished = false;
 
@@ -46,23 +47,22 @@ public class Horse {
     public void move(YutResult result) {
         if(result==YutResult.BackDo){
             System.out.println("백도 처리 시작");
+            if(currentNode.backDoNode == null) {
+                System.out.println("출발점임");//출발점임
+            }
+            else{
+                this.currentNode = currentNode.backDoNode;
 
+                this.x = currentNode.x;
+                this.y = currentNode.y;
+//                if (currentNode.isFirstNode) {
+//                    HorseBackDoState = true; // 다음에 도~모가 나오면 Finish 처리
+//                }
+            }
 
-            this.currentNode = currentNode.backDoNode;
-            this.x = currentNode.x;
-            this.y = currentNode.y;
             return;
         }
 
-        // 30번 노드로 확인
-        // finish처리 다시 확인하기 -> endnode로하게끔
-//        if(HorseBackDoState && result.ordinal() < 5 ){
-//            //finish처리
-//            isFinished = true;
-//            state = false;  // 컨트롤러가 score++ 해줄 수 있도록
-//            HorseBackDoState = false;
-//            return;
-//        }
 
         if(currentNode.isDaegak) {
             this.currentNode = ((DaegakNode)currentNode).DNode;
@@ -83,7 +83,9 @@ public class Horse {
             this.x = currentNode.x;
             this.y = currentNode.y;
         }
-
+//        if (!currentNode.isFirstNode) {
+//            HorseBackDoState = false;
+//        }
 
     }
 
