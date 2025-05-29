@@ -87,6 +87,7 @@ public class GameView  extends JPanel {
                 yutImages.add(img);
             }
         }
+
         // 윷 결과 이미지
         resultImages = new ArrayList<>();
         String[] resultImageNames = {"1.png", "2.png", "3.png", "4.png", "5.png", "-1.png"};
@@ -302,6 +303,7 @@ public class GameView  extends JPanel {
         horseComponents.get(horse_id).setLocation(x, y);
         repaint();
     }
+
     // 혹시 몰라서 여러 개 받으면 이렇게 처리
     public void moveHorse(List<Integer> horse_id_list, int x, int y){
         int i = 0;
@@ -473,6 +475,17 @@ public class GameView  extends JPanel {
                 }, 800);
             }
         }, 400);
+    }
+
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
     }
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
@@ -767,17 +780,6 @@ public class GameView  extends JPanel {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
-    }
-
-    private String getKoreanName(YutResult result) {
-        return switch (result) {
-            case DO -> "도";
-            case GAE -> "개";
-            case GEOL -> "걸";
-            case YUT -> "윷";
-            case MO -> "모";
-            case BackDo -> "백도";
-        };
     }
 
     public void addThrowButtonListener(ActionListener listener) {

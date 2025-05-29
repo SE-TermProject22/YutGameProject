@@ -1,5 +1,3 @@
-import Controller.GameController;
-
 //
 public class YutGame {
     // 여기에 main 함수 존제 -> 여기서 돌리기?

@@ -210,6 +210,16 @@ public class GameView extends AnchorPane {
         }
     }
 
+    public void setHorseToGray(int horse_id) {
+        ImageView horseView = waitingHorseLabels.get(horse_id);
+        if (horseView != null) {
+            Image grayImage = new Image(getClass().getResourceAsStream("/image/끝난 말.png"));
+            horseView.setImage(grayImage);
+        } else {
+            System.out.println("❌ 회색으로 바꿀 horseView를 찾지 못함. horseId = " + horse_id);
+        }
+    }
+
     public void initHorses(List<String> colors, int horseCount) {
         int idCounter = 0;
 
@@ -249,16 +259,6 @@ public class GameView extends AnchorPane {
         horseView.setVisible(true);
         horseComponents.put(horse_id, horseView);
         this.getChildren().add(horseView);
-    }
-
-    public void setHorseToGray(int horse_id) {
-        ImageView horseView = waitingHorseLabels.get(horse_id);
-        if (horseView != null) {
-            Image grayImage = new Image(getClass().getResourceAsStream("/image/끝난 말.png"));
-            horseView.setImage(grayImage);
-        } else {
-            System.out.println("❌ 회색으로 바꿀 horseView를 찾지 못함. horseId = " + horse_id);
-        }
     }
 
     public void setHorseVisible(int horse_id) {

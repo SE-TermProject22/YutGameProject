@@ -1,5 +1,5 @@
 import javax.swing.*;
-import Controller.GameController;
+import Controller.SwingGameController;
 import View.Swing.StartView;
 import View.Swing.GameView;
 
@@ -50,7 +50,7 @@ public class Main {
             frame.add(endView);
 
             // 컨트롤러 생성
-            new GameController(frame, startView, gameView, endView);
+            new SwingGameController(frame, startView, gameView, endView);
 
             frame.setVisible(true);
         });
