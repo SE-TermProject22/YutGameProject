@@ -126,25 +126,27 @@ public class GameView extends AnchorPane {
         this.getChildren().add(currentImageView);
 
         notifyingImageView = new ImageView();
+//        notifyingImageView.setLayoutX(420);
+//        notifyingImageView.setLayoutY(300);
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
         this.getChildren().add(notifyingImageView);
 
         eventNotifyingImageView = new ImageView();
-        eventNotifyingImageView.setLayoutX(420);
-        eventNotifyingImageView.setLayoutY(300);
+        eventNotifyingImageView.setLayoutX(291);
+        eventNotifyingImageView.setLayoutY(294);
         this.getChildren().add(eventNotifyingImageView);
 
         AnchorPane anchorRoot = new AnchorPane();
 
         throwButton = createButton("/image/윷 던지기.png");
-        AnchorPane.setLeftAnchor(throwButton, 744.0);
+        AnchorPane.setLeftAnchor(throwButton, 735.0);
         AnchorPane.setTopAnchor(throwButton, 405.0);
         anchorRoot.getChildren().add(throwButton);
 
         // 지정던지기 버튼
         specialThrowButton = createButton("/image/지정던지기 버튼.png");
-        AnchorPane.setLeftAnchor(specialThrowButton, 940.0);
+        AnchorPane.setLeftAnchor(specialThrowButton, 920.0);
         AnchorPane.setTopAnchor(specialThrowButton, 405.0);
         anchorRoot.getChildren().add(specialThrowButton);
 
@@ -158,10 +160,10 @@ public class GameView extends AnchorPane {
 
     public void displayPlayers(int playerCount) {
         Point2D[] playerPositions = {
-                new Point2D(692, 502),
-                new Point2D(898, 502),
-                new Point2D(692, 578),
-                new Point2D(898, 578)
+                new Point2D(692, 512),
+                new Point2D(898, 512),
+                new Point2D(692, 588),
+                new Point2D(898, 588)
         };
 
         for (int i = 1; i <= playerCount; i++) {
@@ -178,10 +180,10 @@ public class GameView extends AnchorPane {
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point2D[] horsePositions = {
-                new Point2D(682, 522),
-                new Point2D(888, 522),
-                new Point2D(682, 598),
-                new Point2D(888, 598),
+                new Point2D(690, 539),
+                new Point2D(896, 539),
+                new Point2D(690, 615),
+                new Point2D(896, 615),
         };
 
         int horseId = 0;
