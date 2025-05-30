@@ -395,6 +395,7 @@ public class FXGameController {
 
         startView.resetSelection();
         gameView.clearHorses();
+        gameView.clearPlayers();
 
         setState(GameState.START_SCREEN);
 

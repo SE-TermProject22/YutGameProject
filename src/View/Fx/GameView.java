@@ -34,12 +34,15 @@ public class GameView extends AnchorPane {
     private Image board, notifyingImage, currentImage;
     private Button throwButton;
     private Button specialThrowButton;
-    private Map<String, Image> horseImages = new HashMap<>();
-    private Map<String, Point2D> horsePositions = new HashMap<>();
 
+    private Map<String, Image> horseImages = new HashMap<>();
     private Map<String, Image> scoreHorseImages = new HashMap<>();
 
+    private Map<String, Point2D> horsePositions = new HashMap<>();
+
     private Map<Integer, ImageView> horseComponents = new HashMap<>();
+    private Map<Integer, ImageView> playerViews = new HashMap<>();
+
     private List<Image> yutImages = new ArrayList<>();
     private List<Image> resultImages = new ArrayList<>();
 
@@ -175,6 +178,7 @@ public class GameView extends AnchorPane {
             AnchorPane.setTopAnchor(playerView, pos.getY());
 
             this.getChildren().add(playerView);
+            playerViews.put(i, playerView);
         }
     }
 
@@ -546,6 +550,13 @@ public class GameView extends AnchorPane {
             this.getChildren().remove(waitingHorseView);
         }
         waitingHorseLabels.clear();
+    }
+
+    public void clearPlayers() {
+        for (ImageView view : playerViews.values()) {
+            this.getChildren().remove(view);
+        }
+        playerViews.clear();
     }
 
     public void addThrowButtonListener(EventHandler<ActionEvent> handler) {
