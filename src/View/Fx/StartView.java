@@ -111,6 +111,12 @@ public class StartView extends StackPane {
         playerCountBox.getItems().addAll("2", "3", "4");
         playerCountBox.setVisible(false);
         playerCountBox.setPrefSize(280, 71);
+        playerCountBox.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 20px;" +
+                        "-fx-font-weight: bold;"
+        );
         AnchorPane.setLeftAnchor(playerCountBox, 200.0);
         AnchorPane.setTopAnchor(playerCountBox, 265.0);
         anchorRoot.getChildren().add(playerCountBox);
@@ -119,6 +125,12 @@ public class StartView extends StackPane {
         horseCountBox.getItems().addAll("2", "3", "4", "5");
         horseCountBox.setVisible(false);
         horseCountBox.setPrefSize(280, 71);
+        horseCountBox.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 20px;" +
+                        "-fx-font-weight: bold;"
+        );
         AnchorPane.setLeftAnchor(horseCountBox, 621.0);
         AnchorPane.setTopAnchor(horseCountBox, 265.0);
         anchorRoot.getChildren().add(horseCountBox);

@@ -68,11 +68,17 @@ public class StartView extends JPanel{
         playerCountBox = new JComboBox<>(new String[]{"2","3", "4"});
         playerCountBox.setBounds(200, 265, 280, 71);
         playerCountBox.setVisible(false);
+//        playerCountBox.setBackground(Color.WHITE);
+//        playerCountBox.setForeground(Color.BLACK);
+        //playerCountBox.setFont(new Font("Arial", Font.PLAIN, 16));
         add(playerCountBox);
 
         horseCountBox = new JComboBox<>(new String[]{"2", "3", "4", "5"});
         horseCountBox.setBounds(621, 265, 280, 71);
         horseCountBox.setVisible(false);
+//        horseCountBox.setBackground(Color.WHITE);
+//        horseCountBox.setForeground(Color.BLACK);
+        //horseCountBox.setFont(new Font("Arial", Font.PLAIN, 16));
         add(horseCountBox);
 
         horseButtons = new HashMap<>(); //key-value 형태로 저장 -> 색깔을 key로 사용해 각 말에 대응하는 버튼을 쉽게 찾을 수 있음
