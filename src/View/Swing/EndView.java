@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
 public class EndView extends JPanel {
     private JButton restartButton;
     private JButton exitButton;
@@ -34,7 +33,6 @@ public class EndView extends JPanel {
 
         add(restartButton);
         add(exitButton);
-
     }
 
     public void addRestartButtonListener(ActionListener listener) {
@@ -85,4 +83,3 @@ public class EndView extends JPanel {
         }
     }
 }
-

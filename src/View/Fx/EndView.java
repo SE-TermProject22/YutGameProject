@@ -4,11 +4,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.Font;
-import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -16,8 +11,6 @@ import java.util.Objects;
 
 public class EndView extends AnchorPane {
     private AnchorPane anchorRoot;
-    private AnchorPane boardPane;
-    private AnchorPane horsePane;
 
     private Button restartButton;
     private Button exitButton;
@@ -26,8 +19,6 @@ public class EndView extends AnchorPane {
     private Image endBackground;
     private Image[] winnerImages = new Image[4];
     private int winnerId = 1;
-
-    private Canvas canvas;
 
     public EndView() {
         loadImages();
@@ -76,10 +67,6 @@ public class EndView extends AnchorPane {
                         "-fx-focus-color: transparent;" +
                         "-fx-faint-focus-color: transparent;"
         );
-
-//        AnchorPane.setLeftAnchor(button, x);
-//        AnchorPane.setTopAnchor(button, y);
-
         return button;
     }
 
@@ -96,7 +83,6 @@ public class EndView extends AnchorPane {
         anchorRoot.getChildren().add(exitButton);
 
         this.getChildren().add(anchorRoot);
-        //anchorRoot.getChildren().addAll(restartButton, exitButton);
     }
 
     public void addRestartButtonListener(EventHandler<ActionEvent> handler) {

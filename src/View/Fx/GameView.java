@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import javax.swing.*;
 import java.util.function.Consumer;
 import java.util.*;
 
@@ -171,7 +170,6 @@ public class GameView extends AnchorPane {
             AnchorPane.setTopAnchor(playerView, pos.getY());
 
             this.getChildren().add(playerView);
-
         }
     }
 
@@ -379,6 +377,17 @@ public class GameView extends AnchorPane {
         delayBeforeShow.play();
     }
 
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
+    }
+
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -522,17 +531,6 @@ public class GameView extends AnchorPane {
 
         dialog.setScene(scene);
         dialog.showAndWait();
-    }
-
-    private String getKoreanName(YutResult result) {
-        return switch (result) {
-            case DO -> "도";
-            case GAE -> "개";
-            case GEOL -> "걸";
-            case YUT -> "윷";
-            case MO -> "모";
-            case BackDo -> "백도";
-        };
     }
 
     public void clearHorses() {

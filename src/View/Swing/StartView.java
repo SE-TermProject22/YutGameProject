@@ -226,6 +226,4 @@ public class StartView extends JPanel{
         // 상태를 다시 시작 화면으로
         setState(GameState.START_SCREEN);
     }
-
-
 }

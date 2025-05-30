@@ -4,14 +4,13 @@ import View.Swing.StartView;
 import View.Swing.GameView;
 
 import View.Fx.MainFX;
-//
 import View.Swing.EndView;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        String uiMode = "swing";
+        String uiMode = "fx";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();
@@ -35,8 +34,6 @@ public class Main {
             EndView endView = new EndView();
 
             gameView.setVisible(false); // 처음엔 안 보이게
-
-            //
             endView.setVisible(false);
 
             // 패널들을 JFrame에 추가
@@ -56,7 +53,3 @@ public class Main {
         });
     }
 }
-
-
-
-

@@ -73,19 +73,11 @@ public class StartView extends StackPane {
         imageView.setFitHeight(image.getHeight());
 
         Button button = new Button("", imageView);
-//        button.setStyle(
-//                "-fx-background-color: transparent;" +
-//                        "-fx-border-color: transparent;" +
-//                        "-fx-focus-color: transparent;" +
-//                        "-fx-faint-focus-color: transparent;"
-//        );
         button.setStyle(
                 "-fx-background-color: transparent;" +
                         "-fx-border-color: transparent;" +
                         "-fx-focus-color: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-padding: 0;" +
-                        "-fx-opacity: 1;"
+                        "-fx-faint-focus-color: transparent;"
         );
 
         button.setLayoutX(x);

@@ -285,7 +285,6 @@ public class GameView  extends JPanel {
 
     // horse를 remove하는 함수 - 필요할까? 일단은
 
-
     // horse를 setvisible하게 하는 함수
     public void setHorseVisible(int horse_id){
         horseComponents.get(horse_id).setVisible(true);
@@ -473,6 +472,17 @@ public class GameView  extends JPanel {
                 }, 800);
             }
         }, 400);
+    }
+
+    private String getKoreanName(YutResult result) {
+        return switch (result) {
+            case DO -> "도";
+            case GAE -> "개";
+            case GEOL -> "걸";
+            case YUT -> "윷";
+            case MO -> "모";
+            case BackDo -> "백도";
+        };
     }
 
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
@@ -767,17 +777,6 @@ public class GameView  extends JPanel {
                 g.drawImage(horseImages.get(color), position.x, position.y, 40, 40, null);
             }
         }
-    }
-
-    private String getKoreanName(YutResult result) {
-        return switch (result) {
-            case DO -> "도";
-            case GAE -> "개";
-            case GEOL -> "걸";
-            case YUT -> "윷";
-            case MO -> "모";
-            case BackDo -> "백도";
-        };
     }
 
     public void addThrowButtonListener(ActionListener listener) {
