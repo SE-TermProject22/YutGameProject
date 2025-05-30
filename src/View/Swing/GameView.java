@@ -170,10 +170,10 @@ public class GameView  extends JPanel {
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
-                new Point(682, 522),
-                new Point(888, 522),
-                new Point(682, 598),
-                new Point(888, 598),
+                new Point(685, 522),
+                new Point(891, 522),
+                new Point(685, 598),
+                new Point(891, 598),
         };
 
         int horseId = 0;
