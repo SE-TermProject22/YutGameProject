@@ -243,12 +243,25 @@ public class GameView extends AnchorPane {
         }
     }
 
-    public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage = new Image(getClass().getResourceAsStream("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png"));
-        ImageView horseView = new ImageView(horseImage);
+    public void mkDoubled(int horse_id, String color, int horseCount, int x, int y, int imageType) {
+        String imagePath;
+        String buttonImagePath;
 
-        horseView.setFitWidth(40);
-        horseView.setFitHeight(40);
+        if (imageType == 0) {
+            imagePath = "/image/업힌 말/" + color + "/2개.png";
+            buttonImagePath = "/image/업힌 말 버튼/" + color + "/2개.png";
+        } else if (imageType == 1) {
+            imagePath = "/image/업힌 말/" + color + "/1개.png";
+            buttonImagePath = "/image/업힌 말 버튼/" + color + "/1개.png";
+        } else {
+            // 3개 이상 말 업힌 경우: 개수 기반 이미지 사용
+            imagePath = "/image/업힌 말/" + color + "/" + horseCount + "개.png";
+            buttonImagePath = "/image/업힌 말 버튼/" + color + "/" + horseCount + "개.png";
+        }
+
+        //Image horseImage = new Image(getClass().getResourceAsStream("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png"));
+        Image horseImage = new Image(getClass().getResourceAsStream(imagePath));
+        ImageView horseView = new ImageView(horseImage);
 
         AnchorPane.setLeftAnchor(horseView, (double)x);
         AnchorPane.setTopAnchor(horseView, (double)y);
@@ -256,6 +269,9 @@ public class GameView extends AnchorPane {
         horseView.setVisible(true);
         horseComponents.put(horse_id, horseView);
         this.getChildren().add(horseView);
+
+        System.out.println("업힌말 이미지 경로: " + imagePath);
+        System.out.println("업힌말 버튼 이미지 경로: " + buttonImagePath);
     }
 
     public void setHorseToGray(int horse_id) {
@@ -464,7 +480,11 @@ public class GameView extends AnchorPane {
                 imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
                 System.out.println(horse.id);
             } else {
-                imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
+                //imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
+                // 수정된 코드
+                int imageType = ((DoubledHorse) horse).getImageType();
+                String suffix = (imageType == 0) ? "2개" : "1개";
+                imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + suffix + ".png";
             }
 
             Image image = new Image(getClass().getResourceAsStream(imagePath));

@@ -422,7 +422,7 @@ public class FXGameController {
             gameView.setHorseInvisible(doubledHorse.id);
 
             // 새 위치에 다시 생성
-            gameView.mkDoubled(doubledHorse.id, doubledHorse.color, doubledHorse.horseCount, doubledHorse.x, doubledHorse.y);
+            gameView.mkDoubled(doubledHorse.id, doubledHorse.color, doubledHorse.horseCount, doubledHorse.x, doubledHorse.y, doubledHorse.getImageType());
         } else {
             // 일반 말의 경우: 기존대로 처리
             gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
@@ -532,7 +532,7 @@ public class FXGameController {
         //doubledHorse 화면에 표시
         gameView.setHorseInvisible(selectedHorse.id);
         gameView.setHorseInvisible(other.id);
-        gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.x, dh.y);
+        gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.x, dh.y, dh.getImageType());
 
         //플레이어 말 목록에 doublehorse 추가
         currentPlayer.horseList.add(dh);
@@ -661,6 +661,7 @@ public class FXGameController {
         endView = new EndView();
 
         initializeFXListeners();
+        DoubledHorse.resetLightDoubleHorseMap();
 
         startView.resetSelection();
         setState(GameState.START_SCREEN);
