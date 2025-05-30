@@ -11,12 +11,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -393,19 +396,18 @@ public class GameView extends AnchorPane {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.TRANSPARENT);
 
-        AnchorPane root = new AnchorPane();
-        root.setPrefSize(665, 298);
+        StackPane root = new StackPane();
         root.setStyle("-fx-background-color: transparent;");
 
         //모달창 배경
         Image modalImage = new Image(getClass().getResourceAsStream("/image/결과 적용.png"));
         ImageView modalView = new ImageView(modalImage);
-        modalView.setFitHeight(665);
-        modalView.setFitHeight(298);
+
         root.getChildren().add(modalView);
 
-        double x = 100;
-        double y = 100;
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setTranslateY(25);
 
         for (YutResult result : yutResults) {
             String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
@@ -415,20 +417,21 @@ public class GameView extends AnchorPane {
             Button btn = new Button();
             btn.setGraphic(imageView);
             btn.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
-            btn.setLayoutX(x);
-            btn.setLayoutY(y);
 
             btn.setOnAction(e -> {
                 dialog.close();
                 onSelected.accept(result);
             });
-            root.getChildren().add(btn);
-            x += image.getWidth() + 20;
+            buttonBox.getChildren().add(btn);
         }
-        Scene scene = new Scene(root, 665, 298);
+
+        root.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(root, 1100, 700);
         scene.setFill(Color.TRANSPARENT);
 
         dialog.setScene(scene);
+        dialog.centerOnScreen();
         dialog.showAndWait();
     }
 
@@ -437,18 +440,17 @@ public class GameView extends AnchorPane {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.TRANSPARENT);
 
-        AnchorPane root = new AnchorPane();
-        root.setPrefSize(665, 298);
+        StackPane root = new StackPane();
         root.setStyle("-fx-background-color: transparent;");
 
         Image modalImage = new Image(getClass().getResourceAsStream("/image/말 적용.png"));
         ImageView modalView = new ImageView(modalImage);
-        modalView.setFitWidth(665);
-        modalView.setFitHeight(298);
+
         root.getChildren().add(modalView);
 
-        double x = 100;
-        double y = 100;
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setTranslateY(25);
 
         for (Horse horse : horses) {
             String imagePath;
@@ -465,22 +467,21 @@ public class GameView extends AnchorPane {
             Button btn = new Button();
             btn.setGraphic(imageView);
             btn.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
-            btn.setLayoutX(x);
-            btn.setLayoutY(y);
 
             btn.setOnAction(e -> {
                 dialog.close();  // FX에서 창 닫기
                 onSelected.accept(horse);
             });
-
-            root.getChildren().add(btn);
-            x += image.getWidth() + 20;  // 버튼 간 간격 조정
+            buttonBox.getChildren().add(btn);
         }
 
-        Scene scene = new Scene(root, 665, 298);
+        root.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(root, 1100, 700);
         scene.setFill(null);
 
         dialog.setScene(scene);
+        dialog.centerOnScreen();
         dialog.showAndWait();
     }
 
