@@ -11,12 +11,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,12 +34,15 @@ public class GameView extends AnchorPane {
     private Image board, notifyingImage, currentImage;
     private Button throwButton;
     private Button specialThrowButton;
-    private Map<String, Image> horseImages = new HashMap<>();
-    private Map<String, Point2D> horsePositions = new HashMap<>();
 
+    private Map<String, Image> horseImages = new HashMap<>();
     private Map<String, Image> scoreHorseImages = new HashMap<>();
 
+    private Map<String, Point2D> horsePositions = new HashMap<>();
+
     private Map<Integer, ImageView> horseComponents = new HashMap<>();
+    private Map<Integer, ImageView> playerViews = new HashMap<>();
+
     private List<Image> yutImages = new ArrayList<>();
     private List<Image> resultImages = new ArrayList<>();
 
@@ -123,25 +129,27 @@ public class GameView extends AnchorPane {
         this.getChildren().add(currentImageView);
 
         notifyingImageView = new ImageView();
+//        notifyingImageView.setLayoutX(420);
+//        notifyingImageView.setLayoutY(300);
         notifyingImageView.setLayoutX(291);
         notifyingImageView.setLayoutY(294);
         this.getChildren().add(notifyingImageView);
 
         eventNotifyingImageView = new ImageView();
-        eventNotifyingImageView.setLayoutX(420);
-        eventNotifyingImageView.setLayoutY(300);
+        eventNotifyingImageView.setLayoutX(291);
+        eventNotifyingImageView.setLayoutY(294);
         this.getChildren().add(eventNotifyingImageView);
 
         AnchorPane anchorRoot = new AnchorPane();
 
         throwButton = createButton("/image/윷 던지기.png");
-        AnchorPane.setLeftAnchor(throwButton, 744.0);
+        AnchorPane.setLeftAnchor(throwButton, 735.0);
         AnchorPane.setTopAnchor(throwButton, 405.0);
         anchorRoot.getChildren().add(throwButton);
 
         // 지정던지기 버튼
         specialThrowButton = createButton("/image/지정던지기 버튼.png");
-        AnchorPane.setLeftAnchor(specialThrowButton, 940.0);
+        AnchorPane.setLeftAnchor(specialThrowButton, 920.0);
         AnchorPane.setTopAnchor(specialThrowButton, 405.0);
         anchorRoot.getChildren().add(specialThrowButton);
 
@@ -155,10 +163,10 @@ public class GameView extends AnchorPane {
 
     public void displayPlayers(int playerCount) {
         Point2D[] playerPositions = {
-                new Point2D(692, 502),
-                new Point2D(898, 502),
-                new Point2D(692, 578),
-                new Point2D(898, 578)
+                new Point2D(692, 512),
+                new Point2D(898, 512),
+                new Point2D(692, 588),
+                new Point2D(898, 588)
         };
 
         for (int i = 1; i <= playerCount; i++) {
@@ -170,15 +178,16 @@ public class GameView extends AnchorPane {
             AnchorPane.setTopAnchor(playerView, pos.getY());
 
             this.getChildren().add(playerView);
+            playerViews.put(i, playerView);
         }
     }
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point2D[] horsePositions = {
-                new Point2D(682, 522),
-                new Point2D(888, 522),
-                new Point2D(682, 598),
-                new Point2D(888, 598),
+                new Point2D(690, 539),
+                new Point2D(896, 539),
+                new Point2D(690, 615),
+                new Point2D(896, 615),
         };
 
         int horseId = 0;
@@ -393,19 +402,18 @@ public class GameView extends AnchorPane {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.TRANSPARENT);
 
-        AnchorPane root = new AnchorPane();
-        root.setPrefSize(665, 298);
+        StackPane root = new StackPane();
         root.setStyle("-fx-background-color: transparent;");
 
         //모달창 배경
         Image modalImage = new Image(getClass().getResourceAsStream("/image/결과 적용.png"));
         ImageView modalView = new ImageView(modalImage);
-        modalView.setFitHeight(665);
-        modalView.setFitHeight(298);
+
         root.getChildren().add(modalView);
 
-        double x = 100;
-        double y = 100;
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setTranslateY(25);
 
         for (YutResult result : yutResults) {
             String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
@@ -415,20 +423,21 @@ public class GameView extends AnchorPane {
             Button btn = new Button();
             btn.setGraphic(imageView);
             btn.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
-            btn.setLayoutX(x);
-            btn.setLayoutY(y);
 
             btn.setOnAction(e -> {
                 dialog.close();
                 onSelected.accept(result);
             });
-            root.getChildren().add(btn);
-            x += image.getWidth() + 20;
+            buttonBox.getChildren().add(btn);
         }
-        Scene scene = new Scene(root, 665, 298);
+
+        root.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(root, 1100, 700);
         scene.setFill(Color.TRANSPARENT);
 
         dialog.setScene(scene);
+        dialog.centerOnScreen();
         dialog.showAndWait();
     }
 
@@ -437,18 +446,17 @@ public class GameView extends AnchorPane {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.TRANSPARENT);
 
-        AnchorPane root = new AnchorPane();
-        root.setPrefSize(665, 298);
+        StackPane root = new StackPane();
         root.setStyle("-fx-background-color: transparent;");
 
         Image modalImage = new Image(getClass().getResourceAsStream("/image/말 적용.png"));
         ImageView modalView = new ImageView(modalImage);
-        modalView.setFitWidth(665);
-        modalView.setFitHeight(298);
+
         root.getChildren().add(modalView);
 
-        double x = 100;
-        double y = 100;
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setTranslateY(25);
 
         for (Horse horse : horses) {
             String imagePath;
@@ -465,22 +473,21 @@ public class GameView extends AnchorPane {
             Button btn = new Button();
             btn.setGraphic(imageView);
             btn.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
-            btn.setLayoutX(x);
-            btn.setLayoutY(y);
 
             btn.setOnAction(e -> {
                 dialog.close();  // FX에서 창 닫기
                 onSelected.accept(horse);
             });
-
-            root.getChildren().add(btn);
-            x += image.getWidth() + 20;  // 버튼 간 간격 조정
+            buttonBox.getChildren().add(btn);
         }
 
-        Scene scene = new Scene(root, 665, 298);
+        root.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(root, 1100, 700);
         scene.setFill(null);
 
         dialog.setScene(scene);
+        dialog.centerOnScreen();
         dialog.showAndWait();
     }
 
@@ -543,6 +550,13 @@ public class GameView extends AnchorPane {
             this.getChildren().remove(waitingHorseView);
         }
         waitingHorseLabels.clear();
+    }
+
+    public void clearPlayers() {
+        for (ImageView view : playerViews.values()) {
+            this.getChildren().remove(view);
+        }
+        playerViews.clear();
     }
 
     public void addThrowButtonListener(EventHandler<ActionEvent> handler) {

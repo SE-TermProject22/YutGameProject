@@ -170,10 +170,10 @@ public class GameView  extends JPanel {
 
     public void displayHorses(List<String> selectedColors, int playerCount, int horseCount) {
         Point[] horsePositions = {
-                new Point(682, 522),
-                new Point(888, 522),
-                new Point(682, 598),
-                new Point(888, 598),
+                new Point(685, 522),
+                new Point(891, 522),
+                new Point(685, 598),
+                new Point(891, 598),
         };
 
         int horseId = 0;
@@ -499,17 +499,34 @@ public class GameView  extends JPanel {
                 g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
             }
         };
+
         System.out.println("전달된 결과 리스트: " + yutResults);
         panel.setLayout(null);
         panel.setOpaque(false);  // 패널도 투명하게
         panel.setBounds(0, 0, 800, 600);
 
-        int x = 100;
-        int y = 100;
+        int spacing = 20;
+        int y = 115;
+
+        List<ImageIcon> icons = new ArrayList<>();
+        int totalWidth = 0;
 
         for (YutResult result : yutResults) {
             String imagePath = "/image/선택 윷 결과/선택 " + getKoreanName(result) + ".png";
             ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
+            icons.add(icon);
+            totalWidth += icon.getIconWidth();
+        }
+
+        totalWidth += spacing * (icons.size()-1);
+
+        int panelWidth = dialog.getWidth();
+        int x = (panelWidth - totalWidth)/2;
+
+        for (int i = 0; i < yutResults.size(); i++) {
+            YutResult result = yutResults.get(i);
+            ImageIcon icon = icons.get(i);
+
             JButton btn = new JButton(icon);
             btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
             btn.setContentAreaFilled(false);
@@ -522,7 +539,7 @@ public class GameView  extends JPanel {
             });
 
             panel.add(btn);
-            x += icon.getIconWidth() + 20;
+            x += icon.getIconWidth() + spacing;
         }
 
         dialog.setContentPane(panel);

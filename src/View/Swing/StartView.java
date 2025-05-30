@@ -81,7 +81,7 @@ public class StartView extends JPanel{
         addHorseButton("yellow", 578);
         addHorseButton("green", 793);
 
-        nextButton = createButton("image/다음.png", 432, 575);
+        nextButton = createButton("image/다음.png", 432, 555);
         nextButton.setVisible(false);
         add(nextButton);
     }
