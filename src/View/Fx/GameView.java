@@ -480,11 +480,6 @@ public class GameView extends AnchorPane {
                 imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
                 System.out.println(horse.id);
             } else {
-                //imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개.png";
-                // 수정된 코드
-//                int imageType = ((DoubledHorse) horse).getImageType();
-//                String suffix = (imageType == 0) ? "2개" : "1개";
-                //업힌 말2 수정하면서 추가한 부분(업힌 말 버튼 잘 나오게)
                 int imageType = ((DoubledHorse) horse).getImageType();
                 String suffix;
                 if (imageType == 0) suffix = "2개";   // 연한색
