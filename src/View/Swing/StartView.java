@@ -20,6 +20,8 @@ public class StartView extends JPanel{
     private String selectedBoard = null;
     private List<String> selectedColors = new ArrayList<>();
 
+    private Map<String, Point> horseButtonPositions = new HashMap<>();
+
     private GameState currentState = GameState.START_SCREEN;
 
     public StartView() { //생성자
@@ -30,14 +32,14 @@ public class StartView extends JPanel{
 
     //필요한 이미지 불러오기
     private void loadImages() {
-        startBackground = new ImageIcon("image/시작 화면.png").getImage(); //시작 배경화면
-        horseSelectionBackground = new ImageIcon("image/말 선택.png").getImage(); //말 고를 때 배경화면
-        boardSelectionBackground = new ImageIcon("image/판 선택.png").getImage();
+        startBackground = new ImageIcon(getClass().getResource("/image/시작 화면.png")).getImage(); //시작 배경화면
+        horseSelectionBackground = new ImageIcon(getClass().getResource("/image/말 선택.png")).getImage(); //말 고를 때 배경화면
+        boardSelectionBackground = new ImageIcon(getClass().getResource("/image/판 선택.png")).getImage();
     }
 
     //버튼 생성 메서드
     private JButton createButton(String imagePath, int x, int y) {
-        ImageIcon icon = new ImageIcon(imagePath);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/" + imagePath));
         JButton button = new JButton(icon);
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
@@ -79,7 +81,7 @@ public class StartView extends JPanel{
         addHorseButton("yellow", 578);
         addHorseButton("green", 793);
 
-        nextButton = createButton("image/다음.png", 432, 575);
+        nextButton = createButton("image/다음.png", 432, 555);
         nextButton.setVisible(false);
         add(nextButton);
     }
@@ -90,6 +92,7 @@ public class StartView extends JPanel{
         btn.setActionCommand(color);
         btn.setVisible(false);
         horseButtons.put(color, btn);
+        horseButtonPositions.put(color, new Point(x, 401)); // 위치 저장
         add(btn);
     }
 
@@ -223,6 +226,4 @@ public class StartView extends JPanel{
         // 상태를 다시 시작 화면으로
         setState(GameState.START_SCREEN);
     }
-
-
 }

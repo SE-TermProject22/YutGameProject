@@ -381,7 +381,7 @@ public class GameView  extends JPanel {
     }
 
     private void showResultImage(YutResult result) {
-        // 화면에 현재 이미지 표시
+       // 화면에 현재 이미지 표시
         Image resultImage = getResultImagePathForYutValue(result);
 
         if (resultImage != null) {
