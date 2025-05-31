@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String uiMode = "swing";
+        String uiMode = "fx";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();

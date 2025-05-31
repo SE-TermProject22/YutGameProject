@@ -117,7 +117,7 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                while (throwState) {
+                if (throwState) {
                     throwState = false;
                     // YutResult result = currentPlayer.throwYut();
                     // yutList.add(result);
@@ -128,18 +128,21 @@ public class GameController {
                         throwState = true;
                         gameView.scheduleNotifyingImage(result);
                     }
+                    else{
+                        javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
+                            move();
+                        });
+                        delayTimer.setRepeats(false);
+                        delayTimer.start();
+                    }
                 }
-                javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
-                    move();
-                });
-                delayTimer.setRepeats(false);
-                delayTimer.start();
+
             }
         });
 
         // 지정윷던지기 버튼 리스너
         gameView.addSpecialThrowListener(e -> {
-            while(throwState) {
+            if (throwState) {
                 throwState = false;
                 YutResult result;
                 gameView.showFixedYutChoiceDialog(selectedResult -> {
@@ -155,12 +158,15 @@ public class GameController {
                     throwState = true;
                     gameView.scheduleNotifyingImage(result);
                 }
+                else{
+                    javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
+                        move();
+                    });
+                    delayTimer.setRepeats(false);
+                    delayTimer.start();
+                }
             }
-            javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
-                move();
-            });
-            delayTimer.setRepeats(false);
-            delayTimer.start();
+
         });
 
         // EndView - 재시작 버튼 리스너
@@ -207,9 +213,11 @@ public class GameController {
 
         startView.setVisible(false); // StartView 숨기기
         gameView.setVisible(true);   // GameView 보이기
+
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
+        //gameView.placeHorses(selectedColors, playerCount);
     }
 
     private void setState(GameState newState) {
@@ -273,7 +281,7 @@ public class GameController {
             gameView.setHorseInvisible(doubledHorse.id);
 
             // 새 위치에 다시 생성
-            // gameView.mkDoubled(doubledHorse.id, doubledHorse.color, doubledHorse.horseCount, doubledHorse.x, doubledHorse.y, doubledHorse.getImageType());
+            gameView.mkDoubled(doubledHorse.id, doubledHorse.color, doubledHorse.horseCount, doubledHorse.x, doubledHorse.y, doubledHorse.getImageType());
         } else {
             // 일반 말의 경우: 기존대로 처리
             gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
@@ -340,7 +348,7 @@ public class GameController {
         if(sameTeam){
             // 업기
             DoubledHorse dh = selectedHorse.stack(d_init++, currentPlayer, other);
-            gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
+            gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y, dh.getImageType()); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
             gameView.setHorseInvisible(other.id);
             gameView.setHorseInvisible(selectedHorse.id);
             gameView.showEventImage("/image/업었다.png");

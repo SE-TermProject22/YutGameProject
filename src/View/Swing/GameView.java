@@ -1,9 +1,8 @@
 package View.Swing;
 
-// import Controller.GameController;
 import Controller.YutResult;
 import Model.DoubledHorse;
-import Model.Player;
+import Model.Horse;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
-import Model.Horse;
+
 
 public class GameView  extends JPanel {
     private Image board, currentImage;
@@ -205,20 +204,6 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    // finish처리 된 말 색깔 회색으로 변경
-    // 업은 말 들어올 때는 horse_id를 list으로 받거나 해야할 듯
-    public void setHorseToGray(int horse_id){
-        JLabel horseLabel = waitingHorseLabels.get(horse_id);
-        if (horseLabel != null) {
-            Image grayImage = new ImageIcon("image/끝난 말.png").getImage();
-            horseLabel.setIcon(new ImageIcon(grayImage));
-            repaint();
-        } else {
-            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
-        }
-        repaint();
-    }
-
     // 만약 말이 finish 처리되면 말 하나 사라지게 해야 함 - 이거 어떻게 할지 - 위에 display 그거 음음
 
     // 처음 말들을 다 만들기
@@ -247,34 +232,45 @@ public class GameView  extends JPanel {
     }
 
     // horse를 add하는 함수 - 엎기 할 때 - color, x, y,
-    public void mkDoubled(int horse_id, String color, int horseCount, int x, int y) {
-        Image horseImage;
-        if (horseCount == 2) {
-            switch (color) {
-                case "blue":
-                    bdouble++;
-                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png")).getImage();
-                    break;
-                case "yellow":
-                    ydouble++;
-                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png")).getImage();
-                    break;
-                case "green":
-                    gdouble++;
-                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png")).getImage();
-                    break;
-                case "red":
-                    rdouble++;
-                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png")).getImage();
-                    break;
-                default:
-                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage();
-                    break;
-            }
+    public void mkDoubled(int horse_id, String color, int horseCount, int x, int y, int imageType) {
+        String imagePath;
+
+        if (imageType == 0) {
+            imagePath = "/image/업힌 말/" + color + "/2개.png";
+        } else if (imageType == 1) {
+            imagePath = "/image/업힌 말/" + color + "/1개.png";
         } else {
-            horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage(); //fallback
+            imagePath = "/image/업힌 말/" + color + "/" + horseCount + "개.png";
         }
 
+//        Image horseImage;
+//        if (horseCount == 2) {
+//            switch (color) {
+//                case "blue":
+//                    bdouble++;
+//                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - bdouble % 2) + "개" + ".png")).getImage();
+//                    break;
+//                case "yellow":
+//                    ydouble++;
+//                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - ydouble % 2) + "개" + ".png")).getImage();
+//                    break;
+//                case "green":
+//                    gdouble++;
+//                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - gdouble % 2) + "개" + ".png")).getImage();
+//                    break;
+//                case "red":
+//                    rdouble++;
+//                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + (horseCount - rdouble % 2) + "개" + ".png")).getImage();
+//                    break;
+//                default:
+//                    horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage();
+//                    break;
+//            }
+//        } else {
+//            horseImage = new ImageIcon(getClass().getResource("/image/업힌 말/" + color + "/" + horseCount + "개" + ".png")).getImage(); //fallback
+//        }
+
+        Image horseImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
         JLabel horseLabel = new JLabel(new ImageIcon(horseImage));
         horseLabel.setBounds(x, y, 40, 40);
         horseLabel.setVisible(true); // 디버깅
@@ -283,7 +279,20 @@ public class GameView  extends JPanel {
         repaint();
     }
 
-    // horse를 remove하는 함수 - 필요할까? 일단은
+    // finish처리 된 말 색깔 회색으로 변경
+    public void setHorseToGray(int horse_id){
+        String imagePath = "/image/끝난 말.png";
+        JLabel horseLabel = waitingHorseLabels.get(horse_id);
+        if (horseLabel != null) {
+            Image grayImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
+//            Image grayImage = new ImageIcon("/image/끝난 말.png").getImage();
+            horseLabel.setIcon(new ImageIcon(grayImage));
+            repaint();
+        } else {
+            System.out.println("❌ 회색으로 바꿀 horseLabel을 찾지 못함. horseId = " + horse_id);
+        }
+        repaint();
+    }
 
     // horse를 setvisible하게 하는 함수
     public void setHorseVisible(int horse_id){
@@ -314,16 +323,16 @@ public class GameView  extends JPanel {
     // 그러면 나중에 마지막에 moveHorse()를 하면 됨
 
     // 설명 필요 - 아래 두 함수
-    public void placeHorses(List<String> colors) {
-        int x = 50;  // x 좌표를 50부터 시작
-        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
-
-        for (String color : colors) {
-            setHorsePosition(color, x, y);
-            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
-        }
-        repaint();
-    }
+//    public void placeHorses(List<String> colors) {
+//        int x = 50;  // x 좌표를 50부터 시작
+//        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
+//
+//        for (String color : colors) {
+//            setHorsePosition(color, x, y);
+//            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
+//        }
+//        repaint();
+//    }
 
     //말 위치를 업데이트하는 메서드
     public void setHorsePosition(String color, int x, int y) {
@@ -547,14 +556,6 @@ public class GameView  extends JPanel {
     }
 
     public void showHorseSelectionDialog(List<Horse> horses, int horseCount, Consumer<Horse> onSelected) {  // horses : selectedHorses, horseCount -> 찐 말의 개수 -> 게임 시작할 때
-        int bi = -1;
-        int bii = 0;
-
-        int ri = 0;
-        int yi = 0;
-        int gi = 0;
-        int twoHorseCounter = 0;
-
         JDialog dialog = new JDialog((JFrame) null, "말 선택", true);
         dialog.setSize(665, 298);
         dialog.setLocationRelativeTo(null);
@@ -569,164 +570,65 @@ public class GameView  extends JPanel {
             }
         };
 
-        panel.setLayout(new BorderLayout());
+        panel.setLayout(null);
         panel.setOpaque(false);  // 패널도 투명하게
+        panel.setBounds(0, 0, 800, 600);
 
-        // int x = 100;
-        // int y = 100;
+        int spacing = 20;
+        int y = 115;
 
-        JPanel buttonPanel = new JPanel(); // 기본은 FlowLayout(왼쪽→오른쪽 정렬)
-        buttonPanel.setOpaque(false); // 배경 투명하게 (원한다면)
+        List<ImageIcon> icons = new ArrayList<>();
+        int totalWidth = 0;
 
+        // 먼저 아이콘 로드 및 너비 측정
         for (Horse horse : horses) {
-            try {
-                System.out.println("🐎 처리 중인 말 ID: " + horse.id + ", Class: " + horse.getClass().getSimpleName());
+            String imagePath = null;
 
-                String imagePath = null;
-
-                if (horse.id < 20) {
-                    int index = (horse.id % horseCount) + 1;
-                    imagePath = "/image/선택 " + horse.color + "/" + index + ".png";
-                    System.out.println("📌 일반 말 - 색상: " + horse.color + ", 이미지 경로: " + imagePath);
-                } else {
-                    // 업힌 말 처리
-                    if (!(horse instanceof DoubledHorse)) {
-                        System.out.println("⚠️ 오류: ID >= 20인데 DoubledHorse 아님. ID: " + horse.id);
-                        continue;
-                    }
-
-                    DoubledHorse dh = (DoubledHorse) horse;
-
-                    System.out.println("📦 업힌 말 처리 중 - ID: " + dh.id +
-                            ", createdOrder: " + dh.createdOrder +
-                            ", horseCount: " + dh.horseCount +
-                            ", color: " + dh.color);
-
-                    if (dh.horseCount == 2) {
-                        String imageCount;
-                        if (dh.createdOrder % 2 == 0) {
-                            imageCount = "2개";
-                        } else {
-                            imageCount = "1개";
-                        }
-                        System.out.println("🎯 업힌 말 이미지 선택 - createdOrder: " + dh.createdOrder +
-                                ", 선택된 이미지: " + imageCount);
-
-                        imagePath = "/image/업힌 말 버튼/" + dh.color + "/" + imageCount + ".png";
-                    } else {
-                        imagePath = "/image/업힌 말 버튼/" + dh.color + "/" + dh.horseCount + "개.png";
-                        System.out.println("🎯 업힌 말 이미지 선택 - horseCount 사용: " + imagePath);
-                    }
-                }
-
-                // 이미지 경로 확인
-                if (imagePath == null) {
-                    System.out.println("❌ 이미지 경로 null - 말 ID: " + horse.id);
-                    continue;
-                }
-
-                java.net.URL imageURL = getClass().getResource(imagePath);
-                if (imageURL == null) {
-                    System.out.println("❗ 이미지 경로 오류: 존재하지 않음 -> " + imagePath);
-                    continue;
-                }
-
-                ImageIcon icon = new ImageIcon(imageURL);
-                System.out.println("✅ 이미지 로드 성공: " + imagePath);
-
-                JButton btn = new JButton(icon);
-                // btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-                btn.setContentAreaFilled(false);
-                btn.setBorderPainted(false);
-                btn.setFocusPainted(false);
-
-                btn.addActionListener(e -> {
-                    System.out.println("🖱️ 선택된 말 ID: " + horse.id);
-                    dialog.dispose();
-                    onSelected.accept(horse);
-                });
-
-                // panel.add(btn);
-                buttonPanel.add(btn);
-                // x += icon.getIconWidth() + 20;
-            } catch (Exception ex) {
-                System.out.println("❌ 예외 발생 - 말 ID: " + horse.id + ", 메시지: " + ex.getMessage());
-                ex.printStackTrace();
+            if (horse.id < 20) {
+                imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount + 1) + ".png";
+            } else {
+                int imageType = ((DoubledHorse) horse).getImageType();
+                String suffix = (imageType == 0) ? "2개" : (imageType == 1) ? "1개" : ((DoubledHorse) horse).horseCount + "개";
+                imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + suffix + ".png";
             }
-        }
-        panel.add(buttonPanel, BorderLayout.CENTER);
 
-//        for (Horse horse : horses) {
-//            System.out.println(horse.id);
-//            String imagePath;
-//            // 여기서 id가 크면은 color.count로 해서 파일 받기
-//            if(horse.id < 20) {
-//                imagePath = "/image/선택 " + horse.color + "/" + (horse.id % horseCount+1) + ".png";
-//                System.out.println(horse.id);
-//            }
-//            else {
-//                // 업은 말 선택
-//                DoubledHorse dh = (DoubledHorse) horse;
-//                System.out.println("업힌 말 ID: " + dh.id + ", createdOrder: " + dh.createdOrder + ", horseCount: " + dh.horseCount);
-//
-//                if (dh.horseCount == 2) {
-//                    String imageCount;
-//                    if (dh.createdOrder % 2 == 0) {
-//                        imageCount = "1개";
-//                    } else {
-//                        imageCount = "2개";
-//                    }
-//
-//                    System.out.println("이미지 선택: " + imageCount);
-//
-//                    imagePath = "/image/업힌 말 버튼/" + dh.color + "/" + imageCount + ".png";
-//                } else {
-//                    imagePath = "/image/업힌 말 버튼/" + dh.color + "/" + dh.horseCount + "개.png";
-//                }
-////                    switch (horse.color) {
-////                        case "blue" :
-////                            bi++;
-////                            bii+=2;
-////                            System.out.println("전"+ bdouble + "/" + bi);
-////                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(bdouble+bi+bii) % 2) + "개"+ ".png"; // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-////                            System.out.println("후"+ bdouble + "/" + bi);
-////                            break;
-////                        case "red" :
-////                            ri++;
-////                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(rdouble+ri) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-////                            break;
-////                        case "green" :
-////                            gi++;
-////                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(gdouble+gi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-////                            break;
-////                        case "yellow" :
-////                            yi++;
-////                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + (((DoubledHorse)horse).horseCount-(ydouble+yi) % 2) + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-////                            break;
-////                        default :
-////                            imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse)horse).horseCount + "개"+ ".png";  // 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-////                            break;
-////                    }
-////                } else {
-////                    imagePath = "/image/업힌 말 버튼/" + horse.color + "/" + ((DoubledHorse) horse).horseCount + "개" + ".png";
-////                }// 업힌 말의 (몇 개 업었는지 나타내는 horseCount)
-//            }
-//            ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
-//
-//            JButton btn = new JButton(icon);
-//            btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-//            btn.setContentAreaFilled(false);
-//            btn.setBorderPainted(false);
-//            btn.setFocusPainted(false);
-//
-//            btn.addActionListener(e -> {
-//                dialog.dispose();
-//                onSelected.accept(horse);
-//            });
-//
-//            panel.add(btn);
-//            x += icon.getIconWidth() + 20;
-//        }
+            java.net.URL imageURL = getClass().getResource(imagePath);
+            if (imageURL == null) {
+                System.out.println("❗ 이미지 경로 오류: 존재하지 않음 -> " + imagePath);
+                continue;
+            }
+
+            ImageIcon icon = new ImageIcon(imageURL);
+            icons.add(icon);
+            totalWidth += icon.getIconWidth();
+        }
+
+        totalWidth += spacing * (icons.size() - 1); // 간격까지 포함
+
+        int panelWidth = dialog.getWidth();
+        int x = (panelWidth - totalWidth) / 2;  // ← ✨ 가운데 정렬용 x 좌표 계산
+
+        // 두 번째 루프: 버튼 실제 생성
+        for (int i = 0; i < icons.size(); i++) {
+            Horse horse = horses.get(i);
+            ImageIcon icon = icons.get(i);
+
+            JButton btn = new JButton(icon);
+            btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+
+            Horse selectedHorse = horse;
+            btn.addActionListener(e -> {
+                System.out.println("🖱️ 선택된 말 ID: " + selectedHorse.id);
+                dialog.dispose();
+                onSelected.accept(selectedHorse);
+            });
+
+            panel.add(btn);
+            x += icon.getIconWidth() + spacing;
+        }
 
         dialog.setContentPane(panel);
         dialog.setVisible(true);
