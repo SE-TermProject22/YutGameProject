@@ -321,44 +321,14 @@ public class GameView  extends JPanel {
         horseComponents.get(horse_id).setLocation(x, y);
         repaint();
     }
-    // 혹시 몰라서 여러 개 받으면 이렇게 처리
-    public void moveHorse(List<Integer> horse_id_list, int x, int y){
-        int i = 0;
-        for(Integer horse_id : horse_id_list){
-            horseComponents.get(horse_id_list.get(i)).setLocation(x, y);
-            i++;
-        }
-        repaint();
-    }
-
-    // 그러면 나중에 마지막에 moveHorse()를 하면 됨
-
-    // 설명 필요 - 아래 두 함수
-    public void placeHorses(List<String> colors) {
-        int x = 50;  // x 좌표를 50부터 시작
-        int y = 50;  // y 좌표를 50으로 고정 (필요에 따라 조정 가능)
-
-        for (String color : colors) {
-            setHorsePosition(color, x, y);
-            x += 100;  // 각 말의 x 좌표를 100씩 증가시켜서 수평으로 배치
-        }
-        repaint();
-    }
-
-    //말 위치를 업데이트하는 메서드
-    public void setHorsePosition(String color, int x, int y) {
-        horsePositions.put(color, new Point(x, y));
-        repaint();
-    }
 
     // 윷 관련
     public void startYutAnimation(YutResult result) {
-        yutIndex = 0;
 
+        yutIndex = 0;
         if (animationTimer != null) {
             animationTimer.cancel();
         }
-
         animationTimer = new Timer();
         animationTimer.schedule(new TimerTask() {
             @Override
@@ -371,7 +341,6 @@ public class GameView  extends JPanel {
                     showResultImage(result);
                 }
             }
-
         }, 0, 300);
     }
 

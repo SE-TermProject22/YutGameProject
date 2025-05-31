@@ -1,21 +1,7 @@
 package Controller;
 
-import Model.Board;
-import Model.DoubledHorse;
-import Model.Player;
-import Model.Horse;
-
-import View.StartView;
-import View.GameView;
-
-//
-import View.EndView;
-
-//
-
-
-import java.awt.*;
-import java.util.*;
+import Model.*;
+import View.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,41 +10,42 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameController {
+
+    // frame
+    private JFrame frame;
+
+    // view
     private StartView startView;
     private GameView gameView;
-
     private EndView endView;
 
-    private Player currentPlayer;
-
-    private Board board;            // borad 지정
-    private List<Player> players = new ArrayList<>();   // players
-    private List<Horse> horses = new ArrayList<>();         // 전체 horse
-    private int horseCount;
-    private int playerCount;
-    private boolean throwState = true;
-    private List<YutResult> yutList = new ArrayList<>();
-    ;    //나중에 turn이 바뀔 때마다 currentPlayer 하면서 같이 .clear()
-
+    // gameState
     private GameState currentState = GameState.START_SCREEN;
 
+    // Player
+    private List<Player> players = new ArrayList<>();   // players
+    private int playerCount;
+    private Player currentPlayer;
     // turn 구현을 위한 1차례 2차례 이렇계 계속 늘어나는 변수
     private int turn = 0;
 
+    // Board - 현재 선택된 board
+    private Board board;            // borad 지정
+
+    // Horse
+    private List<Horse> horses = new ArrayList<>();         // 전체 horse
+    private int horseCount;
     // 업기 구현을 위한 initial_id
     private int d_init = 100;
-    //
 
-    private JFrame frame;
+    // Yut 윷 던지기
+    private boolean throwState = true;
+    private Yut yut;
 
     public GameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
-
         this.frame = frame;
-
         this.startView = startView;
         this.gameView = gameView;
-
-        //
         this.endView = endView;
 
         initializeListeners();
@@ -131,35 +118,22 @@ public class GameController {
             public void actionPerformed(ActionEvent e) {
                 if(throwState) {
                     throwState = false;
-                    YutResult result = currentPlayer.throwYut();
-                    System.out.println(result);
-                    yutList.add(result);
+                    // YutResult result = currentPlayer.throwYut();
+                    // yutList.add(result);
+                    YutResult result = yut.throwYut();
                     gameView.startYutAnimation(result);
 
                     if (result == YutResult.MO || result == YutResult.YUT) {
                         throwState = true;
                         gameView.scheduleNotifyingImage(result);
                     }
-
                     else{
-
                         javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
                             move();
                         });
                         delayTimer.setRepeats(false);
                         delayTimer.start();
-
-
-
-                        // move();
-                        // 다시 throwYut true 처리하고 turn 넘겨주기 - 원래는 move 안에서 하려고 해는데 계속 버튼이 눌려서 여기로 옮김
-                        /*
-                        throwState = true;
-                        turn++;
-                        currentPlayer = players.get(turn%playerCount);
-                        */
                     }
-
                 }
             }
         });
@@ -169,12 +143,11 @@ public class GameController {
             throwState = false;
             YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
-                yutList.add(selectedResult);
+                // yutList.add(selectedResult);
+                yut.throwYut(selectedResult);
             });
-            result = yutList.get(yutList.size() - 1);
-
-            System.out.println(result);
-            // yutList.add(result);
+            // result = yutList.get(yutList.size() - 1);
+            result = yut.getYutResultList().get(yut.getYutResultListSize() - 1);
             gameView.startYutAnimation(result);
 
             if (result == YutResult.MO || result == YutResult.YUT) {
@@ -202,74 +175,44 @@ public class GameController {
 
     }
 
-
     private void startGame() {
+
         String selectedBoard = startView.getSelectedBoard();
 
-        // new 보드 연결
-        // board = new Board();
-        // square board
-        // pentagon board
-        // hexagon board
         board = new Board(selectedBoard);
-
         playerCount = startView.getPlayerCount();
         horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
-
-        // 모든 말 생성
-        for(int i = 0; i < playerCount; i++) {
-            String color = selectedColors.get(i);
-            players.add(new Player(i, color));
-            for(int j = 0; j < horseCount; j++) {
-                horses.add(new Horse((i*horseCount+j), color, board.nodes.get(0)));
-                players.get(i).horseList.add(horses.get(i*horseCount+j));   // 일단 이렇게 바로 add를 하는데 나중에는 함수를 만들어서 하던지 합시다^
-            }
-        }
-
-
-        System.out.println("===== 생성된 말(Horses) =====");
-        for (Horse horse : horses) {
-            System.out.printf("Horse ID: %d, Color: %s, StartNode: (%d, %d)\n",
-                    horse.id, horse.color, horse.currentNode.x, horse.currentNode.y);
-        }
-
-        // 디버깅: 생성된 모든 플레이어 및 보유 말 출력
-        System.out.println("\n===== 생성된 플레이어(Players) 및 보유 말 log=====");
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-            System.out.printf("Player ID: %d, Color: %s, Horse Count: %d\n",
-                    player.id, player.color, player.horseList.size());
-
-            for (Horse horse : player.horseList) {
-                System.out.printf("  └─ Horse ID: %d, Color: %s, StartNode: (%d, %d)\n",
-                        horse.id, horse.color, horse.currentNode.x, horse.currentNode.y);
-            }
-        }
-
-        // 말 component 생성
-        gameView.initHorses(selectedColors, horseCount);
-
-
 
         if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
             JOptionPane.showMessageDialog(null, "보드와 말 선택이 완료되지 않았습니다.");
             return;
         }
 
+        // 모든 말 생성
+        for(int i = 0; i < playerCount; i++) {
+            String color = selectedColors.get(i);
+            players.add(new Player(i, color));
+            for(int j = 0; j < horseCount; j++) {
+                horses.add(new Horse((i*horseCount+j), color, board.nodes.getFirst()));
+                players.get(i).addHorse(horses.get(i*horseCount+j));
+            }
+        }
 
+        // 말 component 생성
+        gameView.initHorses(selectedColors, horseCount);
 
-        currentPlayer = players.get(0);  // 첫 번째 플레이어로 시작
-        // gameView.setPlayer(currentPlayer);
+        currentPlayer = players.getFirst();  // 첫 번째 플레이어로 시작
+
+        yut = new Yut();
 
         setState(GameState.GAME_PLAY); // 게임 상태로 전환
+
         startView.setVisible(false); // StartView 숨기기
         gameView.setVisible(true);   // GameView 보이기
-
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
-        //gameView.placeHorses(selectedColors, playerCount);
     }
 
     private void setState(GameState newState) {
@@ -281,176 +224,111 @@ public class GameController {
         startView.setState(currentState);
     }
 
+
+
     // 팝업창 너무 빨리뜨는거 나중에 해결했으면 좋겠어요!
     public void move(){
-
-        while(!yutList.isEmpty()){
+        while(!yut.isEmptyYutResultList()){ //!yutList.isEmpty()){
                 //윷 결과 선택창
-                gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
-                    // yutList.remove(chosenResult); // 선택한 결과 제거
-                    // System.out.println("선택된 결과: " + chosenResult);
-
-                    //말 적용 선택창 - 이거 나중에 list로 주는거 따로 처리하기
-                    List<Horse> selectableHorseList = new ArrayList<>();
-                    for (Horse horse : currentPlayer.horseList) {
-                        if(horse.isDoubled)
-                            continue;
-                        selectableHorseList.add(horse);
-                    }
-
+                gameView.showYutResultChoiceDialog(yut.getYutResultList(), chosenResult -> { // yutList, chosenResult -> {
+                    List<Horse> selectableHorseList = currentPlayer.selectableHorse();
                     gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
-                        // System.out.println("선택된 말: " + selectedHorse.id);
-                        //이동 구현 필요
-                        // yutList.clear();
-                        // throwState = true;
                         YutResult result = chosenResult;
-                        yutList.remove(result);
+                        // yutList.remove(result);
+                        yut.removeYutResult(result);
 
+                        // 말 움직이기 - model
                         selectedHorse.move(result);
-
+                        // 말 움직이기 - view
                         if(selectedHorse.state == false){
                             selectedHorse.state = true;
                             gameView.setHorseVisible(selectedHorse.id);
                         }
-
                         gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
 
-                        ////////// finish 처리 /////////
-                        //if (selectedHorse.currentNode.isEndNode || selectedHorse.isFinished)
-                        if (selectedHorse.currentNode.isEndNode) {
+                        // finish
+                        horseFinishCheck(selectedHorse);
 
-                            System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
-                            if(selectedHorse instanceof DoubledHorse) {
-                                ArrayList<Horse> doubledHorseList = new ArrayList<>();
-                                doubledHorseList.addAll(((DoubledHorse) selectedHorse).getCarriedHorses());
-                                for(Horse horse : doubledHorseList){
-                                    // horse 부분이 selected horse여도 되긴 하지만 논리적으로 조금 맞지 않음
-                                    // horse로 하면 회색 처리도 됨 - 논리적으로 맞음
-                                    gameView.setHorseToGray(horse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
-
-                                    // 말 상태 변경
-                                    horse.state = false;
-
-                                    // 플레이어 점수 +1
-                                    // 업기 할때 수정필요
-                                    currentPlayer.horseList.remove(horse);
-                                    currentPlayer.score++;
-
-                                    // 말 숨기기
-                                    gameView.setHorseInvisible(horse.id);
-                                }
-                                // 사용자 list에서도 없어지고, setInVisible
-                                selectedHorse.state = false;
-                                gameView.setHorseInvisible(selectedHorse.id);
-                                currentPlayer.horseList.remove(selectedHorse);
-                            }
-                            else{
-                                gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
-
-                                // 말 상태 변경
-                                selectedHorse.state = false;
-
-                                // 플레이어 점수 +1
-                                // 업기 할때 수정필요
-                                currentPlayer.horseList.remove(selectedHorse);
-                                currentPlayer.score++;
-                                // 말 숨기기
-                                gameView.setHorseInvisible(selectedHorse.id);
-                            }
-
-
-
-                            // 승리 조건 체크
-                            if (currentPlayer.score >= horseCount) {
-                                System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
-                                // ✅ [1] 윷 리스트 모두 비우기
-                                yutList.clear();
-
-                                // ✅ [2] 남아있는 팝업 모두 닫기
-                                gameView.disposeAllDialogs();
-
-                                endView.setWinner(currentPlayer.id + 1); // 승리자 id넘겨주기 // 원래 이거 안했었음 -> 이번에 추가(예나-5/23)
-
-                                setState(GameState.GAME_OVER);    // ✅ 게임 종료 상태로 전환
-
-                                gameView.setVisible(false);
-                                endView.setVisible(true);
-
-                                return;
-                            }
-                        }
-
-                        // 업기 처리
-                        for (Player players : players) {
-                            for(Horse other : players.horseList) {
-                                if (other == selectedHorse || !other.state || other.isDoubled) continue;
-
-                                int check = selectedHorse.checkSameNodeAndTeam(other);
-
-                                // 같은 말 - 업기
-                                if (check == 1) {
-                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
-
-                                    selectedHorse.isDoubled = true;
-                                    other.isDoubled = true;
-
-                                    // view 건들기
-                                    gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
-                                    gameView.setHorseInvisible(other.id);
-                                    gameView.setHorseInvisible(selectedHorse.id);
-                                    currentPlayer.horseList.add(dh);
-
-                                    System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n", selectedHorse.id, other.id, dh.id);
-
-                                    // TODO: DoubledHorse 처리 로직
-                                    // break;
-                                    return;
-
-                                }
-                                // 다른 말 - 잡기
-                                else if (check == 0) {
-                                    System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
-                                    if(other instanceof DoubledHorse) {
-                                        ArrayList<Horse> doubledHorseList = new ArrayList<>();
-                                        doubledHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
-                                        for(Horse horse : doubledHorseList){
-                                            horse.state = false;
-                                            gameView.setHorseInvisible(horse.id);
-                                            horse.currentNode = board.nodes.get(0); // 시작점으로
-                                            horse.x = horse.currentNode.x;
-                                            horse.y = horse.currentNode.y;
-                                            horse.isDoubled = false;
-                                            gameView.moveHorse(horse.id, horse.x, horse.y);  // 잡힌 말 다시 그리기
-                                        }
-                                        // 사용자 list에서도 없어지고, setInVisible
-                                        gameView.setHorseInvisible(other.id);
-                                        players.horseList.remove(other);
-                                    }
-                                    else{
-                                        other.state = false;
-                                        gameView.setHorseInvisible(other.id);
-                                        other.currentNode = board.nodes.get(0); // 시작점으로
-                                        other.x = other.currentNode.x;
-                                        other.y = other.currentNode.y;
-                                        gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
-
-                                    }
-                                    //break;
-                                    return;
-                                }
-                            }
-
-                        }
-
-
+                        // 업기 & 잡기
+                        horseStackCheck(selectedHorse);
                     });
-
                 });
         }
         throwState = true;
         turn++;
         currentPlayer = players.get(turn%playerCount);
 
+    }
+
+    private void horseFinishCheck(Horse selectedHorse) {
+        // EndNode라면
+        selectedHorse.finish(currentPlayer);
+        if (selectedHorse.currentNode.isEndNode) {
+            System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
+            if(selectedHorse instanceof DoubledHorse) {
+                ArrayList<Horse> doubledHorseList = new ArrayList<>();
+                doubledHorseList.addAll(((DoubledHorse) selectedHorse).getCarriedHorses());
+                for(Horse horse : doubledHorseList){
+                    gameView.setHorseToGray(horse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
+                    gameView.setHorseInvisible(horse.id);
+                }
+
+                gameView.setHorseInvisible(selectedHorse.id);
+            }
+            else{
+                gameView.setHorseToGray(selectedHorse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
+                gameView.setHorseInvisible(selectedHorse.id);
+            }
+            checkWinner();
+        }
+    }
+
+    public void checkWinner(){
+        // 승리 조건 체크
+        if (currentPlayer.getScore() >= horseCount) {
+            System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.getId() + 1);
+            // ✅ [1] 윷 리스트 모두 비우기
+            // yutList.clear();
+            yut.clearYutResultList();
+            // ✅ [2] 남아있는 팝업 모두 닫기
+            gameView.disposeAllDialogs();
+            endView.setWinner(currentPlayer.getId() + 1); // 승리자 id넘겨주기 // 원래 이거 안했었음 -> 이번에 추가(예나-5/23)
+            setState(GameState.GAME_OVER);    // ✅ 게임 종료 상태로 전환
+            gameView.setVisible(false);
+            endView.setVisible(true);
+        }
+    }
+
+    public void horseStackCheck(Horse selectedHorse){
+        Horse other = selectedHorse.findSameNodeHorse(players);
+        if(other == null)
+            return;
+        boolean sameTeam = selectedHorse.checkSameTeam(other);
+        if(sameTeam){
+            // 업기
+            DoubledHorse dh = selectedHorse.stack(d_init++, currentPlayer, other);
+            gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
+            gameView.setHorseInvisible(other.id);
+            gameView.setHorseInvisible(selectedHorse.id);
+        }
+        else{
+            // 잡기
+            other.catched(board.nodes.getFirst(), other.getPlayer(players));
+            if(other instanceof DoubledHorse) {
+                ArrayList<Horse> doubledHorseList = new ArrayList<>();
+                doubledHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
+                for(Horse horse : doubledHorseList){
+                    gameView.setHorseInvisible(horse.id);
+                    gameView.moveHorse(horse.id, horse.x, horse.y);  // 잡힌 말 다시 그리기
+                }
+                // 사용자 list에서도 없어지고, setInVisible
+                gameView.setHorseInvisible(other.id);
+            }
+            else{
+                gameView.setHorseInvisible(other.id);
+                gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
+            }
+        }
     }
 
     private void restartGame(){
@@ -461,7 +339,8 @@ public class GameController {
         horseCount = 0;
         playerCount = 0;
         throwState = true;
-        yutList.clear();
+        // yutList.clear();
+        yut.clearYutResultList();
         turn = 0;
         d_init = 100;
 
@@ -477,11 +356,6 @@ public class GameController {
         startView = null;
         gameView = null;
         endView = null;
-
-        // StartView oldStartView = startView;
-        // GameView oldGameView = gameView;
-        // EndView oldEndView = endView;
-
 
         startView = new StartView();
         startView.setVisible(true);

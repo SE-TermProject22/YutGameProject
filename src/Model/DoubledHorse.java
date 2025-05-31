@@ -26,11 +26,36 @@ public class DoubledHorse extends Horse{
             carriedHorses.add(horse2);
             this.horseCount = horseCount + 1;
         }
+        horse1.isDoubled = true;
+        horse2.isDoubled = true;
         System.out.println("!!!업기 발생!!!" + horseCount + " horses and " + carriedHorses.size());
     }
 
     public List<Horse> getCarriedHorses() {
         return carriedHorses;
+    }
+
+    public void finish(Player player){
+        if(!currentNode.isEndNode) return;
+        for(Horse horse : carriedHorses){
+            horse.state = false;
+            player.removeHorse(horse);
+            player.addScore();
+        }
+
+        this.state = false;
+        player.removeHorse(this);
+    }
+
+    public void catched(Node firstNode, Player player){
+        for(Horse horse : carriedHorses){
+            horse.state = false;
+            horse.currentNode = firstNode; // 시작점으로
+            horse.x = horse.currentNode.x;
+            horse.y = horse.currentNode.y;
+            horse.isDoubled = false;
+        }
+        player.removeHorse(this);
     }
 
 }

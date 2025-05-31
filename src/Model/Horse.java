@@ -1,6 +1,5 @@
 package Model;
-
-import java.util.ArrayList;
+import java.util.List;
 import Controller.YutResult;
 
 public class Horse {
@@ -10,9 +9,6 @@ public class Horse {
     public String color;
     public boolean state = false;
     public boolean isDoubled = false;
-    private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
-    // private boolean HorseBackDoState = false; // 도->백도 -> 다시 들어감 finish 처리 ->
-    // public boolean isFinished = false;
 
     // 생성자
     public Horse(int id, String color, Node currentNode) {
@@ -24,71 +20,78 @@ public class Horse {
 
     }
 
-    // 잡기 확인(같은 노드인지, 같은 팀인지)
-    public int checkSameNodeAndTeam(Horse other) {
-        boolean sameNode = (this.x == other.x)&&(this.y == other.y);
-        //boolean bothInCenter = currentNode.isCenterNode && other.currentNode.isCenterNode;
-        //boolean bothInStart = currentNode.isFirstNode && other.currentNode.isLastNode;
+    // 같은 node에 있는지 확인
+    public boolean checkSameNode(Horse other) {
+        if (other == this || !other.state || other.isDoubled) return false;
+        if (this.x == other.x && this.y == other.y) return true;
+        return false;
+    }
 
-        boolean sameTeam = this.color.equals(other.color);
-        //boolean bothInEnd = currentNode.isLastNode && other.currentNode.isFirstNode;
+    // 같은 팀인지 확인
+    public boolean checkSameTeam(Horse other) {
+        return this.color.equals(other.color);
+    }
 
-        if (sameNode){ //|| bothInCenter || bothInStart || bothInEnd) {
-
-            return sameTeam ? 1 : 0; // 1: 업기 가능, 0: 잡기 가능
+    // 같은 node에 있는 Horse 찾기
+    public Horse findSameNodeHorse(List<Player> players) {
+        for (Player player : players) {
+            for (Horse other : player.getHorseList()) {
+                if(this.checkSameNode(other))
+                    return other;
+            }
         }
-        // currentnode.x = other.x
-        // currentnode.y = other.y
+        return null;
+    }
 
-        return -1; // 서로 다른 위치, 상호작용 없음
+    public DoubledHorse stack(int new_id, Player player, Horse other) {
+        DoubledHorse dh = new DoubledHorse(new_id, this, other);
+        player.addHorse(dh);
+        return dh;
+    }
+
+    public void catched(Node firstNode, Player player){
+        this.state = false;
+        this.currentNode = firstNode; // 시작점으로
+        this.x = this.currentNode.x;
+        this.y = this.currentNode.y;
     }
 
 
     public void move(YutResult result) {
         if(result==YutResult.BackDo){
             System.out.println("백도 처리 시작");
-            if(currentNode.backDoNode == null) {
-                System.out.println("출발점임");//출발점임
-            }
-            else{
-                this.currentNode = currentNode.backDoNode;
-
-                this.x = currentNode.x;
-                this.y = currentNode.y;
-//                if (currentNode.isFirstNode) {
-//                    HorseBackDoState = true; // 다음에 도~모가 나오면 Finish 처리
-//                }
-            }
-
+            this.currentNode = currentNode.backDoNode;
+            this.x = currentNode.x;
+            this.y = currentNode.y;
             return;
         }
 
-
         if(currentNode.isDaegak) {
             this.currentNode = ((DaegakNode)currentNode).DNode;
-            // 원래 이부분은 마지막에만 해주면 됨
-            this.x = currentNode.x;
-            this.y = currentNode.y;
         }
         else {
             this.currentNode = currentNode.nextNode;
-            // 원래 이부분은 마지막에만 해주면 됨
-            this.x = currentNode.x;
-            this.y = currentNode.y;
         }
         for(int i=0; i< result.ordinal(); i++){
             if(result == YutResult.BackDo) break; // 여기는 백도 처리 안함
             this.currentNode = currentNode.nextNode;
-            // 원래 이부분은 마지막에만 해주면 됨
-            this.x = currentNode.x;
-            this.y = currentNode.y;
         }
-//        if (!currentNode.isFirstNode) {
-//            HorseBackDoState = false;
-//        }
-
+        // 원래 이부분은 마지막에만 해주면 됨
+        this.x = currentNode.x;
+        this.y = currentNode.y;
     }
 
+    public void finish(Player player){
+        if(!currentNode.isEndNode) return;
+        this.state = false;
+        player.removeHorse(this);
+        player.addScore();
+    }
 
-
+    public Player getPlayer(List<Player> players) {
+        for (Player player : players) {
+            if(player.getColor().equals(this.color)) return player;
+        }
+        return null;
+    }
 }

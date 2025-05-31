@@ -1,26 +1,57 @@
 package Model;
 
+import Controller.YutResult;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Yut {
-    // 도 개 걸 윷 모
-    public enum yutResult{
-        BAEKDO,   // 빽도: -1칸 이동
-        DO,        // 도: 1칸 이동
-        GAE,       // 개: 2칸 이동
-        GEOL,      // 걸: 3칸 이동
-        YUT,       // 윷: 4칸 이동
-        MO        // 모: 5칸 이동
+    private ArrayList<YutResult> yutResultList;
+
+    // 생성자
+    public Yut(){
+        yutResultList = new ArrayList<>();
     }
 
-    // 랜덤하게 던저져서 결과 반환
-    public List<yutResult> throwYut(){
-        // 여기서 list를 만들어서
-        List<yutResult> yutResults = new ArrayList<yutResult>();
-        // YutList에 랜덤으로 결과 넣기
-        // 결과가 모나 윷이면
-        // 내부적으로 또 던지는 로직 추가하기
-        return yutResults;
+    // 던진 윷의 결과값(int)을 반환하는 함수
+    public YutResult throwYut() {
+        Random rand = new Random();
+        int r = rand.nextInt(100); // 0~99
+        YutResult result;
+        if (r < 5) {             // 0~4 : 5%
+            result = YutResult.BackDo;
+        } else if (r < 12) {     // 5~11 : 7%
+            result = YutResult.MO;
+        } else if (r < 20) {     // 12~19 : 8%
+            result = YutResult.YUT;
+        } else if (r < 45) {     // 20~44 : 25%
+            result = YutResult.GEOL;
+        } else if (r < 75) {     // 45~74 : 30%
+            result = YutResult.GAE;
+        } else {                 // 75~99 : 25%
+            result = YutResult.DO;
+        }
+        yutResultList.add(result);
+        return result;
+    }
+
+    // 지정 윷 던지기
+    public void throwYut(YutResult result) {
+        yutResultList.add(result);
+    }
+    public ArrayList<YutResult> getYutResultList() {
+        return yutResultList;
+    }
+    public int getYutResultListSize() {
+        return yutResultList.size();
+    }
+    public void clearYutResultList() {
+        yutResultList.clear();
+    }
+    public void removeYutResult(YutResult result) {
+        yutResultList.remove(result);
+    }
+    public boolean isEmptyYutResultList() {
+        return yutResultList.isEmpty();
     }
 }
