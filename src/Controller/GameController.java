@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.*;
-import View.*;
+import View.Swing.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -291,7 +291,7 @@ public class GameController {
             // yutList.clear();
             yut.clearYutResultList();
             // ✅ [2] 남아있는 팝업 모두 닫기
-            gameView.disposeAllDialogs();
+            // gameView.disposeAllDialogs();
             endView.setWinner(currentPlayer.getId() + 1); // 승리자 id넘겨주기 // 원래 이거 안했었음 -> 이번에 추가(예나-5/23)
             setState(GameState.GAME_OVER);    // ✅ 게임 종료 상태로 전환
             gameView.setVisible(false);
@@ -332,7 +332,7 @@ public class GameController {
     }
 
     private void restartGame(){
-        gameView.disposeAllDialogs(); // ✅ 재시작 시에도 팝업 다 닫기
+        // gameView.disposeAllDialogs(); // ✅ 재시작 시에도 팝업 다 닫기
         currentPlayer = null;
         players.clear();
         horses.clear();

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DoubledHorse extends Horse{
+    public int createdOrder;
     private List<Horse> carriedHorses = new ArrayList<>();
     public int horseCount = 0;
     private int imageType; // 0: 첫번째(연한색-2개.png), 1: 두번째(진한색-1개.png)

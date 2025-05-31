@@ -3,11 +3,11 @@ import Controller.GameController;
 import Model.Board;
 import Model.DaegakNode;
 import Model.Node;
-import View.StartView;
-import View.GameView;
+//import View.StartView;
+//import View.GameView;
+//import View.EndView;
 
-//
-import View.EndView;
+import View.Swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,8 +22,6 @@ public class Main {
             // 뷰들 생성
             StartView startView = new StartView();
             GameView gameView = new GameView();
-
-            //
             EndView endView = new EndView();
 
             gameView.setVisible(false); // 처음엔 안 보이게
