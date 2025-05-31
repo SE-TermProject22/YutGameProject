@@ -505,6 +505,14 @@ public class FXGameController {
             System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
             endView.setWinner(currentPlayer.id + 1); // 승리자 정보 전달
             setState(GameState.GAME_OVER);
+
+//            // 화면 전환
+//            gameView.setVisible(false);
+//            endView.setVisible(true);
+            Scene endscene = gameView.getScene();
+            if (endscene != null) {
+                endscene.setRoot(endView);
+            }
         }
         // 아직 말이 남았다면 다음 윷 결과 처리
         processNextYutResult();
