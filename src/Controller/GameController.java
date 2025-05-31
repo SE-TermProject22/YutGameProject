@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.Swing.*;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ public class GameController {
         gameView.addThrowButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(throwState) {
+                while (throwState) {
                     throwState = false;
                     // YutResult result = currentPlayer.throwYut();
                     // yutList.add(result);
@@ -127,42 +128,39 @@ public class GameController {
                         throwState = true;
                         gameView.scheduleNotifyingImage(result);
                     }
-                    else{
-                        javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
-                            move();
-                        });
-                        delayTimer.setRepeats(false);
-                        delayTimer.start();
-                    }
                 }
-            }
-        });
-
-        // 지정윷던지기 버튼 리스너
-        gameView.addSpecialThrowListener(e -> {
-            throwState = false;
-            YutResult result;
-            gameView.showFixedYutChoiceDialog(selectedResult -> {
-                // yutList.add(selectedResult);
-                System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
-                yut.throwYut(selectedResult);
-            });
-            // result = yutList.get(yutList.size() - 1);
-            result = yut.getYutResultList().get(yut.getYutResultListSize() - 1);
-            gameView.startYutAnimation(result);
-
-            if (result == YutResult.MO || result == YutResult.YUT) {
-                throwState = true;
-                gameView.scheduleNotifyingImage(result);
-            }
-            else {
                 javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
                     move();
                 });
                 delayTimer.setRepeats(false);
                 delayTimer.start();
-
             }
+        });
+
+        // 지정윷던지기 버튼 리스너
+        gameView.addSpecialThrowListener(e -> {
+            while(throwState) {
+                throwState = false;
+                YutResult result;
+                gameView.showFixedYutChoiceDialog(selectedResult -> {
+                    // yutList.add(selectedResult);
+                    System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
+                    yut.throwYut(selectedResult);
+                });
+                // result = yutList.get(yutList.size() - 1);
+                result = yut.getYutResultList().get(yut.getYutResultListSize() - 1);
+                gameView.startYutAnimation(result);
+
+                if (result == YutResult.MO || result == YutResult.YUT) {
+                    throwState = true;
+                    gameView.scheduleNotifyingImage(result);
+                }
+            }
+            javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
+                move();
+            });
+            delayTimer.setRepeats(false);
+            delayTimer.start();
         });
 
         // EndView - 재시작 버튼 리스너
@@ -227,37 +225,69 @@ public class GameController {
 
     // 팝업창 너무 빨리뜨는거 나중에 해결했으면 좋겠어요!
     public void move(){
-        while(!yut.isEmptyYutResultList()){ //!yutList.isEmpty()){
-                //윷 결과 선택창
-                gameView.showYutResultChoiceDialog(yut.getYutResultList(), chosenResult -> { // yutList, chosenResult -> {
-                    List<Horse> selectableHorseList = currentPlayer.selectableHorse();
-                    gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
-                        YutResult result = chosenResult;
-                        // yutList.remove(result);
-                        yut.removeYutResult(result);
-
-                        // 말 움직이기 - model
-                        selectedHorse.move(result);
-                        // 말 움직이기 - view
-                        if(selectedHorse.state == false){
-                            selectedHorse.state = true;
-                            gameView.setHorseVisible(selectedHorse.id);
-                        }
-                        gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
-
-                        // finish
-                        horseFinishCheck(selectedHorse);
-
-                        // 업기 & 잡기
-                        horseStackCheck(selectedHorse);
-                    });
-                });
-        }
-        throwState = true;
-        turn++;
-        currentPlayer = players.get(turn%playerCount);
-
+        processNextYutResult(); // 첫번째 윷 결과 처리 시작
     }
+
+
+    private void processNextYutResult() {
+        if(yut.isEmptyYutResultList()){ //!yutList.isEmpty()){
+            throwState = true;
+            turn++;
+            currentPlayer = players.get(turn%playerCount);
+            return;
+        }
+        // 윷 결과 선택창
+        gameView.showYutResultChoiceDialog(yut.getYutResultList(), chosenResult -> { // yutList, chosenResult -> {
+            List<Horse> selectableHorseList = currentPlayer.selectableHorse();
+            gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
+                executeMove(chosenResult, selectedHorse); //실제 이동 실행
+            });
+        });
+    }
+
+    //실제 말 이동 실행 함수
+    private void executeMove(YutResult chosenResult, Horse selectedHorse){
+        System.out.println("선택된 말: " + selectedHorse.id);
+
+        YutResult result = chosenResult;
+        // yutList.remove(result);
+        yut.removeYutResult(result);
+
+        // 말 움직이기 - model
+        selectedHorse.move(result);
+        // 말 움직이기 - view
+
+        if(selectedHorse.state == false){
+            selectedHorse.state = true;
+            gameView.setHorseVisible(selectedHorse.id);
+        }
+
+        if (selectedHorse instanceof DoubledHorse) {
+            // DoubledHorse의 경우: 업힌 말 이미지를 이동시킴
+            DoubledHorse doubledHorse = (DoubledHorse) selectedHorse;
+
+            gameView.moveHorse(doubledHorse.id, doubledHorse.x, doubledHorse.y);
+            System.out.println("DoubledHorse 이동: " + doubledHorse.id + " → (" + doubledHorse.x + ", " + doubledHorse.y + ")");
+
+            // 기존 이미지 제거
+            gameView.setHorseInvisible(doubledHorse.id);
+
+            // 새 위치에 다시 생성
+            // gameView.mkDoubled(doubledHorse.id, doubledHorse.color, doubledHorse.horseCount, doubledHorse.x, doubledHorse.y, doubledHorse.getImageType());
+        } else {
+            // 일반 말의 경우: 기존대로 처리
+            gameView.moveHorse(selectedHorse.id, selectedHorse.x, selectedHorse.y);
+            System.out.println("일반 말 이동: " + selectedHorse.id + " → (" + selectedHorse.x + ", " + selectedHorse.y + ")");
+        }
+
+        // finish
+        horseFinishCheck(selectedHorse);
+
+        // 업기 & 잡기
+        horseStackCheck(selectedHorse);
+        processNextYutResult();
+    }
+
 
     private void horseFinishCheck(Horse selectedHorse) {
         // EndNode라면
@@ -265,8 +295,12 @@ public class GameController {
         if (selectedHorse.currentNode.isEndNode) {
             System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
             if(selectedHorse instanceof DoubledHorse) {
+                DoubledHorse dh = (DoubledHorse) selectedHorse;
+                if (dh.getImageType() == 0) {  // 0이면 연한색
+                    DoubledHorse.releaseLightImageForColor(dh.color);
+                }
                 ArrayList<Horse> doubledHorseList = new ArrayList<>();
-                doubledHorseList.addAll(((DoubledHorse) selectedHorse).getCarriedHorses());
+                doubledHorseList.addAll(dh.getCarriedHorses());
                 for(Horse horse : doubledHorseList){
                     gameView.setHorseToGray(horse.id); // 원래 이거 안햇었음 -> 이번에 추가(예나-5/23)
                     gameView.setHorseInvisible(horse.id);
@@ -309,13 +343,20 @@ public class GameController {
             gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.currentNode.x, dh.currentNode.y); // - 여기서 comonet 만들고 x, y, id 지정, setVisible도 하기
             gameView.setHorseInvisible(other.id);
             gameView.setHorseInvisible(selectedHorse.id);
+            gameView.showEventImage("/image/업었다.png");
+
         }
         else{
             // 잡기
             other.catched(board.nodes.getFirst(), other.getPlayer(players));
             if(other instanceof DoubledHorse) {
+                DoubledHorse dh = (DoubledHorse) other;
+                //업힌 말2가 잡힐경우 이미지 컬러 조건 초기화 (서로 다른 색이 될 수 있도록)
+                if (dh.getImageType() == 0) {  // 0이면 연한색
+                    DoubledHorse.releaseLightImageForColor(dh.color);
+                }
                 ArrayList<Horse> doubledHorseList = new ArrayList<>();
-                doubledHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
+                doubledHorseList.addAll(dh.getCarriedHorses());
                 for(Horse horse : doubledHorseList){
                     gameView.setHorseInvisible(horse.id);
                     gameView.moveHorse(horse.id, horse.x, horse.y);  // 잡힌 말 다시 그리기
@@ -327,22 +368,24 @@ public class GameController {
                 gameView.setHorseInvisible(other.id);
                 gameView.moveHorse(other.id, other.x, other.y);  // 잡힌 말 다시 그리기
             }
+            gameView.showEventImage("/image/잡았다.png");
         }
     }
 
-    private void restartGame(){
-        // gameView.disposeAllDialogs(); // ✅ 재시작 시에도 팝업 다 닫기
+    private void resetGame() {
         currentPlayer = null;
         players.clear();
         horses.clear();
         horseCount = 0;
         playerCount = 0;
         throwState = true;
-        // yutList.clear();
         yut.clearYutResultList();
         turn = 0;
         d_init = 100;
-
+    }
+    private void restartGame(){
+        // gameView.disposeAllDialogs(); // ✅ 재시작 시에도 팝업 다 닫기
+        resetGame();
         setState(GameState.START_SCREEN);
 
         frame.setVisible(false);
@@ -391,3 +434,4 @@ public class GameController {
 }
 
 
+// 버튼 못 누르게 하고 싶어...!!!!! >3< 이런 짜증나!!!

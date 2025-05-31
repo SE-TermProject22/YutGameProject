@@ -569,11 +569,14 @@ public class GameView  extends JPanel {
             }
         };
 
-        panel.setLayout(null);
+        panel.setLayout(new BorderLayout());
         panel.setOpaque(false);  // 패널도 투명하게
 
-        int x = 100;
-        int y = 100;
+        // int x = 100;
+        // int y = 100;
+
+        JPanel buttonPanel = new JPanel(); // 기본은 FlowLayout(왼쪽→오른쪽 정렬)
+        buttonPanel.setOpaque(false); // 배경 투명하게 (원한다면)
 
         for (Horse horse : horses) {
             try {
@@ -632,7 +635,7 @@ public class GameView  extends JPanel {
                 System.out.println("✅ 이미지 로드 성공: " + imagePath);
 
                 JButton btn = new JButton(icon);
-                btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+                // btn.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
                 btn.setContentAreaFilled(false);
                 btn.setBorderPainted(false);
                 btn.setFocusPainted(false);
@@ -643,13 +646,15 @@ public class GameView  extends JPanel {
                     onSelected.accept(horse);
                 });
 
-                panel.add(btn);
-                x += icon.getIconWidth() + 20;
+                // panel.add(btn);
+                buttonPanel.add(btn);
+                // x += icon.getIconWidth() + 20;
             } catch (Exception ex) {
                 System.out.println("❌ 예외 발생 - 말 ID: " + horse.id + ", 메시지: " + ex.getMessage());
                 ex.printStackTrace();
             }
         }
+        panel.add(buttonPanel, BorderLayout.CENTER);
 
 //        for (Horse horse : horses) {
 //            System.out.println(horse.id);

@@ -135,29 +135,27 @@ public class FXGameController {
         gameView.addSpecialThrowListener(e -> {
             //일반 윷 던지기 비활성화 시켜놓고
             throwState = false;
-
+            YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("지정 윷 결과: " + selectedResult);
-
-//                yutList.clear();
-                yutList.add(selectedResult);
-                // 윷 던지기 애니메이션 실행
-                gameView.startYutAnimation(selectedResult);
-
-                // 윷 or 모 나오면 한 번 더
-                if (selectedResult == YutResult.MO || selectedResult == YutResult.YUT) {
-                    throwState = true;
-                    gameView.scheduleNotifyingImage(selectedResult);
-
-                    PauseTransition pause = new PauseTransition(Duration.seconds(1700));
-                    pause.setOnFinished(ev -> move());
-                    pause.play();
-                } else {
-                    PauseTransition pause = new PauseTransition(Duration.millis(1700));
-                    pause.setOnFinished(ev -> move());
-                    pause.play();
-                }
+                yut.throwYut(selectedResult);
             });
+            result = yut.getYutResultList().get(yut.getYutResultListSize() - 1);
+            // 윷 던지기 애니메이션 실행
+            gameView.startYutAnimation(result);
+
+            // 윷 or 모 나오면 한 번 더
+            if (result == YutResult.MO || result == YutResult.YUT) {
+                throwState = true;
+                gameView.scheduleNotifyingImage(result);
+                PauseTransition pause = new PauseTransition(Duration.seconds(1700));
+                pause.setOnFinished(ev -> move());
+                pause.play();
+            } else {
+                PauseTransition pause = new PauseTransition(Duration.millis(1700));
+                pause.setOnFinished(ev -> move());
+                pause.play();
+            }
         });
 
         // EndView를 만든 쪽 (예: MainFX 또는 Controller)에서
@@ -181,18 +179,23 @@ public class FXGameController {
         horseCount = startView.getHorseCount();
         List<String> selectedColors = startView.getSelectedColors();
 
-        players.clear();
-        horses.clear();
+        if (selectedBoard == null || selectedColors.size() != startView.getPlayerCount()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("선택 오류");
+            alert.setHeaderText(null);
+            alert.setContentText("보드와 말 선택이 완료되지 않았습니다.");
+            alert.showAndWait();
+            return;
+        }
+
 
         for (int i = 0; i < playerCount; i++) {
             String color = selectedColors.get(i);
             Player player = new Player(i, color);
             players.add(player);
-
             for (int j = 0; j < horseCount; j++) {
-                Horse horse = new Horse(i * horseCount + j, color, board.nodes.get(0));
-                horses.add(horse);
-                player.horseList.add(horse);
+                horses.add(new Horse((i*horseCount+j), color, board.nodes.getFirst()));
+                players.get(i).addHorse(horses.get(i*horseCount+j));
             }
         }
 
@@ -206,7 +209,7 @@ public class FXGameController {
         System.out.println("\n===== 생성된 플레이어 및 말 목록 =====");
         for (Player player : players) {
             System.out.printf("Player ID: %d, Color: %s, Horse Count: %d\n",
-                    player.id, player.color, player.horseList.size());
+                    player.getId(), player.getColor(), player.getHorseList().size());
         }
 
         gameView.initHorses(selectedColors, horseCount);
@@ -216,14 +219,18 @@ public class FXGameController {
             scene.setRoot(gameView); // GameView로 루트 교체
         }
 
+        currentPlayer = players.getFirst();  // 첫 번째 플레이어로 시작
 
-        currentPlayer = players.get(0);
+        yut = new Yut();
+
+        setState(GameState.GAME_PLAY);
+
+
         gameView.setBoardType(selectedBoard);
         gameView.displayPlayers(playerCount);
         gameView.displayHorses(selectedColors, playerCount, horseCount);
 
-        setState(GameState.GAME_PLAY);
-
+        /*
         // startGame() 내부 또는 move() 이후
         gameView.addTestEndButton();  // 버튼 생성
         gameView.setTestEndButtonListener(e -> {
@@ -234,6 +241,7 @@ public class FXGameController {
                 endscene.setRoot(endView);
             }
         });
+        */
     }
 
     private void setState(GameState newState) {
@@ -381,34 +389,22 @@ public class FXGameController {
     }
 
     private void processNextYutResult() {
-        if (yutList.isEmpty()) {
+        if(yut.isEmptyYutResultList()){ //!yutList.isEmpty()){
             throwState = true;
             turn++;
-            currentPlayer = players.get(turn % playerCount);
-            return; //처리 윷 결과 없으면 턴 종료
+            currentPlayer = players.get(turn%playerCount);
+            return;
         }
 
         //처리할 윷 결과가 있으면 1. 윷 선택 창 보여주고
-        gameView.showYutResultChoiceDialog(yutList, chosenResult -> {
+        gameView.showYutResultChoiceDialog(yut.getYutResultList(), chosenResult -> {
             Platform.runLater(() -> {
-                processHorseSelection(chosenResult); //2. 말 선택 결과 창으로(chosenResult 결과 받아서)
-            });
-        });
-    }
-
-    private void  processHorseSelection(YutResult chosenResult) {
-        //선택 가능한 말들만 골라내서
-        List<Horse> selectableHorseList = new ArrayList<>();
-        for (Horse horse : currentPlayer.horseList) {
-            //업힌 말은 따로 처리(DoubledHorse로)
-            if (horse.isDoubled) continue;
-            //리스트에 추가 -> 창에 띄워짐!
-            selectableHorseList.add(horse);
-        }
-
-        gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
-            Platform.runLater(() -> {
-                executeMove(chosenResult, selectedHorse); //실제 이동 실행
+                List<Horse> selectableHorseList = currentPlayer.selectableHorse();
+                gameView.showHorseSelectionDialog(selectableHorseList, horseCount, selectedHorse -> {
+                    Platform.runLater(() -> {
+                        executeMove(chosenResult, selectedHorse); //실제 이동 실행
+                    });
+                });
             });
         });
     }
@@ -419,7 +415,7 @@ public class FXGameController {
 
         // 1. 말 이동 처리
         YutResult result = chosenResult;
-        yutList.remove(result); //사용된 윷 결과 리스트에서 제거
+        yut.removeYutResult(result);
         selectedHorse.move(result); // 말 위치 이동 시킴
 
         // 2. 처음 사용되는 보이게 처리
@@ -427,6 +423,7 @@ public class FXGameController {
             selectedHorse.state = true;
             gameView.setHorseVisible(selectedHorse.id);
         }
+
 
         // 3. 화면에서 말 이동 애니메이션
         // DoubledHorse인지 일반 말인지 구분해서 이동 처리
@@ -449,15 +446,146 @@ public class FXGameController {
         }
 
         // 4. 도착 지점 체크
+        /*
         if (selectedHorse.currentNode.isEndNode) {
             handleFinish(selectedHorse); //도착한 말 피니시 처리
             return; // 도착 지점 도착 시 처리 종료
         }
+        */
+        horseFinishCheck(selectedHorse);
+
 
         //5. 업기/잡기 처리
         //도착 지점이 아닌 말은 업기/잡기 항상 확인
-        handleHorseInteraction(selectedHorse);
+        // handleHorseInteraction(selectedHorse);
+        horseStackCheck(selectedHorse);
+        processNextYutResult();
     }
+
+    private void horseFinishCheck(Horse selectedHorse) {
+        // EndNode라면
+        selectedHorse.finish(currentPlayer);
+        if (selectedHorse.currentNode.isEndNode) {
+            System.out.printf("🏁 말 %d finish 처리됨 (EndNode)\n", selectedHorse.id);
+            // 업힌 말 처리
+            if (selectedHorse instanceof DoubledHorse) {
+                DoubledHorse dh = (DoubledHorse) selectedHorse;
+
+                if (dh.getImageType() == 0) {  // 0이면 연한색
+                    DoubledHorse.releaseLightImageForColor(dh.color);
+                }
+                //업힌 말 가져와서 리스트에 넣기
+                ArrayList<Horse> doubleHorseList = new ArrayList<>();
+                doubleHorseList.addAll(dh.getCarriedHorses());
+
+                // 업힌 말 각각 하나씩 피니시 처리 (회색으로 만듦)
+                //✔️이거 잘되는지 확인 필요!!!!
+                for (Horse horse : doubleHorseList) {
+                    // 말 상태 변경
+                    gameView.setHorseToGray(horse.id);
+                    gameView.setHorseInvisible(horse.id);
+                }
+                gameView.setHorseInvisible(selectedHorse.id);
+            }
+            else {
+                // 일반 말 피니시 처리
+                // 말 상태 변경
+                gameView.setHorseToGray(selectedHorse.id);
+                selectedHorse.state = false;
+                gameView.setHorseInvisible(selectedHorse.id);
+            }
+            checkWinner();
+            // 아직 말이 남았다면 다음 윷 결과 처리
+            // processNextYutResult();
+        }
+    }
+
+    public void checkWinner(){
+        // 승리 조건 체크
+        if (currentPlayer.getScore() >= horseCount) {
+            System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.getId() + 1);
+            // ✅ [1] 윷 리스트 모두 비우기
+            // yutList.clear();
+            yut.clearYutResultList();
+            // ✅ [2] 남아있는 팝업 모두 닫기
+            // gameView.disposeAllDialogs();
+
+            endView.setWinner(currentPlayer.getId() + 1); // 승리자 정보 전달
+            setState(GameState.GAME_OVER);
+            Scene endscene = gameView.getScene();
+            if (endscene != null) {
+                endscene.setRoot(endView);
+            }
+        }
+    }
+
+    public void horseStackCheck(Horse selectedHorse){
+        Horse other = selectedHorse.findSameNodeHorse(players);
+        if(other == null)
+            return;
+        boolean sameTeam = selectedHorse.checkSameTeam(other);
+        if(sameTeam){
+            // 업기
+            DoubledHorse dh = selectedHorse.stack(d_init++, currentPlayer, other);
+            gameView.setHorseInvisible(selectedHorse.id);
+            gameView.setHorseInvisible(other.id);
+            gameView.mkDoubled(dh.id, dh.color, dh.horseCount, dh.x, dh.y, dh.getImageType());
+            // 디버그 출력
+            System.out.printf("🔗 업기 발생: %s 업힌 대상: %s 만들어진 대상: %s\n",
+                    selectedHorse.id, other.id, dh.id);
+
+            // 업기 이벤트 이미지 표시
+            gameView.showEventImage("/image/업었다.png");
+        }
+        else{
+            // 잡기
+            other.catched(board.nodes.getFirst(), other.getPlayer(players));
+            System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
+
+            if (other instanceof DoubledHorse) {
+                DoubledHorse dh = (DoubledHorse) other;
+
+                //업힌 말2가 잡힐경우 이미지 컬러 조건 초기화 (서로 다른 색이 될 수 있도록)
+                if (dh.getImageType() == 0) {  // 0이면 연한색
+                    DoubledHorse.releaseLightImageForColor(dh.color);
+                }
+
+                //업힌 말 잡히면 업힌 모든 말 시작점으로
+                ArrayList<Horse> doubleHorseList = new ArrayList<>();
+                doubleHorseList.addAll(dh.getCarriedHorses());
+
+                for (Horse horse : doubleHorseList) {
+                    // 말 상태 초기화
+                    gameView.setHorseInvisible(horse.id);
+                    gameView.moveHorse(horse.id, horse.x, horse.y);
+                }
+
+                //doublehorse도 안 보이게
+                gameView.setHorseInvisible(other.id);
+
+            } else {
+                gameView.setHorseInvisible(other.id);
+                gameView.moveHorse(other.id, other.x, other.y);
+            }
+
+            gameView.showEventImage("/image/잡았다.png");
+        }
+        // processNextYutResult();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
 
     private void handleFinish(Horse selectedHorse) {
         System.out.printf("🏁 말 %d finish 처리 완료 (EndNode)\n", selectedHorse.id);
@@ -639,7 +767,7 @@ public class FXGameController {
             System.out.println("잡기 후 윷 결과 없음 - 다음 턴으로");
         }
     }
-
+*/
     // 게임 데이터를 초기화하는 메서드
     private void resetGame() {
         currentPlayer = null;
@@ -648,7 +776,7 @@ public class FXGameController {
         horseCount = 0;
         playerCount = 0;
         throwState = true;
-        yutList.clear();
+        yut.clearYutResultList();
         turn = 0;
     }
 
