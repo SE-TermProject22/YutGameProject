@@ -133,13 +133,30 @@ public class FXGameController {
         });
 
         gameView.addSpecialThrowListener(e -> {
+            //일반 윷 던지기 비활성화 시켜놓고
+            throwState = false;
+
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("지정 윷 결과: " + selectedResult);
 
-                yutList.clear();
+//                yutList.clear();
                 yutList.add(selectedResult);
+                // 윷 던지기 애니메이션 실행
+                gameView.startYutAnimation(selectedResult);
 
-                move();
+                // 윷 or 모 나오면 한 번 더
+                if (selectedResult == YutResult.MO || selectedResult == YutResult.YUT) {
+                    throwState = true;
+                    gameView.scheduleNotifyingImage(selectedResult);
+
+                    PauseTransition pause = new PauseTransition(Duration.seconds(1700));
+                    pause.setOnFinished(ev -> move());
+                    pause.play();
+                } else {
+                    PauseTransition pause = new PauseTransition(Duration.millis(1700));
+                    pause.setOnFinished(ev -> move());
+                    pause.play();
+                }
             });
         });
 
@@ -490,6 +507,14 @@ public class FXGameController {
             System.out.printf("🎉 플레이어 %d 승리!\n", currentPlayer.id + 1);
             endView.setWinner(currentPlayer.id + 1); // 승리자 정보 전달
             setState(GameState.GAME_OVER);
+
+//            // 화면 전환
+//            gameView.setVisible(false);
+//            endView.setVisible(true);
+            Scene endscene = gameView.getScene();
+            if (endscene != null) {
+                endscene.setRoot(endView);
+            }
         }
         // 아직 말이 남았다면 다음 윷 결과 처리
         processNextYutResult();

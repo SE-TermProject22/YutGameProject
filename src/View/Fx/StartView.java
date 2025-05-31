@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.List;
 
 public class StartView extends StackPane {
-    private StackPane stackRoot;
     private ImageView background;
     private Image startBackground, horseSelectionBackground, boardSelectionBackground;
 
