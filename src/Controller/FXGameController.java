@@ -131,13 +131,30 @@ public class FXGameController {
         });
 
         gameView.addSpecialThrowListener(e -> {
+            //일반 윷 던지기 비활성화 시켜놓고
+            throwState = false;
+
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 System.out.println("지정 윷 결과: " + selectedResult);
 
-                yutList.clear();
+//                yutList.clear();
                 yutList.add(selectedResult);
+                // 윷 던지기 애니메이션 실행
+                gameView.startYutAnimation(selectedResult);
 
-                move();
+                // 윷 or 모 나오면 한 번 더
+                if (selectedResult == YutResult.MO || selectedResult == YutResult.YUT) {
+                    throwState = true;
+                    gameView.scheduleNotifyingImage(selectedResult);
+
+                    PauseTransition pause = new PauseTransition(Duration.seconds(1700));
+                    pause.setOnFinished(ev -> move());
+                    pause.play();
+                } else {
+                    PauseTransition pause = new PauseTransition(Duration.millis(1700));
+                    pause.setOnFinished(ev -> move());
+                    pause.play();
+                }
             });
         });
 
