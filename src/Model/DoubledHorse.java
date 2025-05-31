@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DoubledHorse extends Horse{
+public class DoubledHorse extends Horse {
     public int createdOrder;
     private List<Horse> carriedHorses = new ArrayList<>();
     public int horseCount = 0;
@@ -15,19 +15,21 @@ public class DoubledHorse extends Horse{
     public DoubledHorse(int id, Horse horse1, Horse horse2) {
         super(id, horse1.color, horse1.currentNode);
         this.state = true;
-        if(horse1 instanceof DoubledHorse) {
+
+        // horseCount 누적 초기화
+        // horseCount = 0;
+
+        if (horse1 instanceof DoubledHorse) {
             carriedHorses.addAll(((DoubledHorse) horse1).carriedHorses);
             this.horseCount += ((DoubledHorse) horse1).horseCount;
-        }
-        else{
+        } else {
             carriedHorses.add(horse1);
             this.horseCount = horseCount + 1;
         }
-        if(horse2 instanceof DoubledHorse) {
+        if (horse2 instanceof DoubledHorse) {
             carriedHorses.addAll(((DoubledHorse) horse2).carriedHorses);
             this.horseCount += ((DoubledHorse) horse2).horseCount;
-        }
-        else{
+        } else {
             carriedHorses.add(horse2);
             this.horseCount = horseCount + 1;
         }
@@ -49,6 +51,7 @@ public class DoubledHorse extends Horse{
     public int getImageType() {
         return imageType;
     }
+
     // 테스트나 게임 재시작 시 초기화 필요할 수 있음
     public static void resetLightDoubleHorseMap() {
         lightDoubleHorseUsed.clear();
@@ -62,9 +65,9 @@ public class DoubledHorse extends Horse{
         return carriedHorses;
     }
 
-    public void finish(Player player){
-        if(!currentNode.isEndNode) return;
-        for(Horse horse : carriedHorses){
+    public void finish(Player player) {
+        if (!currentNode.isEndNode) return;
+        for (Horse horse : carriedHorses) {
             horse.state = false;
             player.removeHorse(horse);
             player.addScore();
@@ -74,8 +77,8 @@ public class DoubledHorse extends Horse{
         player.removeHorse(this);
     }
 
-    public void catched(Node firstNode, Player player){
-        for(Horse horse : carriedHorses){
+    public void catched(Node firstNode, Player player) {
+        for (Horse horse : carriedHorses) {
             horse.state = false;
             horse.currentNode = firstNode; // 시작점으로
             horse.x = horse.currentNode.x;
@@ -84,6 +87,4 @@ public class DoubledHorse extends Horse{
         }
         player.removeHorse(this);
     }
-
 }
-

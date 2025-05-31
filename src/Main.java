@@ -1,21 +1,30 @@
 import javax.swing.*;
 import Controller.GameController;
-import Model.Board;
-import Model.DaegakNode;
-import Model.Node;
-//import View.StartView;
-//import View.GameView;
-//import View.EndView;
+import View.Swing.StartView;
+import View.Swing.GameView;
 
-import View.Swing.*;
+import View.Fx.MainFX;
+import View.Swing.EndView;
 
 public class Main {
+
     public static void main(String[] args) {
+
+        String uiMode = "fx";
+
+        if (uiMode.equalsIgnoreCase("swing")) {
+            SwingUI();
+        } else if (uiMode.equalsIgnoreCase("fx")) {
+            MainFX.launchApp();
+        }
+    }
+
+    private static void SwingUI() {
         // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Horse Game");
+            JFrame frame = new JFrame("Horse Game(javaSwing)");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1100, 700); 
+            frame.setSize(1100, 700);
             frame.setLocationRelativeTo(null); // 화면 중앙에 배치
             frame.setResizable(false);
 
@@ -25,17 +34,13 @@ public class Main {
             EndView endView = new EndView();
 
             gameView.setVisible(false); // 처음엔 안 보이게
-
-            //
             endView.setVisible(false);
-
 
             // 패널들을 JFrame에 추가
             frame.setLayout(null);
             startView.setBounds(0, 0, 1100, 700);
             gameView.setBounds(0, 0, 1100, 700);
             endView.setBounds(0, 0, 1100, 700);
-
 
             frame.add(startView);
             frame.add(gameView);
@@ -47,11 +52,4 @@ public class Main {
             frame.setVisible(true);
         });
     }
-
-
-
-
 }
-
-
-

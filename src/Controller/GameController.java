@@ -144,6 +144,7 @@ public class GameController {
             YutResult result;
             gameView.showFixedYutChoiceDialog(selectedResult -> {
                 // yutList.add(selectedResult);
+                System.out.println("🔧 지정 윷 결과 선택됨: " + selectedResult);
                 yut.throwYut(selectedResult);
             });
             // result = yutList.get(yutList.size() - 1);
@@ -154,9 +155,7 @@ public class GameController {
                 throwState = true;
                 gameView.scheduleNotifyingImage(result);
             }
-
             else {
-
                 javax.swing.Timer delayTimer = new javax.swing.Timer(1700, e2 -> {
                     move();
                 });
@@ -348,7 +347,6 @@ public class GameController {
 
         frame.setVisible(false);
 
-
         // JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(startView);
         frame.getContentPane().removeAll(); // 모든 컴포넌트 제거
         System.out.println("컴포넌트 수: " + frame.getContentPane().getComponentCount());
@@ -389,7 +387,6 @@ public class GameController {
 
         initializeListeners();
         updateViewState();
-
     }
 }
 
