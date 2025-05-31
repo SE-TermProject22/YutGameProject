@@ -10,13 +10,12 @@ import View.GameView;
 import View.EndView;
 
 public class Main {
-
     public static void main(String[] args) {
         // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Horse Game");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1100, 700);
+            frame.setSize(1100, 700); 
             frame.setLocationRelativeTo(null); // 화면 중앙에 배치
             frame.setResizable(false);
 

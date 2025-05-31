@@ -62,12 +62,12 @@ public class Board {
 
         // nodes.get(30).isLastNode = true;
 
-        // EndNode
-        nodes.add(new EndNode(31, 555, 560));
-        nodes.add(new EndNode(32, 555, 560));
-        nodes.add(new EndNode(33, 555, 560));
-        nodes.add(new EndNode(34, 555, 560));
-        nodes.add(new EndNode(35, 555, 560));
+        // EndNode - node 위치 x만 살짝 옮길게요~!!
+        nodes.add(new EndNode(31, 556, 560));
+        nodes.add(new EndNode(32, 556, 560));
+        nodes.add(new EndNode(33, 556, 560));
+        nodes.add(new EndNode(34, 556, 560));
+        nodes.add(new EndNode(35, 556, 560));
 
         // 15부분에 노드 하나더 추가
         nodes.add(new Node(36, 93, 562));
@@ -130,12 +130,12 @@ public class Board {
         nodes.add(new Node(24, 119, 220));
         nodes.add(new Node(25, 67, 257));
 
-        //EndNode
-        nodes.add(new EndNode(26, 67, 257));
-        nodes.add(new EndNode(27, 67, 257));
-        nodes.add(new EndNode(28, 67, 257));
-        nodes.add(new EndNode(29, 67, 257));
-        nodes.add(new EndNode(30, 67, 257));
+        //EndNode - x위치만 살짝 옮길게요~!!
+        nodes.add(new EndNode(26, 68, 257));
+        nodes.add(new EndNode(27, 68, 257));
+        nodes.add(new EndNode(28, 68, 257));
+        nodes.add(new EndNode(29, 68, 257));
+        nodes.add(new EndNode(30, 68, 257));
         /////////////////////////////////////////////
 
         nodes.add(new Node(31, 216, 494));
@@ -237,12 +237,12 @@ public class Board {
         nodes.add(new Node(29, 82, 274));
         nodes.add(new Node(30, 52, 323));
 
-        //EndNode
-        nodes.add(new EndNode(31, 52, 323));
-        nodes.add(new EndNode(32, 52, 323));
-        nodes.add(new EndNode(33, 52, 323));
-        nodes.add(new EndNode(34, 52, 323));
-        nodes.add(new EndNode(35, 52, 323));
+        //EndNode - x위치만 살짝 옮길게요~
+        nodes.add(new EndNode(31, 53, 323));
+        nodes.add(new EndNode(32, 53, 323));
+        nodes.add(new EndNode(33, 53, 323));
+        nodes.add(new EndNode(34, 53, 323));
+        nodes.add(new EndNode(35, 53, 323));
         /////////////////////////////////////////////
 
         nodes.add(new Node(36, 232, 480));
