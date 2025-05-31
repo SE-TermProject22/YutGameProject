@@ -15,10 +15,9 @@ public class DoubledHorse extends Horse{
     // 색깔별로 연한 업힌말이 이미 만들어졌는지 추적 (ex: red → true)
     private static Map<String, Boolean> lightDoubleHorseUsed = new HashMap<>();
 
-    public DoubledHorse(int id, Horse horse1, Horse horse2, int orderCounter) {
+    public DoubledHorse(int id, Horse horse1, Horse horse2) {
         super(id, horse1.color, horse1.currentNode);
 //        this.createdOrder = createdOrder;
-//        this.imageType = orderCounter % 2; // 0 또는 1로 구분
         this.state = true;
 
         // horseCount 누적 초기화
@@ -67,6 +66,11 @@ public class DoubledHorse extends Horse{
     public static void resetLightDoubleHorseMap() {
         lightDoubleHorseUsed.clear();
     }
+
+    public static void releaseLightImageForColor(String color) {
+        lightDoubleHorseUsed.put(color, false);
+    }
+
 
 }
 

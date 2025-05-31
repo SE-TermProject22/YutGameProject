@@ -379,7 +379,7 @@ public class GameController {
 
                                 // 같은 말 - 업기
                                 if (check == 1) {
-                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other, doubleHorseOrderCounter++);
+                                    DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
 
                                     selectedHorse.isDoubled = true;
                                     other.isDoubled = true;

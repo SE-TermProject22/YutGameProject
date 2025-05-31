@@ -445,9 +445,14 @@ public class FXGameController {
 
         // 업힌 말 처리
         if (selectedHorse instanceof DoubledHorse) {
+            DoubledHorse dh = (DoubledHorse) selectedHorse;
+
+            if (dh.getImageType() == 0) {  // 0이면 연한색
+                DoubledHorse.releaseLightImageForColor(dh.color);
+            }
             //업힌 말 가져와서 리스트에 넣기
             ArrayList<Horse> doubleHorseList = new ArrayList<>();
-            doubleHorseList.addAll(((DoubledHorse) selectedHorse).getCarriedHorses());
+            doubleHorseList.addAll(dh.getCarriedHorses());
 
             // 업힌 말 각각 하나씩 피니시 처리 (회색으로 만듦)
             //✔️이거 잘되는지 확인 필요!!!!
@@ -523,7 +528,7 @@ public class FXGameController {
     //업기 처리 (같은 팀 말이 만났을 때)
     private void handleDouble(Horse selectedHorse, Horse other){
         //업은 말 생성
-        DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other, doubleHorseOrderCounter++);
+        DoubledHorse dh = new DoubledHorse(d_init++, selectedHorse, other);
 
         //원래 말들 업힌 상태로 표시
         selectedHorse.isDoubled = true;
@@ -560,9 +565,16 @@ public class FXGameController {
         System.out.printf("💥 잡기 발생: %s가 %s 잡음\n", selectedHorse.id, other.id);
 
         if (other instanceof DoubledHorse) {
+            DoubledHorse dh = (DoubledHorse) other;
+
+            //업힌 말2가 잡힐경우 이미지 컬러 조건 초기화 (서로 다른 색이 될 수 있도록)
+            if (dh.getImageType() == 0) {  // 0이면 연한색
+                DoubledHorse.releaseLightImageForColor(dh.color);
+            }
+
             //업힌 말 잡히면 업힌 모든 말 시작점으로
             ArrayList<Horse> doubleHorseList = new ArrayList<>();
-            doubleHorseList.addAll(((DoubledHorse) other).getCarriedHorses());
+            doubleHorseList.addAll(dh.getCarriedHorses());
 
             for (Horse horse : doubleHorseList) {
                 // 말 상태 초기화
