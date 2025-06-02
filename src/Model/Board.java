@@ -71,8 +71,9 @@ public class Board {
 
         // 15부분에 노드 하나더 추가
         nodes.add(new Node(36, 93, 562));
-        nodes.add(new Node(37, 555, 560));
 
+        // 출발점 노드
+        nodes.add(new Node(37, 555, 560));
     }
 
     public void connectNode_square(){
@@ -83,21 +84,24 @@ public class Board {
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(25);
         ((DaegakNode)nodes.get(22)).DNode = nodes.get(28);
 
+        nodes.get(29).nextNode = nodes.get(37);
         nodes.get(24).nextNode = nodes.get(36);
         nodes.get(36).nextNode = nodes.get(16);
         nodes.get(19).nextNode = nodes.get(30);
         nodes.get(35).nextNode = null;
+        nodes.get(37).nextNode = nodes.get(31);
     }
     public void backDo_connect_square(){
-        for(int i = 30; i > 1; i--){
+        for(int i = 29; i > 1; i--){
             nodes.get(i).backDoNode = nodes.get(i-1);
         }
         nodes.get(1).backDoNode = nodes.get(30);
         nodes.get(0).backDoNode = nodes.get(0);
-        nodes.get(37).backDoNode = nodes.get(19);
+        nodes.get(37).backDoNode = nodes.get(29);
         nodes.get(20).backDoNode = nodes.get(5);
         nodes.get(25).backDoNode = nodes.get(10);
         nodes.get(36).backDoNode = nodes.get(24);
+        nodes.get(30).backDoNode = nodes.get(19);
     }
 
     // x,y 지시
