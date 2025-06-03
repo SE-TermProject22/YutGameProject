@@ -24,7 +24,7 @@ public class BoardTest {
         assertEquals(second, start.nextNode);
 
         // backDoNode 확인
-        Node last = squareBoard.nodes.get(30);
+        Node last = squareBoard.nodes.get(37);
         assertEquals(squareBoard.nodes.get(29), last.backDoNode);
 
         // DaegakNode DNode 연결 확인
@@ -37,7 +37,7 @@ public class BoardTest {
         Board squareBoard = new Board("square");
 
         // 0~29번까지는 i -> i+1 이어야 함
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 29; i++) {
             if(i == 19) continue;
             if(i == 24) continue;
             assertEquals(squareBoard.nodes.get(i + 1), squareBoard.nodes.get(i).nextNode,
@@ -53,6 +53,7 @@ public class BoardTest {
         assertEquals(squareBoard.nodes.get(36), squareBoard.nodes.get(24).nextNode); // 24 → 36
         assertEquals(squareBoard.nodes.get(16), squareBoard.nodes.get(36).nextNode); // 36 → 16
         assertEquals(squareBoard.nodes.get(30), squareBoard.nodes.get(19).nextNode); // 19 → 30
+        assertEquals(squareBoard.nodes.get(37), squareBoard.nodes.get(29).nextNode); // 19 → 30
 
         // 마지막 EndNode는 nextNode가 null
         assertNull(squareBoard.nodes.get(35).nextNode);
@@ -66,7 +67,7 @@ public class BoardTest {
         assertEquals(squareBoard.nodes.get(30), squareBoard.nodes.get(1).backDoNode);
 
         // 2 ~ 30번까지는 직전 노드를 backDoNode로 가리켜야 함
-        for (int i = 30; i > 1; i--) {
+        for (int i = 29; i > 1; i--) {
             if(i == 20) continue;
             if(i == 25) continue;
             assertEquals(squareBoard.nodes.get(i - 1), squareBoard.nodes.get(i).backDoNode,
@@ -76,8 +77,11 @@ public class BoardTest {
         // 0번 노드는 자기 자신을 backDoNode로 가리켜야 함
         assertEquals(squareBoard.nodes.get(0), squareBoard.nodes.get(0).backDoNode);
 
-        // 37번 노드는 19번을 backDoNode로 가져야 함
-        assertEquals(squareBoard.nodes.get(19), squareBoard.nodes.get(37).backDoNode);
+        // 37번 노드는 29번을 backDoNode로 가져야 함
+        assertEquals(squareBoard.nodes.get(29), squareBoard.nodes.get(37).backDoNode);
+
+        // 30번 노드는 19번을 backDoNode로 가져야 함
+        assertEquals(squareBoard.nodes.get(19), squareBoard.nodes.get(30).backDoNode);
 
         // DaegakNode 5번 → DNode 20번 → backDoNode는 5번
         DaegakNode d5 = (DaegakNode) squareBoard.nodes.get(5);
