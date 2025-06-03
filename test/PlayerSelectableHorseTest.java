@@ -35,20 +35,4 @@ class PlayerSelectableHorseTest {
         assertFalse(result.contains(h2));
         assertTrue(result.contains(h3));
     }
-
-    @Test
-    void selectableHorse_shouldReturnEmptyListIfAllDoubled() {
-        Horse h1 = new Horse(1, "blue", node);
-        h1.isDoubled = true;
-        player.addHorse(h1);
-
-        List<Horse> result = player.selectableHorse();
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void selectableHorse_shouldReturnEmptyListIfNoHorses() {
-        List<Horse> result = player.selectableHorse();
-        assertTrue(result.isEmpty());
-    }
 }

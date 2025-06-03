@@ -61,7 +61,7 @@ class HorseMoveTest {
     // 백도 확인(사각형)
     @ParameterizedTest
     @MethodSource("backDoCases_squareBoard")
-    void move_shouldHandleBackDo_onVariousNodes(Node start, Node expected) {
+    void move_shouldHandleBackDo_onSquareBoard(Node start, Node expected) {
         Horse horse = new Horse(1, "red", start);
         horse.state = true;
 

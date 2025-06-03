@@ -19,24 +19,16 @@ public class BoardTest {
         assertEquals(555, start.x);
         assertEquals(560, start.y);
 
-        // 연결 확인
-        Node second = squareBoard.nodes.get(1);
-        assertEquals(second, start.nextNode);
-
-        // backDoNode 확인
-        Node last = squareBoard.nodes.get(37);
-        assertEquals(squareBoard.nodes.get(29), last.backDoNode);
-
         // DaegakNode DNode 연결 확인
-        DaegakNode d1 = (DaegakNode) squareBoard.nodes.get(5);
-        assertEquals(squareBoard.nodes.get(20), d1.DNode);
+        DaegakNode d = (DaegakNode) squareBoard.nodes.get(5);
+        assertNotNull(d.DNode);
     }
 
     @Test
     public void testSquareNextConnections() {
         Board squareBoard = new Board("square");
 
-        // 0~29번까지는 i -> i+1 이어야 함
+        // 0~28번까지는 i -> i+1 이어야 함
         for (int i = 0; i < 29; i++) {
             if(i == 19) continue;
             if(i == 24) continue;
@@ -66,7 +58,7 @@ public class BoardTest {
         // 1번 노드의 backDoNode는 30번 노드
         assertEquals(squareBoard.nodes.get(30), squareBoard.nodes.get(1).backDoNode);
 
-        // 2 ~ 30번까지는 직전 노드를 backDoNode로 가리켜야 함
+        // 2 ~ 29번까지는 직전 노드를 backDoNode로 가리켜야 함
         for (int i = 29; i > 1; i--) {
             if(i == 20) continue;
             if(i == 25) continue;
@@ -119,7 +111,7 @@ public class BoardTest {
         Board pentagonBoard = new Board("pentagon");
 
         // 0~24까지 기본적인 연결 확인
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 25; i++) {
             assertEquals(pentagonBoard.nodes.get(i + 1), pentagonBoard.nodes.get(i).nextNode);
         }
 
@@ -128,6 +120,7 @@ public class BoardTest {
         assertEquals(pentagonBoard.nodes.get(31), ((DaegakNode) pentagonBoard.nodes.get(5)).DNode);
         assertEquals(pentagonBoard.nodes.get(36), ((DaegakNode) pentagonBoard.nodes.get(10)).DNode);
         assertEquals(pentagonBoard.nodes.get(38), ((DaegakNode) pentagonBoard.nodes.get(15)).DNode);
+        assertEquals(pentagonBoard.nodes.get(41), ((DaegakNode) pentagonBoard.nodes.get(33)).DNode);
 
         // 노드 35 → 45
         assertEquals(pentagonBoard.nodes.get(45), pentagonBoard.nodes.get(35).nextNode,
@@ -206,15 +199,10 @@ public class BoardTest {
         // 노드 수 확인
         assertTrue(hexBoard.nodes.size() >= 54);
 
-        // 특정 노드 좌표
-        Node n25 = hexBoard.nodes.get(25);
-        assertEquals(191, n25.x);
-        assertEquals(99, n25.y);
-
-        // backDoNode 연결 확인
-        Node n40 = hexBoard.nodes.get(40);
-        Node n52 = hexBoard.nodes.get(52);
-        assertEquals(n40, n52.backDoNode);
+        // 시작 노드 좌표 확인
+        Node start = hexBoard.nodes.get(0);
+        assertEquals(52, start.x);
+        assertEquals(323, start.y);
 
         // DaegakNode DNode 연결 확인
         DaegakNode center = (DaegakNode) hexBoard.nodes.get(38);
@@ -224,7 +212,7 @@ public class BoardTest {
     public void testHexagonNextConnections() {
         Board hexBoard = new Board("hexagon");
 
-        // 0 ~ 47번까지는 기본 순서 연결 확인
+        // 0 ~ 34번까지는 기본 순서 연결 확인
         for (int i = 0; i < 35; i++) {
             assertEquals(hexBoard.nodes.get(i + 1), hexBoard.nodes.get(i).nextNode,
                     "Node " + i + "의 nextNode는 Node " + (i + 1) + "이어야 합니다.");

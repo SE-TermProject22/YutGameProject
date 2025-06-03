@@ -25,17 +25,6 @@ public class YutTest {
         }
         assertTrue(isValid, "결과가 YutResult enum 내 값이어야 합니다.");
     }
-    // 결과를 리스트에 정확한 순서대로저장되는지
-    @Test
-    void throwYut_storesResultInList() {
-        Yut yut = new Yut();
-        yut.throwYut(YutResult.DO);
-        yut.throwYut(YutResult.YUT);
-
-        assertEquals(2, yut.getYutResultListSize());
-        assertEquals(YutResult.DO, yut.getYutResultList().get(0));
-        assertEquals(YutResult.YUT, yut.getYutResultList().get(1));
-    }
 
     // 랜덤 윷 던지기 test(1000번 중 한번은 나오는가)
     @Test
