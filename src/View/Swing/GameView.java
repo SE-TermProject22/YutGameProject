@@ -3,6 +3,7 @@ package View.Swing;
 import Controller.YutResult;
 import Model.DoubledHorse;
 import Model.Horse;
+import View.IGameView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.TimerTask;
 import java.util.function.Consumer;
 
 
-public class GameView  extends JPanel {
+public class GameView  extends JPanel implements IGameView {
     private Image board, currentImage;
     private JButton throwButton;
     private JButton specialThrowButton; //지정던지기 버튼 추가
@@ -37,12 +38,11 @@ public class GameView  extends JPanel {
     private JLabel eventNotifyingImage;
 
     private Map<Integer, JLabel> waitingHorseLabels = new HashMap<>();
-    private int bdouble = 0;
-    private int ydouble = 0;
-    private int rdouble = 0;
-    private int gdouble = 0;
 
-    private int bnum, ynum, rnum, gnum;
+    private Runnable onThrow;
+    private Runnable onSpecialThrow;
+
+    private Map<String, JButton> horseButtons = new HashMap<>();
 
     public GameView() {
         setLayout(null);
@@ -738,4 +738,40 @@ public class GameView  extends JPanel {
 
         repaint();
     }
+
+
+    @Override
+    public void setOnThrow(Runnable handler) {
+        this.onThrow = handler;
+        throwButton.addActionListener(e -> {
+            if (onThrow != null) onThrow.run();
+        });
+    }
+
+    @Override
+    public void setOnSpecialThrow(Runnable handler) {
+        this.onSpecialThrow = handler;
+        specialThrowButton.addActionListener(e -> {
+            if (onSpecialThrow != null) onSpecialThrow.run();
+        });
+    }
+
+
+    @Override
+    public void setOnHorseSelected(Consumer<String> handler) {
+        for (Map.Entry<String, JButton> entry : horseButtons.entrySet()) {
+            String color = entry.getKey();
+            JButton btn = entry.getValue();
+
+            btn.addActionListener(e -> handler.accept(color));
+        }
+    }
+
+    @Override
+    public javax.swing.JPanel getRoot() {
+        System.out.println("✅ getRoot() 호출됨 - 컴포넌트 수: " + this.getComponentCount());
+        return this;
+    }
+
+
 }

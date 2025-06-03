@@ -1,16 +1,18 @@
 import javax.swing.*;
-import Controller.GameController;
+import Controller.IGameController;
+
+import Controller.SwingUIRoot;
 import View.Swing.StartView;
 import View.Swing.GameView;
+import View.Swing.EndView;
 
 import View.Fx.MainFX;
-import View.Swing.EndView;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        String uiMode = "fx";
+        String uiMode = "swing";
 
         if (uiMode.equalsIgnoreCase("swing")) {
             SwingUI();
@@ -23,6 +25,7 @@ public class Main {
         // Swing UI는 이벤트 디스패치 스레드에서 실행해야 안전
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Horse Game(javaSwing)");
+            SwingUIRoot uiRoot = new SwingUIRoot(frame);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1100, 700);
             frame.setLocationRelativeTo(null); // 화면 중앙에 배치
@@ -46,8 +49,8 @@ public class Main {
             frame.add(gameView);
             frame.add(endView);
 
-            // 컨트롤러 생성
-            new GameController(frame, startView, gameView, endView);
+            //컨트롤러 생성
+            new IGameController(uiRoot, startView, gameView, endView);
 
             frame.setVisible(true);
         });

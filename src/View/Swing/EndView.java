@@ -4,15 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class EndView extends JPanel {
+public class EndView extends JPanel implements ISwingEndView{
     private JButton restartButton;
     private JButton exitButton;
     private StartView startView;
 
     private Image endBackground;
     private Image[] winnerImages = new Image[4];
+
+    private int winnerId;
   
-    private int winnerId = 1; // 기본값: 플레이어 1 우승
+    //private int winnerId = 1; // 기본값: 플레이어 1 우승
 
     public EndView() {
         setLayout(null);
@@ -73,13 +75,40 @@ public class EndView extends JPanel {
     }
 */
     @Override
+    public void updateEndView(Image endBackground, Image[] winnerImages, int winnerId) {
+        this.endBackground = endBackground;
+        this.winnerImages = winnerImages;
+        this.winnerId = winnerId;
+        repaint();
+    }
+
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (endBackground != null) {
             g.drawImage(endBackground, 0, 0, getWidth(), getHeight(), null);
         }
-        if (winnerId >= 1 && winnerId <= 4) {
-            g.drawImage(winnerImages[winnerId - 1], 440, 455, null);
+        if (winnerImages != null && winnerId >= 0 && winnerId < winnerImages.length) {
+            g.drawImage(winnerImages[winnerId], 440, 455, null);
         }
     }
+
+    @Override
+    public void setOnRestart(Runnable handler) {
+        restartButton.addActionListener(e -> handler.run());
+    }
+
+    @Override
+    public void setOnExit(Runnable handler) {
+        exitButton.addActionListener(e -> handler.run());
+    }
+
+    @Override
+    public javax.swing.JPanel getRoot() {
+        return this;
+    }
+
+
+
 }

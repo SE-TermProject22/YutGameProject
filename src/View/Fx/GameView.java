@@ -4,12 +4,10 @@ import Controller.YutResult;
 import Model.DoubledHorse;
 import Model.Horse;
 
+import View.IGameView;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -27,9 +24,10 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.util.function.Consumer;
+import java.util.List;
 import java.util.*;
 
-public class GameView extends AnchorPane {
+public class GameView extends AnchorPane implements IGameView {
     private ImageView boardView, currentImageView, notifyingImageView;
     private Image board, notifyingImage, currentImage;
     private Button throwButton;
@@ -52,6 +50,7 @@ public class GameView extends AnchorPane {
     private Map<Integer, ImageView> waitingHorseLabels = new HashMap<>();
 
     private ImageView eventNotifyingImageView;
+    private Map<String, Button> horseButtons = new HashMap<>();
 
     public GameView() {
         loadImages();
@@ -413,6 +412,7 @@ public class GameView extends AnchorPane {
         };
     }
 
+    @Override
     public void showYutResultChoiceDialog(List<YutResult> yutResults, Consumer<YutResult> onSelected) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -580,14 +580,6 @@ public class GameView extends AnchorPane {
         playerViews.clear();
     }
 
-    public void addThrowButtonListener(EventHandler<ActionEvent> handler) {
-        throwButton.setOnAction(handler);
-    }
-
-    public void addSpecialThrowListener(EventHandler<ActionEvent> handler) {
-        specialThrowButton.setOnAction(handler);
-    }
-
     public void setCurrentImage(Image image) {
         currentImageView.setImage(image);
     }
@@ -605,7 +597,29 @@ public class GameView extends AnchorPane {
         this.getChildren().add(testEndButton);
     }
 
-    public void setTestEndButtonListener(EventHandler<ActionEvent> handler) {
-        testEndButton.setOnAction(handler);
+    @Override
+    public void setOnThrow(Runnable handler) {
+        throwButton.setOnAction(e -> handler.run());
     }
+
+    @Override
+    public void setOnSpecialThrow(Runnable handler) {
+        specialThrowButton.setOnAction(e -> handler.run());
+    }
+
+    @Override
+    public void setOnHorseSelected(Consumer<String> handler) {
+        for (Map.Entry<String, Button> entry : horseButtons.entrySet()) {
+            String color = entry.getKey();
+            Button btn = entry.getValue();
+            btn.setOnAction(e -> handler.accept(color));
+        }
+    }
+
+    @Override
+    public javafx.scene.Parent getRoot() {
+        return this;
+    }
+
+
 }

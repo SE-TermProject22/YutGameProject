@@ -5,5 +5,5 @@ public enum GameState {
     HORSE_SELECTION,
     BOARD_SELECTION,
     GAME_PLAY,
-    GAME_OVER
+    GAME_SCREEN, END_SCREEN, GAME_OVER
 }

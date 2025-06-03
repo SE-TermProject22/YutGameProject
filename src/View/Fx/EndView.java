@@ -1,5 +1,6 @@
 package View.Fx;
 
+import View.IEndView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -9,7 +10,7 @@ import javafx.event.EventHandler;
 
 import java.util.Objects;
 
-public class EndView extends AnchorPane {
+public class EndView extends AnchorPane implements IEndView {
     private AnchorPane anchorRoot;
 
     private Button restartButton;
@@ -110,4 +111,21 @@ public class EndView extends AnchorPane {
             winnerView.setVisible(false);
         }
     }
+
+    @Override
+    public void setOnRestart(Runnable handler) {
+        restartButton.setOnAction(e -> handler.run());
+    }
+
+    @Override
+    public void setOnExit(Runnable handler) {
+        exitButton.setOnAction(e -> handler.run());
+    }
+
+    @Override
+    public javafx.scene.Parent getRoot() {
+        return this;
+    }
+
+
 }

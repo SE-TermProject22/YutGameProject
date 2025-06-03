@@ -1,8 +1,6 @@
 package View.Fx;
 
 import Controller.GameState;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -13,8 +11,9 @@ import javafx.scene.layout.*;
 
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class StartView extends StackPane {
+public class StartView extends StackPane implements IFXStartView {
     private ImageView background;
     private Image startBackground, horseSelectionBackground, boardSelectionBackground;
 
@@ -32,6 +31,10 @@ public class StartView extends StackPane {
 
     private GameState currentState = GameState.START_SCREEN;
 
+    private Runnable onStart;
+    private Runnable onNext;
+    private Consumer<String> horseSelectHandler;
+
     public StartView() {
         loadImages();
 
@@ -47,9 +50,9 @@ public class StartView extends StackPane {
 
         setState(currentState);
 
-        startButton.setVisible(true);
-        startButton.setDisable(false);
-        startButton.setOnAction(e -> System.out.println("✅ 눌림!"));
+//        startButton.setVisible(true);
+//        startButton.setDisable(false);
+//        startButton.setOnAction(e -> System.out.println("✅ 눌림!"));
     }
 
     private void loadImages() {
@@ -141,6 +144,7 @@ public class StartView extends StackPane {
         anchorRoot.getChildren().add(btn);
     }
 
+    @Override
     public void setState(GameState state) {
         this.currentState = state;
 
@@ -171,26 +175,6 @@ public class StartView extends StackPane {
 
         for (Node node : contentPane.getChildren()) {
             node.setVisible(visibleSet.contains(node));
-        }
-    }
-
-    public void addStartButtonListener(EventHandler<ActionEvent> handler) {
-        startButton.setOnAction(handler);
-    }
-
-    public void addNextButtonListener(EventHandler<ActionEvent> handler) {
-        nextButton.setOnAction(handler);
-    }
-
-    public void setBoardSelectionListeners(EventHandler<ActionEvent> square, EventHandler<ActionEvent> pentagon, EventHandler<ActionEvent> hexagon) {
-        squareBtn.setOnAction(square);
-        pentagonBtn.setOnAction(pentagon);
-        hexagonBtn.setOnAction(hexagon);
-    }
-
-    public void setHorseSelectionListener(EventHandler<ActionEvent> handler) {
-        for (Button btn : horseButtons.values()) {
-            btn.setOnAction(handler);
         }
     }
 
@@ -259,4 +243,39 @@ public class StartView extends StackPane {
 
         setState(GameState.START_SCREEN);
     }
+
+    @Override
+    public void setOnStart(Runnable handler) {
+        this.onStart = handler;
+        startButton.setOnAction(e -> onStart.run());
+    }
+
+    @Override
+    public void setOnNext(Runnable handler) {
+        this.onNext = handler;
+        nextButton.setOnAction(e -> onNext.run());
+    }
+
+    @Override
+    public void setOnHorseSelected(Consumer<String> handler) {
+        this.horseSelectHandler = handler;
+        for (Map.Entry<String, Button> entry : horseButtons.entrySet()) {
+            String color = entry.getKey();
+            Button btn = entry.getValue();
+            btn.setOnAction(e -> handler.accept(color));
+        }
+    }
+
+    @Override
+    public void setOnBoardSelected(Consumer<String> handler) {
+        squareBtn.setOnAction(e -> handler.accept("square"));
+        pentagonBtn.setOnAction(e -> handler.accept("pentagon"));
+        hexagonBtn.setOnAction(e -> handler.accept("hexagon"));
+    }
+
+    @Override
+    public javafx.scene.Parent getRoot() {
+        return this;
+    }
+
 }

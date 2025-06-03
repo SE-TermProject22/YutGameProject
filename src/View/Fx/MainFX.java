@@ -1,6 +1,7 @@
 package View.Fx;
 
-import Controller.FXGameController;
+import Controller.FXUIRoot;
+import Controller.IGameController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -8,13 +9,14 @@ import javafx.stage.Stage;
 public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) {
+        FXUIRoot uiRoot = new FXUIRoot(primaryStage);
         StartView startView = new StartView();
         GameView gameView = new GameView();
         EndView endView = new EndView();
 
         Scene scene = new Scene(startView, 1100, 700);
 
-        new FXGameController(primaryStage, startView, gameView, endView);
+        new IGameController(uiRoot, startView, gameView, endView);
 
         primaryStage.setTitle("Horse Game(JavaFX)");
         primaryStage.setScene(scene);

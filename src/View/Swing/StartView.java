@@ -1,14 +1,16 @@
 package View.Swing;
 
 import Controller.GameState;
+import View.IStartView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class StartView extends JPanel{
+public class StartView extends JPanel implements IStartView {
     private Image startBackground, horseSelectionBackground, boardSelectionBackground;
 
     private JButton startButton, nextButton;
@@ -116,12 +118,50 @@ public class StartView extends JPanel{
         }
     }
 
+//    @Override
+//    public void setState(GameState state) {
+//        this.currentState = state;
+//
+//        setAllInvisible(); // 모든 요소 숨기기
+//
+//        switch (state) {
+//            case START_SCREEN:
+//                startButton.setVisible(true);
+//                break;
+//
+//            case HORSE_SELECTION:
+//                for (JButton btn : horseButtons.values()) {
+//                    btn.setVisible(true);
+//                }
+//                playerCountBox.setVisible(true);
+//                horseCountBox.setVisible(true);
+//                break;
+//
+//            case BOARD_SELECTION:
+//                squareBtn.setVisible(true);
+//                pentagonBtn.setVisible(true);
+//                hexagonBtn.setVisible(true);
+//                nextButton.setVisible(true);
+//                break;
+//
+//            default:
+//                break;
+//        }
+//
+//        repaint();
+//    }
+
+
+    @Override
     public void setState(GameState state) {
         this.currentState = state;
 
+        setAllInvisible();
+
         switch (state) {
             case START_SCREEN:
-                showOnly(startButton);
+                startButton.setVisible(true);
+//                showOnly(startButton);
                 break;
 
             case HORSE_SELECTION:
@@ -140,33 +180,18 @@ public class StartView extends JPanel{
         repaint();
     }
 
+    private void setAllInvisible() {
+        for (Component comp : getComponents()) {
+            comp.setVisible(false);
+        }
+    }
+
+
     private void showOnly(JComponent... visibleComponents) {
         Set<JComponent> show = new HashSet<>(Arrays.asList(visibleComponents));
 
         for (Component comp : getComponents()) {
             comp.setVisible(show.contains(comp));
-        }
-    }
-
-    //MVC 분리의 핵심 포인트
-    //View는 ActionListener를 직접 구현하지 X -> Controller에서 만든 리스너 객체를 매개변수로 받아서 버튼에 연결
-    public void addStartButtonListener(ActionListener listener) {
-        startButton.addActionListener(listener);
-    }
-
-    public void addNextButtonListener(ActionListener listener) {
-        nextButton.addActionListener(listener);
-    }
-
-    public void setBoardSelectionListeners(ActionListener square, ActionListener pentagon, ActionListener hexagon) {
-        squareBtn.addActionListener(square);
-        pentagonBtn.addActionListener(pentagon);
-        hexagonBtn.addActionListener(hexagon);
-    }
-
-    public void setHorseSelectionListener(ActionListener listener) {
-        for (JButton btn : horseButtons.values()) {
-            btn.addActionListener(listener);
         }
     }
 
@@ -203,7 +228,7 @@ public class StartView extends JPanel{
         return horseButtons;
     }
 
-    public void resetSelectionState() {
+    public void resetSelection() {
         selectedColors.clear();       // 말 색상 초기화
         selectedBoard = null;        // 보드 선택 초기화
 
@@ -226,4 +251,36 @@ public class StartView extends JPanel{
         // 상태를 다시 시작 화면으로
         setState(GameState.START_SCREEN);
     }
+
+    @Override
+    public void setOnStart(Runnable handler) {
+        startButton.addActionListener(e -> handler.run());
+    }
+
+    @Override
+    public void setOnNext(Runnable handler) {
+        nextButton.addActionListener(e -> handler.run());
+    }
+
+    @Override
+    public void setOnHorseSelected(Consumer<String> handler) {
+        for (Map.Entry<String, JButton> entry : horseButtons.entrySet()) {
+            String color = entry.getKey();
+            JButton button = entry.getValue();
+            button.addActionListener(e -> handler.accept(color));
+        }
+    }
+
+    @Override
+    public void setOnBoardSelected(Consumer<String> handler) {
+        squareBtn.addActionListener(e -> handler.accept("square"));
+        pentagonBtn.addActionListener(e -> handler.accept("pentagon"));
+        hexagonBtn.addActionListener(e -> handler.accept("hexagon"));
+    }
+
+    @Override
+    public javax.swing.JPanel getRoot() {
+        return this;
+    }
+
 }

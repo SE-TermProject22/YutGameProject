@@ -1,4 +1,4 @@
-import Controller.GameController;
+import Controller.IGameController;
 
 //
 public class YutGame {
