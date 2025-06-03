@@ -3,6 +3,7 @@ package Controller;
 import Model.*;
 import View.Fx.EndView;
 import View.Fx.GameView;
+import View.Fx.pane.HorsePane;
 import View.Fx.StartView;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -110,7 +111,9 @@ public class FXGameController {
             startGame();
         });
 
+        System.out.println("🎯 addThrowButtonListener 호출됨");
         gameView.addThrowButtonListener(e -> {
+            System.out.println("🔥 윷던지기 버튼 클릭됨");
             if (throwState) {
                 throwState = false;
                 YutResult result = yut.throwYut();
