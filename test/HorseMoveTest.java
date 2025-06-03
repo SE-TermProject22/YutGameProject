@@ -45,7 +45,6 @@ class HorseMoveTest {
         );
     }
 
-    // "도" 등이 나왔을 때 올바른 노드에 가는가?
     @ParameterizedTest
     @MethodSource("yutMoves")
     void move_shouldLandOnCorrectNode(YutResult result, int expectedIndex) {
@@ -253,4 +252,48 @@ class HorseMoveTest {
         assertEquals(1, player.getScore());
     }
 
+    // 업은 말을 또 업은 경우 테스트
+    @Test
+    void stack_doubledHorse_shouldBeStackedAgain() {
+        Node node = nodes.get(0); // 모든 말이 이 노드에 있다고 가정
+
+        // 말 3개 생성
+        Horse h1 = new Horse(1, "red", node);
+        Horse h2 = new Horse(2, "red", node);
+        Horse h3 = new Horse(3, "red", node);
+
+        h1.state = true;
+        h2.state = true;
+        h3.state = true;
+
+        player.addHorse(h1);
+        player.addHorse(h2);
+        player.addHorse(h3);
+
+        // 첫 번째 업기: h1 + h2 → dh1
+        DoubledHorse dh1 = new DoubledHorse(100, h1, h2);
+        player.addHorse(dh1);
+        player.removeHorse(h1);
+        player.removeHorse(h2);
+
+        assertEquals(2, dh1.getCarriedHorses().size());
+        assertTrue(dh1.getCarriedHorses().contains(h1));
+        assertTrue(dh1.getCarriedHorses().contains(h2));
+
+        // 두 번째 업기: dh1 + h3 → dh2
+        DoubledHorse dh2 = new DoubledHorse(200, dh1, h3);
+        player.addHorse(dh2);
+        player.removeHorse(dh1);
+        player.removeHorse(h3);
+
+        List<Horse> carried = dh2.getCarriedHorses();
+        assertEquals(3, carried.size());
+        assertTrue(carried.contains(h1));
+        assertTrue(carried.contains(h2));
+        assertTrue(carried.contains(h3));
+
+        // 최종 말 목록 확인
+        assertEquals(1, player.getHorseList().size());
+        assertTrue(player.getHorseList().contains(dh2));
+    }
 }
