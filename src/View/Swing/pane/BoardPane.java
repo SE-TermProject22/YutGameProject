@@ -7,7 +7,7 @@ public class BoardPane {
     private Image board;
 
     public void setBoardType(String boardType) {
-        board = new ImageIcon(getClass().getResource("/image/" + boardType + " board.png")).getImage();
+        board = new ImageIcon(getClass().getResource("/image/new " + boardType + " board.png")).getImage();
     }
 
     public void paintBoard(Graphics g, int width, int height) {

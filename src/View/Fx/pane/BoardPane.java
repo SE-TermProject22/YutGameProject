@@ -14,7 +14,7 @@ public class BoardPane extends AnchorPane {
     }
 
     public void setBoardImage(String boardType) {
-        String path = "/image/" + boardType + " board.png";
+        String path = "/image/new " + boardType + " board.png";
         Image image = new Image(getClass().getResourceAsStream(path));
         boardView.setImage(image);
     }
