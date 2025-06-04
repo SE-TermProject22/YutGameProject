@@ -48,8 +48,6 @@ public class FXGameController {
     // private int doubleHorseOrderCounter = 0;
 
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
-    private SwingGameController gameController;
-
     private StackPane mainStackPane;
     private Scene mainScene;
     private Stage primaryStage;
