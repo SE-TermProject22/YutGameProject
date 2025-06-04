@@ -8,7 +8,6 @@ public class Board {
     public List<Node> nodes = new ArrayList<>();
     //
     public Board(String boardType) {
-        // nodes = new ArrayList<Node>();
         if(boardType == "square") {
             createNode_square();
             connectNode_square();
@@ -20,8 +19,8 @@ public class Board {
             backDo_connect_pentagon();
         }
         else if(boardType == "hexagon") {
-            createNode_Hexagon();
-            connectNode_Hexagon();
+            createNode_hexagon();
+            connectNode_hexagon();
             backDo_connect_hexagon();
         }
     }
@@ -71,8 +70,9 @@ public class Board {
 
         // 15부분에 노드 하나더 추가
         nodes.add(new Node(36, 93, 562));
-        nodes.add(new Node(37, 555, 560));
 
+        // 출발점 노드
+        nodes.add(new Node(37, 555, 560));
     }
 
     public void connectNode_square(){
@@ -83,21 +83,24 @@ public class Board {
         ((DaegakNode)nodes.get(10)).DNode = nodes.get(25);
         ((DaegakNode)nodes.get(22)).DNode = nodes.get(28);
 
+        nodes.get(29).nextNode = nodes.get(37);
         nodes.get(24).nextNode = nodes.get(36);
         nodes.get(36).nextNode = nodes.get(16);
         nodes.get(19).nextNode = nodes.get(30);
         nodes.get(35).nextNode = null;
+        nodes.get(37).nextNode = nodes.get(31);
     }
     public void backDo_connect_square(){
-        for(int i = 30; i > 1; i--){
+        for(int i = 29; i > 1; i--){
             nodes.get(i).backDoNode = nodes.get(i-1);
         }
         nodes.get(1).backDoNode = nodes.get(30);
         nodes.get(0).backDoNode = nodes.get(0);
-        nodes.get(37).backDoNode = nodes.get(19);
+        nodes.get(37).backDoNode = nodes.get(29);
         nodes.get(20).backDoNode = nodes.get(5);
         nodes.get(25).backDoNode = nodes.get(10);
         nodes.get(36).backDoNode = nodes.get(24);
+        nodes.get(30).backDoNode = nodes.get(19);
     }
 
     // x,y 지시
@@ -199,7 +202,7 @@ public class Board {
 
     // 육각형 보드 수정해야함
 
-    public void createNode_Hexagon(){
+    public void createNode_hexagon(){
         nodes.add(new Node(0, 52, 323));
         // nodes.get(0).isFirstNode = true;
         nodes.add(new Node(1, 76, 376));
@@ -270,7 +273,7 @@ public class Board {
         nodes.add(new Node(53, 52, 323)); // 0이랑 겹치는
     }
 
-    public void connectNode_Hexagon(){
+    public void connectNode_hexagon(){
         for(int i = 0; i < 48; i++){
             nodes.get(i).nextNode = nodes.get(i+1);
         }
