@@ -141,7 +141,7 @@ public class GameController {
         });
 
         // 지정윷던지기 버튼 리스너
-        gameView.addSpecialThrowListener(e -> {
+        gameView.addSpecialThrowButtonListener(e -> {
             if (throwState) {
                 throwState = false;
                 YutResult result;
