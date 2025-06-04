@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="YutGameProject_Fx:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/YutGameProject_Fx_jar</output-path>
+  <artifact type="jar" name="YutGameProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/YutGameProject_jar</output-path>
     <root id="archive" name="YutGameProject.jar">
       <element id="module-output" name="YutGameProject" />
       <element id="library" level="project" name="javafx.base" />
