@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import View.Swing.*;
-import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GameController {
+public class SwingGameController {
 
     // frame
     private JFrame frame;
@@ -43,7 +42,7 @@ public class GameController {
     private boolean throwState = true;
     private Yut yut;
 
-    public GameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
+    public SwingGameController(JFrame frame, StartView startView, GameView gameView, EndView endView) {
         this.frame = frame;
         this.startView = startView;
         this.gameView = gameView;
@@ -141,7 +140,7 @@ public class GameController {
         });
 
         // 지정윷던지기 버튼 리스너
-        gameView.addSpecialThrowListener(e -> {
+        gameView.addSpecialThrowButtonListener(e -> {
             if (throwState) {
                 throwState = false;
                 YutResult result;

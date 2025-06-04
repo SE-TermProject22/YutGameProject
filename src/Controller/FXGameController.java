@@ -48,7 +48,7 @@ public class FXGameController {
     // private int doubleHorseOrderCounter = 0;
 
     //나중에 필요하면 swing이랑 공통되는 부분만 넣은 컨트롤러로 변경
-    private GameController gameController;
+    private SwingGameController gameController;
 
     private StackPane mainStackPane;
     private Scene mainScene;
@@ -110,7 +110,9 @@ public class FXGameController {
             startGame();
         });
 
+        System.out.println("🎯 addThrowButtonListener 호출됨");
         gameView.addThrowButtonListener(e -> {
+            System.out.println("🔥 윷던지기 버튼 클릭됨");
             if (throwState) {
                 throwState = false;
                 YutResult result = yut.throwYut();
