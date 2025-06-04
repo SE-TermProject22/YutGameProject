@@ -439,6 +439,3 @@ public class SwingGameController {
         updateViewState();
     }
 }
-
-
-// 버튼 못 누르게 하고 싶어...!!!!! >3< 이런 짜증나!!!

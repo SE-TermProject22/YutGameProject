@@ -15,8 +15,4 @@ public class BoardPane {
             g.drawImage(board, 0, 0, width, height, null);
         }
     }
-
-    public void reset() {
-        board = null;
-    }
 }
